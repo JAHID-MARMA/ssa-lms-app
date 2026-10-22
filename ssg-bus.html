@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>SSG Direct Bus — CEO ⇄ DMD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d1b2a; color: #e8eef4; min-height: 100vh; display: flex; flex-direction: column; }
+  header { background: #12283d; padding: 14px 18px; border-bottom: 2px solid #E91E63; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 18px; } header .dot { color: #37d67a; font-size: 13px; }
+  #gate { max-width: 380px; margin: 70px auto; background: #12283d; padding: 28px; border-radius: 14px; text-align: center; width: calc(100% - 32px); }
+  #gate input { width: 100%; padding: 13px; font-size: 18px; text-align: center; border-radius: 9px; border: 1px solid #2c4a63; background: #0d1b2a; color: #fff; margin: 14px 0; letter-spacing: 3px; }
+  #gate button, #sendBtn { background: #E91E63; color: #fff; border: 0; padding: 13px 22px; font-size: 16px; font-weight: 700; border-radius: 9px; cursor: pointer; width: 100%; }
+  #feed { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; max-width: 860px; width: 100%; margin: 0 auto; }
+  .msg { max-width: 82%; padding: 11px 14px; border-radius: 13px; line-height: 1.55; white-space: pre-wrap; word-wrap: break-word; font-size: 15px; }
+  .msg .meta { font-size: 11.5px; opacity: .75; margin-bottom: 4px; font-weight: 700; }
+  .msg.ceo { align-self: flex-start; background: #173a2a; border: 1px solid #2e7d4f; }
+  .msg.dmd { align-self: flex-end; background: #14304d; border: 1px solid #2f6db3; }
+  #composer { background: #12283d; padding: 12px; display: flex; gap: 9px; max-width: 860px; width: 100%; margin: 0 auto; }
+  #text { flex: 1; padding: 12px; font-size: 15.5px; border-radius: 9px; border: 1px solid #2c4a63; background: #0d1b2a; color: #fff; min-height: 52px; resize: vertical; }
+  #sendBtn { width: auto; padding: 12px 26px; }
+  .hidden { display: none !important; }
+  #who { font-size: 13px; opacity: .85; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚡ SSG Direct Bus</h1>
+  <span class="dot" id="status">● connecting…</span>
+</header>
+
+<div id="gate">
+  <h2>🔐 Enter PIN</h2>
+  <p style="opacity:.8;font-size:14px;margin-top:6px">This is the private CEO ⇄ DMD channel.</p>
+  <input id="pin" type="password" inputmode="numeric" placeholder="PIN" autocomplete="off">
+  <button id="unlock">Open Bus</button>
+  <p id="pinErr" style="color:#ff7aa8;font-size:13.5px;margin-top:9px"></p>
+</div>
+
+<div id="feed" class="hidden"></div>
+
+<div id="composer" class="hidden">
+  <textarea id="text" placeholder="Write a message…"></textarea>
+  <button id="sendBtn">Send</button>
+</div>
+<p id="who" class="hidden" style="text-align:center;padding:0 0 10px"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+  "use strict";
+  var PIN = "583914";
+  var DB = window.supabase.createClient(
+    "https://actykevvljlwoxjybagw.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdHlrZXZ2bGpsd294anliYWd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2MzAyNDgsImV4cCI6MjEwODIwNjI0OH0.edsL4u0ms6jmcfBSlGjY93Av2XEd7VFfDTC1uAwbBew"
+  );
+  var params = new URLSearchParams(location.search);
+  var ME = (params.get("as") || "").toLowerCase() === "dmd" ? "DMD" : "CEO";
+  var lastId = 0, unlocked = false;
+
+  var gate = document.getElementById("gate"), feed = document.getElementById("feed"),
+      composer = document.getElementById("composer"), who = document.getElementById("who"),
+      status = document.getElementById("status");
+
+  function fmt(t) {
+    var d = new Date(t);
+    return d.toLocaleDateString() + " " + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  function addMsg(m) {
+    var div = document.createElement("div");
+    div.className = "msg " + (m.sender === "CEO" ? "ceo" : "dmd");
+    var meta = document.createElement("div"); meta.className = "meta";
+    meta.textContent = (m.sender === "CEO" ? "🟢 CEO" : "🔵 DMD") + " • " + fmt(m.created_at);
+    var body = document.createElement("div"); body.textContent = m.body;
+    div.appendChild(meta); div.appendChild(body);
+    feed.appendChild(div);
+    if (m.id > lastId) lastId = m.id;
+  }
+  function scrollDown() { feed.scrollTop = feed.scrollHeight; }
+  function poll(first) {
+    DB.from("dmd_bus").select("id,sender,body,created_at").gt("id", lastId).order("id", { ascending: true }).limit(100)
+      .then(function (r) {
+        if (r.error) { status.textContent = "● reconnecting…"; status.style.color = "#ffb74d"; return; }
+        status.textContent = "● live"; status.style.color = "#37d67a";
+        if (r.data && r.data.length) { r.data.forEach(addMsg); scrollDown(); }
+        if (first) scrollDown();
+      });
+  }
+  function unlock() {
+    unlocked = true;
+    gate.classList.add("hidden"); feed.classList.remove("hidden");
+    composer.classList.remove("hidden"); who.classList.remove("hidden");
+    who.textContent = "You are posting as " + ME + " — messages appear instantly for the other side.";
+    poll(true);
+    setInterval(poll, 4000);
+  }
+  document.getElementById("unlock").addEventListener("click", function () {
+    if (document.getElementById("pin").value === PIN) {
+      try { localStorage.setItem("ssg_bus_pin", PIN); } catch (e) {}
+      unlock();
+    } else {
+      document.getElementById("pinErr").textContent = "Wrong PIN — please check and try again.";
+    }
+  });
+  try { if (localStorage.getItem("ssg_bus_pin") === PIN) unlock(); } catch (e) {}
+
+  function send() {
+    var ta = document.getElementById("text");
+    var body = ta.value.replace(/^\s+|\s+$/g, "");
+    if (!body || !unlocked) return;
+    ta.value = "";
+    DB.from("dmd_bus").insert({ sender: ME, body: body }).then(function (r) {
+      if (r.error) { ta.value = body; alert("Could not send — please try again."); return; }
+      poll(false);
+    });
+  }
+  document.getElementById("sendBtn").addEventListener("click", send);
+  document.getElementById("text").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+  });
+})();
+</script>
+</body>
+</html>
