@@ -421,6 +421,7 @@
     if (name === "products") loadProducts();
     if (name === "support") loadSupport();
     if (name === "settings") loadSettings();
+    if (name === "settings" && window.SSA_loadNotices) window.SSA_loadNotices();
     if (name === "partners" && window.SSA_loadPartners) window.SSA_loadPartners();
   }
 
@@ -3329,6 +3330,58 @@
         if (r.error) { msg("পেআউট যোগ হয়নি — আবার চেষ্টা করুন।", false); return; }
         $("poName").value = ""; $("poAmount").value = ""; $("poNote").value = "";
         msg("পেআউট যোগ হয়েছে ✓ টাকা পাঠিয়ে Paid করুন।", true); loadPartners();
+      });
+    });
+  });
+})();
+
+/* ---- Site notices manager (Founder order 2026-10-22): Settings tab ---- */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function msg(t, ok) { var m = $("noticeMsg"); if (!m) return; m.textContent = t; m.style.display = ""; m.style.color = ok ? "#14703D" : "#B90E59"; }
+  function fmtDate(iso) { try { return new Date(iso).toLocaleDateString("en-GB"); } catch (e) { return ""; } }
+  function loadNotices() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    window.SSA_DB.from("site_notices").select("*").order("created_at", { ascending: false }).then(function (r) {
+      var el = $("noticeList"); if (!el) return;
+      var rows = r.data || [];
+      if (!rows.length) { el.innerHTML = '<p class="empty-note">এখনো কোনো নোটিশ প্রকাশ হয়নি।</p>'; return; }
+      el.innerHTML = '<div class="table-scroll"><table class="admin-table"><thead><tr><th>নোটিশ</th><th>তারিখ</th><th>অবস্থা</th><th></th></tr></thead><tbody>' +
+        rows.map(function (n) {
+          return "<tr><td><b>" + esc(n.title) + "</b>" + (n.detail ? "<br>" + esc(n.detail) : "") + "</td><td>" + fmtDate(n.created_at) + "</td><td>" +
+            (n.is_active ? '<span class="tag tag-ok">সক্রিয় — সাইটে দেখাচ্ছে</span>' : '<span class="tag tag-pend">বন্ধ</span>') +
+            '</td><td class="row-actions"><button class="btn sm neutral" type="button" data-nact="toggle" data-id="' + n.id + '" data-on="' + (n.is_active ? "1" : "0") + '">' + (n.is_active ? "বন্ধ করুন" : "চালু করুন") + '</button> <button class="btn sm neutral" type="button" data-nact="del" data-id="' + n.id + '">🗑 মুছুন</button></td></tr>';
+        }).join("") + "</tbody></table></div>";
+    }, function () {});
+  }
+  window.SSA_loadNotices = loadNotices;
+  document.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest("[data-nact]") : null;
+    if (!b || !window.SSA_DB) return;
+    var id = b.getAttribute("data-id"), act = b.getAttribute("data-nact");
+    if (act === "toggle") {
+      var on = b.getAttribute("data-on") === "1";
+      window.SSA_DB.from("site_notices").update({ is_active: !on }).eq("id", id).then(function (r) {
+        if (r.error) { msg("বদলানো যায়নি — আবার চেষ্টা করুন।", false); return; }
+        msg(on ? "নোটিশ বন্ধ করা হয়েছে।" : "নোটিশ চালু — এখন সাইটে দেখাচ্ছে ✓", true); loadNotices();
+      });
+    } else if (act === "del") {
+      window.SSA_DB.from("site_notices").delete().eq("id", id).then(function (r) {
+        if (r.error) { msg("মোছা যায়নি — আবার চেষ্টা করুন।", false); return; }
+        msg("নোটিশ মোছা হয়েছে।", true); loadNotices();
+      });
+    }
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    var add = $("ntAddBtn");
+    if (add) add.addEventListener("click", function () {
+      var title = $("ntTitle").value.trim();
+      if (!title) { msg("শিরোনাম আবশ্যক।", false); return; }
+      window.SSA_DB.from("site_notices").insert({ title: title, detail: $("ntDetail").value.trim() || null, is_active: true }).then(function (r) {
+        if (r.error) { msg("প্রকাশ হয়নি — আবার চেষ্টা করুন।", false); return; }
+        $("ntTitle").value = ""; $("ntDetail").value = "";
+        msg("নোটিশ প্রকাশিত ✓ এখন সব পেজের Footer-এ দেখা যাচ্ছে।", true); loadNotices();
       });
     });
   });
