@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>কুইজ — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy-র কুইজ — লেসন শেষে নিজেকে যাচাই করুন।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p style="margin-top:22px"><a id="quizBack" href="courses.html">← ফিরে যান</a></p>
+
+  <section class="panel" style="margin-top:14px">
+    <h2 id="quizTitle">লোড হচ্ছে…</h2>
+    <div id="quizMsg"></div>
+    <div id="quizResult" style="margin-bottom:16px"></div>
+    <form id="quizForm"></form>
+  </section>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>কুইজ নিয়ে কোনো প্রশ্ন আছে? আমাদের Customer Manager Nowshin-কে জিজ্ঞেস করুন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Quiz player (Phase 4). Questions come from the PUBLIC view
+   quiz_questions_public, which never contains the answers. Grading
+   happens inside the database via the submit_quiz RPC — the correct
+   answers never reach the browser. */
+(function () {
+  var titleEl = document.getElementById("quizTitle");
+  var msgEl = document.getElementById("quizMsg");
+  var resultEl = document.getElementById("quizResult");
+  var formEl = document.getElementById("quizForm");
+  var backEl = document.getElementById("quizBack");
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function bnNum(n) {
+    return String(n).replace(/\d/g, function (d) { return "০১২৩৪৫৬৭৮৯"[Number(d)]; });
+  }
+  function note(html) { msgEl.innerHTML = '<p class="empty-note">' + html + '</p>'; }
+  function coursePageFor(slug) {
+    var it = (typeof ssaFindItem === "function") ? ssaFindItem(slug) : null;
+    if (it && it.page) return it.page;
+    if (slug === "spoken") return "course-spoken.html";
+    if (slug === "phonics") return "course-phonics.html";
+    return "course.html?slug=" + encodeURIComponent(slug || "");
+  }
+
+  var m = /[?&]id=([^&]+)/.exec(window.location.search);
+  var quizId = m ? parseInt(decodeURIComponent(m[1]), 10) : NaN;
+
+  if (!window.SSA_DB) {
+    titleEl.textContent = "কুইজ";
+    note("ডাটাবেসে সংযোগ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+    return;
+  }
+  if (!quizId || isNaN(quizId)) {
+    titleEl.textContent = "কুইজ";
+    note("কুইজটি পাওয়া যায়নি।");
+    return;
+  }
+
+  var quiz = null;
+  var questions = [];
+
+  function blocked() {
+    titleEl.textContent = "কুইজ";
+    note("এই কুইজটি দিতে হলে আপনাকে লগইন করে সংশ্লিষ্ট কোর্সে ভর্তি থাকতে হবে।");
+    msgEl.innerHTML += '<p style="text-align:center"><a class="btn" href="login.html">লগইন করুন</a> ' +
+      '<a class="btn ghost" href="' + coursePageFor(quiz ? quiz.course_slug : "") + '">কোর্সে ভর্তি হোন</a></p>';
+  }
+
+  function renderQuestions() {
+    var html = questions.map(function (q, i) {
+      var opts = (q.options && q.options.length) ? q.options : [];
+      return '<div class="quiz-q" id="qq-' + i + '"><h3>প্রশ্ন ' + bnNum(i + 1) + ': ' + escapeHtml(q.question) + '</h3>' +
+        opts.map(function (opt, oi) {
+          return '<label class="quiz-opt"><input type="radio" name="qq' + q.id + '" value="' + oi + '"> <span>' +
+            escapeHtml(opt) + '</span></label>';
+        }).join("") +
+        '<p class="quiz-correct" style="display:none"></p></div>';
+    }).join("");
+    html += '<button class="btn lg" type="submit" id="quizSubmit" style="width:100%">উত্তর জমা দিন</button>';
+    formEl.innerHTML = html;
+  }
+
+  formEl.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var answers = questions.map(function (q) {
+      var sel = formEl.querySelector('input[name="qq' + q.id + '"]:checked');
+      return sel ? parseInt(sel.value, 10) : -1;
+    });
+    var btn = document.getElementById("quizSubmit");
+    if (btn) { btn.disabled = true; btn.textContent = "জমা দেওয়া হচ্ছে…"; }
+    window.SSA_DB.rpc("submit_quiz", { p_quiz: quizId, p_answers: answers })
+      .then(function (r) {
+        if (r.error) {
+          if (btn) { btn.disabled = false; btn.textContent = "উত্তর জমা দিন"; }
+          note("দুঃখিত, কুইজটি জমা দেওয়া যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।");
+          return;
+        }
+        var data = r.data;
+        if (typeof data === "string") { try { data = JSON.parse(data); } catch (e) { data = null; } }
+        if (!data || data.error) {
+          if (btn) { btn.disabled = false; btn.textContent = "উত্তর জমা দিন"; }
+          note("দুঃখিত, কুইজটি জমা দেওয়া যায়নি" + (data && data.error ? ": " + escapeHtml(String(data.error)) : "। আবার চেষ্টা করুন।"));
+          return;
+        }
+        /* graded — show the score and mark every question */
+        resultEl.innerHTML = '<div class="success-box"><h3>🎉 আপনার স্কোর: ' +
+          bnNum(data.score) + ' / ' + bnNum(data.total) + '</h3>' +
+          '<p>আপনার উত্তর সেভ করা হয়েছে।</p></div>';
+        var correct = data.correct || [];
+        questions.forEach(function (q, i) {
+          var block = document.getElementById("qq-" + i);
+          if (!block) return;
+          var c = correct[i];
+          var correctIdx = (typeof c === "number") ? c : null;
+          var isRight = (typeof c === "boolean") ? c : (correctIdx !== null && answers[i] === correctIdx);
+          block.classList.add(isRight ? "right" : "wrong");
+          if (!isRight && correctIdx !== null && q.options && q.options[correctIdx] != null) {
+            var cp = block.querySelector(".quiz-correct");
+            if (cp) {
+              cp.textContent = "সঠিক উত্তর: " + q.options[correctIdx];
+              cp.style.display = "";
+            }
+          }
+          var inputs = block.querySelectorAll("input");
+          for (var j = 0; j < inputs.length; j++) inputs[j].disabled = true;
+        });
+        if (btn) { btn.disabled = true; btn.textContent = "জমা দেওয়া হয়েছে ✓"; }
+        if (resultEl.scrollIntoView) resultEl.scrollIntoView({ block: "center" });
+      }, function () {
+        if (btn) { btn.disabled = false; btn.textContent = "উত্তর জমা দিন"; }
+        note("দুঃখিত, কুইজটি জমা দেওয়া যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+      });
+  });
+
+  window.SSA_DB.from("quizzes").select("id, title, course_slug, lesson_id")
+    .eq("id", quizId).maybeSingle()
+    .then(function (r) {
+      if (r.error || !r.data) { blocked(); return; }
+      quiz = r.data;
+      document.title = quiz.title + " — Self Scale Academy";
+      titleEl.textContent = quiz.title;
+      if (quiz.lesson_id) backEl.href = "lesson.html?id=" + quiz.lesson_id;
+      else backEl.href = coursePageFor(quiz.course_slug);
+      window.SSA_DB.from("quiz_questions_public").select("id, quiz_id, position, question, options")
+        .eq("quiz_id", quizId)
+        .order("position", { ascending: true })
+        .order("id", { ascending: true })
+        .then(function (qr) {
+          if (qr.error) { blocked(); return; }
+          questions = qr.data || [];
+          if (!questions.length) {
+            note("এই কুইজে এখনো কোনো প্রশ্ন যোগ করা হয়নি।");
+            return;
+          }
+          renderQuestions();
+        }, function () {
+          note("প্রশ্নগুলো লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+        });
+    }, function () {
+      note("কুইজটি লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+    });
+})();
+</script>
+</body>
+</html>

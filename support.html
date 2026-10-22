@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>সাপোর্ট — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy সাপোর্ট — কোর্স, পেমেন্ট বা অ্যাক্সেস নিয়ে সাহায্য নিন।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel" style="margin-top:26px">
+    <h2>সাপোর্ট — আমরা সাহায্য করতে এখানে আছি</h2>
+    <p style="margin:0">ধাপ ১: Nowshin-কে জিজ্ঞেস করুন — বেশিরভাগ প্রশ্নের উত্তর সঙ্গে সঙ্গে পেয়ে যাবেন।<br>
+    ধাপ ২: তাতে সমাধান না হলে নিচে লিখুন — আমাদের সাপোর্ট টিম (স্যারের টিম) আপনার লেখাটি দেখে এই পেজেই উত্তর দেবে।</p>
+  </section>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>কোর্স, দাম বা অর্ডার নিয়ে প্রশ্ন? Nowshin ২৪ ঘণ্টাই উত্তর দেয়।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>সাপোর্টে লিখুন</h2>
+    <div id="supportGate"><p class="empty-note">লোড হচ্ছে…</p></div>
+    <form class="form-grid" id="ticketForm" style="display:none">
+      <div class="field">
+        <label for="tSubject">বিষয় *</label>
+        <select id="tSubject" required>
+          <option value="course">কোর্স / লেসন সংক্রান্ত</option>
+          <option value="payment">পেমেন্ট সংক্রান্ত</option>
+          <option value="access">অ্যাক্সেস পাইনি</option>
+          <option value="download">ডাউনলোড সমস্যা</option>
+          <option value="other">অন্যান্য</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tCourse">কোন কোর্স / পণ্য</label>
+        <select id="tCourse"><option value="">সাধারণ</option></select>
+      </div>
+      <div class="field">
+        <label for="tMobile">মোবাইল নম্বর *</label>
+        <input id="tMobile" type="tel" required placeholder="01XXXXXXXXX">
+      </div>
+      <div class="field" style="grid-column:1/-1">
+        <label for="tMessage">আপনার সমস্যা বা প্রশ্ন বিস্তারিত লিখুন *</label>
+        <textarea id="tMessage" rows="5" required placeholder="যেমন: পেমেন্ট করেছি, কিন্তু কোর্সে অ্যাক্সেস পাইনি…"></textarea>
+      </div>
+      <div class="field" style="grid-column:1/-1">
+        <button class="btn" type="submit" id="tSubmit">পাঠিয়ে দিন</button>
+        <p id="tMsg" class="admin-msg" style="display:none"></p>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>আমার সাপোর্ট বার্তা</h2>
+    <div id="myTickets"><p class="empty-note">লোড হচ্ছে…</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>জরুরি প্রয়োজনে</h2>
+    <p style="margin:0">সাপোর্টে লিখেও সমাধান না হলে WhatsApp-এ জানান: <a href="https://wa.me/8801782911601">01782911601</a> (সকাল ৯টা — রাত ৯টা)।</p>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="support.html">সাপোর্ট</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="content.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Support: students open tickets; staff/admin reply from the Admin panel.
+   RLS limits reads to the student's own tickets. */
+(function () {
+  var gateEl = document.getElementById("supportGate");
+  var form = document.getElementById("ticketForm");
+  var listEl = document.getElementById("myTickets");
+  var msgEl = document.getElementById("tMsg");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  var SUBJECTS = {
+    course: "কোর্স / লেসন সংক্রান্ত", payment: "পেমেন্ট সংক্রান্ত",
+    access: "অ্যাক্সেস পাইনি", download: "ডাউনলোড সমস্যা", other: "অন্যান্য"
+  };
+  function statusTag(st) {
+    if (st === "answered") return '<span class="tag tag-ok">উত্তর দেওয়া হয়েছে</span>';
+    if (st === "closed") return '<span class="tag">বন্ধ</span>';
+    return '<span class="tag tag-pend">উত্তরের অপেক্ষায়</span>';
+  }
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  SSA_AUTH.ready.then(function () {
+    var user = SSA_AUTH.getUser();
+    if (!user) {
+      gateEl.innerHTML = '<p class="empty-note">সাপোর্টে লিখতে আগে লগইন করুন।<br><a class="btn" href="login.html" style="margin-top:10px">Login করুন</a></p>';
+      listEl.innerHTML = '<p class="empty-note">লগইন করলে আপনার আগের বার্তাগুলো এখানে দেখা যাবে।</p>';
+      return;
+    }
+    if (!window.SSA_DB) {
+      gateEl.innerHTML = '<p class="empty-note">সংযোগ করা যায়নি — আপনার ইন্টারনেট দেখে আবার চেষ্টা করুন।</p>';
+      return;
+    }
+    var profile = SSA_AUTH.getProfile() || {};
+    gateEl.style.display = "none";
+    form.style.display = "";
+    if (profile.mobile) document.getElementById("tMobile").value = profile.mobile;
+
+    SSA_DB.from("enrollments").select("course_slug").eq("user_id", user.id).then(function (r) {
+      if (r.error || !r.data) return;
+      var sel = document.getElementById("tCourse");
+      r.data.forEach(function (row) {
+        var it = (typeof ssaFindItem === "function") ? ssaFindItem(row.course_slug) : null;
+        var o = document.createElement("option");
+        o.value = row.course_slug;
+        o.textContent = it ? it.title : row.course_slug;
+        sel.appendChild(o);
+      });
+    });
+
+    function loadTickets() {
+      SSA_DB.from("support_tickets")
+        .select("subject,course_slug,message,status,reply,created_at,replied_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .then(function (r) {
+          if (r.error) {
+            listEl.innerHTML = '<p class="empty-note">বার্তা লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+            return;
+          }
+          var rows = r.data || [];
+          if (!rows.length) {
+            listEl.innerHTML = '<p class="empty-note">এখনো কোনো বার্তা পাঠাননি।</p>';
+            return;
+          }
+          listEl.innerHTML = rows.map(function (t) {
+            var html = '<div class="order-card"><div class="o-top"><b>' +
+              esc(SUBJECTS[t.subject] || t.subject) + '</b>' + statusTag(t.status) + '</div>' +
+              '<div class="o-items">তারিখ: <span class="en">' + fmtDate(t.created_at) + '</span><br>' +
+              esc(t.message) + '</div>';
+            if (t.reply) {
+              html += '<div class="o-items" style="margin-top:8px;background:var(--pink-soft);border-radius:10px;padding:10px 12px">' +
+                '<b>সাপোর্ট টিমের উত্তর:</b><br>' + esc(t.reply) + '</div>';
+            }
+            return html + '</div>';
+          }).join("");
+        });
+    }
+    loadTickets();
+
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var mobile = document.getElementById("tMobile").value.trim();
+      var message = document.getElementById("tMessage").value.trim();
+      if (!/^01[3-9][0-9]{8}$/.test(mobile)) {
+        msgEl.style.display = "";
+        msgEl.textContent = "সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।";
+        return;
+      }
+      if (message.length < 5) {
+        msgEl.style.display = "";
+        msgEl.textContent = "সমস্যাটি একটু বিস্তারিত লিখুন।";
+        return;
+      }
+      var btn = document.getElementById("tSubmit");
+      btn.disabled = true;
+      SSA_DB.from("support_tickets").insert({
+        user_id: user.id,
+        username: profile.username || "",
+        name: profile.name || "",
+        mobile: mobile,
+        course_slug: document.getElementById("tCourse").value || null,
+        subject: document.getElementById("tSubject").value,
+        message: message
+      }).then(function (r) {
+        btn.disabled = false;
+        msgEl.style.display = "";
+        if (r.error) {
+          msgEl.textContent = "পাঠানো যায়নি। আবার চেষ্টা করুন।";
+          return;
+        }
+        msgEl.textContent = "পাঠানো হয়েছে। আমাদের সাপোর্ট টিম শীঘ্রই এখানেই উত্তর দেবে।";
+        document.getElementById("tMessage").value = "";
+        loadTickets();
+      }, function () {
+        btn.disabled = false;
+        msgEl.style.display = "";
+        msgEl.textContent = "পাঠানো যায়নি। আপনার ইন্টারনেট সংযোগ দেখুন।";
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

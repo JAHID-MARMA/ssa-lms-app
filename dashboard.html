@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>আমার ড্যাশবোর্ড — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy ছাত্র ড্যাশবোর্ড — আপনার কোর্স ও অর্ডার এক জায়গায়।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel" style="margin-top:26px">
+    <div class="dash-head">
+      <div class="who">
+        <h2 id="dashGreet">স্বাগতম!</h2>
+        <p id="dashMeta">আপনার তথ্য লোড হচ্ছে…</p>
+      </div>
+      <a class="btn" id="ssaAdminBtn" href="admin.html" style="display:none">Admin Panel</a>
+      <button class="btn ghost" type="button" id="logoutBtn">লগআউট</button>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>আমার কোর্সসমূহ</h2>
+    <div id="myCourses"><p class="empty-note">লোড হচ্ছে…</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>আমার অগ্রগতি</h2>
+    <div id="myProgress"><p class="empty-note">লোড হচ্ছে…</p></div>
+    <h3 style="margin:20px 0 6px">আমার কুইজের ফলাফল</h3>
+    <div id="myQuizResults"><p class="empty-note">লোড হচ্ছে…</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>আমার রিভিউ</h2>
+    <p style="margin:0 0 6px">কোর্সটি আপনার কেমন লেগেছে? আপনার মতামত আমাদের আরও ভালো কোর্স বানাতে সাহায্য করবে।</p>
+    <div id="myReviews"><p class="empty-note">লোড হচ্ছে…</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>আমার অর্ডারসমূহ</h2>
+    <div id="myOrders"><p class="empty-note">লোড হচ্ছে…</p></div>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>সাপোর্ট</h2>
+    <p style="margin:0 0 10px">কোর্স, পেমেন্ট বা অ্যাক্সেস নিয়ে যেকোনো সমস্যায় আমাদের সাপোর্ট টিমকে লিখুন — উত্তর আপনার এই অ্যাকাউন্টেই পৌঁছে যাবে।</p>
+    <a class="btn" href="support.html">সাপোর্টে লিখুন</a>
+  </section>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>আপনার কোর্স বা অর্ডার নিয়ে কোনো প্রশ্ন আছে? Nowshin-কে জিজ্ঞেস করুন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Dashboard: the signed-in student's courses (enrollments) + orders.
+   Reads are limited to the student's own rows by Supabase RLS. */
+(function () {
+  var coursesEl = document.getElementById("myCourses");
+  var progressEl = document.getElementById("myProgress");
+  var quizEl = document.getElementById("myQuizResults");
+  var reviewsEl = document.getElementById("myReviews");
+  var ordersEl = document.getElementById("myOrders");
+  var greetEl = document.getElementById("dashGreet");
+  var metaEl = document.getElementById("dashMeta");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function statusTag(st) {
+    if (st === "pending") return '<span class="tag tag-pend">অনুমোদনের অপেক্ষায়</span>';
+    if (st === "approved" || st === "completed") return '<span class="tag tag-ok">অনুমোদিত</span>';
+    if (st === "rejected" || st === "cancelled" || st === "canceled") return '<span class="tag tag-bad">বাতিল</span>';
+    return '<span class="tag tag-pend">' + esc(st || "pending") + '</span>';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
+  document.getElementById("logoutBtn").addEventListener("click", function () {
+    SSA_AUTH.signOut().then(function () { window.location.href = "index.html"; });
+  });
+
+  SSA_AUTH.ready.then(function () {
+    var user = SSA_AUTH.getUser();
+    if (!user) { window.location.href = "login.html"; return; }
+    var profile = SSA_AUTH.getProfile();
+    var name = (profile && profile.name) ? profile.name : (user.email || "");
+    greetEl.textContent = "স্বাগতম, " + name + "!";
+    metaEl.innerHTML =
+      (profile && profile.username ? 'ইউজারনেম: <b class="en">' + esc(profile.username) + '</b> · ' : '') +
+      'ইমেইল: <span class="en">' + esc(user.email || "") + '</span>';
+
+    if (!window.SSA_DB) {
+      coursesEl.innerHTML = '<p class="empty-note">তথ্য লোড করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+      progressEl.innerHTML = '<p class="empty-note">তথ্য লোড করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+      quizEl.innerHTML = '<p class="empty-note">তথ্য লোড করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+      reviewsEl.innerHTML = '<p class="empty-note">তথ্য লোড করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+      ordersEl.innerHTML = '<p class="empty-note">তথ্য লোড করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+      return;
+    }
+
+    Promise.all([
+      SSA_DB.from("enrollments").select("course_slug").eq("user_id", user.id),
+      SSA_DB.from("products").select("slug,file_path,file_name")
+    ]).then(function (res) {
+      var r = res[0];
+      if (r.error) {
+        coursesEl.innerHTML = '<p class="empty-note">কোর্সের তালিকা লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+        return;
+      }
+      var fileBySlug = {};
+      if (!res[1].error && res[1].data) {
+        res[1].data.forEach(function (p) { if (p.file_path) fileBySlug[p.slug] = p; });
+      }
+      var rows = r.data || [];
+      if (!rows.length) {
+        coursesEl.innerHTML =
+          '<p class="empty-note">আপনি এখনো কোনো কোর্সে ভর্তি হননি।<br>' +
+          'আপনার পেমেন্ট অনুমোদিত হলেই কোর্সটি এখানে চলে আসবে।<br>' +
+          '<a href="courses.html">সকল কোর্স দেখুন →</a></p>';
+        return;
+      }
+      var html = rows.map(function (row) {
+        var it = ssaFindItem(row.course_slug);
+        if (!it) return "";
+        if (it.type !== "course") {
+          var pf = fileBySlug[row.course_slug];
+          var action = pf
+            ? '<button class="btn" type="button" data-dl="' + esc(row.course_slug) + '">📥 ডাউনলোড করুন</button>'
+            : '<span class="tag tag-pend">ফাইল প্রস্তুত হচ্ছে</span>';
+          return '<div class="cart-row"><img src="' + it.cover + '" alt="">' +
+            '<div class="ci"><b class="en">' + it.title + '</b><span>' + it.titleBn + '</span></div>' +
+            action + '</div>';
+        }
+        return '<div class="cart-row"><img src="' + it.cover + '" alt="">' +
+          '<div class="ci"><b class="en">' + it.title + '</b><span>' + it.titleBn + '</span></div>' +
+          '<a class="btn" href="' + it.page + '">কোর্স খুলুন</a></div>';
+      }).join("");
+      coursesEl.innerHTML = html || '<p class="empty-note">আপনি এখনো কোনো কোর্সে ভর্তি হননি।<br><a href="courses.html">সকল কোর্স দেখুন →</a></p>';
+      var dlBtns = coursesEl.querySelectorAll("[data-dl]");
+      for (var d = 0; d < dlBtns.length; d++) {
+        dlBtns[d].addEventListener("click", function () {
+          var slug = this.getAttribute("data-dl");
+          var pf = fileBySlug[slug];
+          if (!pf) return;
+          var btn = this;
+          btn.disabled = true;
+          btn.textContent = "লিংক তৈরি হচ্ছে…";
+          SSA_DB.storage.from("course-files").createSignedUrl(pf.file_path, 3600).then(function (sr) {
+            btn.disabled = false;
+            btn.textContent = "📥 ডাউনলোড করুন";
+            if (sr.error || !sr.data || !sr.data.signedUrl) {
+              alert("ডাউনলোড লিংক তৈরি করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন, অথবা সাপোর্টে জানান।");
+              return;
+            }
+            var a = document.createElement("a");
+            a.href = sr.data.signedUrl;
+            a.download = pf.file_name || "";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }, function () {
+            btn.disabled = false;
+            btn.textContent = "📥 ডাউনলোড করুন";
+            alert("ডাউনলোড লিংক তৈরি করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখুন।");
+          });
+        });
+      }
+    });
+
+    /* Progress (Phase 6): completed lessons per enrolled course. Lesson
+       totals come from the live database lessons (readable by everyone);
+       if that read fails, the static data.js lists are the fallback.
+       A course at 100% earns the certificate button. */
+    Promise.all([
+      SSA_DB.from("enrollments").select("course_slug").eq("user_id", user.id),
+      SSA_DB.from("lessons").select("id, course_slug"),
+      SSA_DB.from("lesson_progress").select("lesson_id").eq("user_id", user.id)
+    ]).then(function (res) {
+      var enr = res[0];
+      if (enr.error) {
+        progressEl.innerHTML = '<p class="empty-note">অগ্রগতি লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+        return;
+      }
+      var slugs = [];
+      (enr.data || []).forEach(function (row) {
+        var it = ssaFindItem(row.course_slug);
+        if (it && it.type === "course" && slugs.indexOf(row.course_slug) === -1) slugs.push(row.course_slug);
+      });
+      if (!slugs.length) {
+        progressEl.innerHTML = '<p class="empty-note">আপনি এখনো কোনো কোর্সে ভর্তি হননি — ভর্তি হলেই এখানে আপনার অগ্রগতি দেখা যাবে।</p>';
+        return;
+      }
+      var slugByLesson = {}, totalBySlug = {};
+      if (!res[1].error && res[1].data) {
+        res[1].data.forEach(function (l) {
+          slugByLesson[l.id] = l.course_slug;
+          totalBySlug[l.course_slug] = (totalBySlug[l.course_slug] || 0) + 1;
+        });
+      }
+      var doneBySlug = {};
+      if (!res[2].error && res[2].data) {
+        res[2].data.forEach(function (p) {
+          var s = slugByLesson[p.lesson_id];
+          if (s) doneBySlug[s] = (doneBySlug[s] || 0) + 1;
+        });
+      }
+      progressEl.innerHTML = slugs.map(function (slug) {
+        var it = ssaFindItem(slug);
+        var total = totalBySlug[slug] || (it.lessons ? it.lessons.length : 0);
+        var done = doneBySlug[slug] || 0;
+        if (done > total) done = total;
+        var pct = total > 0 ? Math.round(done * 100 / total) : 0;
+        var html = '<div style="padding:12px 0;border-bottom:1px solid #F3E4EE">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">' +
+          '<b class="en">' + esc(it.title) + '</b>' +
+          '<span>সম্পন্ন লেসন: <b>' + done + ' / ' + total + '</b> (' + pct + '%)</span></div>' +
+          '<div style="background:var(--pink-soft);border-radius:999px;height:14px;overflow:hidden;margin-top:8px">' +
+          '<div style="background:var(--pink);height:100%;width:' + pct + '%;border-radius:999px"></div></div>';
+        if (total > 0 && done === total) {
+          html += '<p style="margin-top:10px"><a class="btn green" href="certificate.html?slug=' +
+            encodeURIComponent(slug) + '">🎓 সার্টিফিকেট দেখুন</a></p>';
+        }
+        html += '</div>';
+        return html;
+      }).join("");
+    }, function () {
+      progressEl.innerHTML = '<p class="empty-note">অগ্রগতি লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+    });
+
+    /* Own quiz results (Phase 6): RLS already limits the read to this
+       student's rows. Quiz titles resolve via the quizzes table. */
+    Promise.all([
+      SSA_DB.from("quiz_results").select("quiz_id,score,total,created_at")
+        .eq("user_id", user.id).order("created_at", { ascending: false }),
+      SSA_DB.from("quizzes").select("id, title")
+    ]).then(function (res) {
+      var rr = res[0];
+      if (rr.error) {
+        quizEl.innerHTML = '<p class="empty-note">কুইজের ফলাফল লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+        return;
+      }
+      var rows = rr.data || [];
+      if (!rows.length) {
+        quizEl.innerHTML = '<p class="empty-note">আপনি এখনো কোনো কুইজ দেননি। লেসনের কুইজ দিলেই ফলাফল এখানে দেখা যাবে।</p>';
+        return;
+      }
+      var titles = {};
+      if (!res[1].error && res[1].data) {
+        res[1].data.forEach(function (q) { titles[q.id] = q.title; });
+      }
+      var sumScore = 0, sumTotal = 0;
+      var html = rows.map(function (r) {
+        sumScore += Number(r.score) || 0;
+        sumTotal += Number(r.total) || 0;
+        return '<div class="order-card"><div class="o-top"><b>' +
+          esc(titles[r.quiz_id] || ("কুইজ #" + r.quiz_id)) + '</b>' +
+          '<span class="tag tag-ok">স্কোর: ' + (Number(r.score) || 0) + ' / ' + (Number(r.total) || 0) + '</span></div>' +
+          '<div class="o-items">তারিখ: <span class="en">' + fmtDate(r.created_at) + '</span></div></div>';
+      }).join("");
+      html += '<p style="margin-top:12px;font-size:17px">মোট কুইজ স্কোর: <b>' + sumScore + ' / ' + sumTotal + '</b></p>';
+      quizEl.innerHTML = html;
+    }, function () {
+      quizEl.innerHTML = '<p class="empty-note">কুইজের ফলাফল লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+    });
+
+    /* Course reviews (Phase 12): one review per enrolled course —
+       5 stars + a written মতামত. The student can come back and edit
+       their own review any time (upsert on user + course). RLS keeps
+       every review private: only the student and the Super Admin
+       can read it. If the reviews table is not created yet, a clean
+       "coming soon" line shows instead of an error. */
+    Promise.all([
+      SSA_DB.from("enrollments").select("course_slug").eq("user_id", user.id),
+      SSA_DB.from("lessons").select("id, course_slug"),
+      SSA_DB.from("lesson_progress").select("lesson_id").eq("user_id", user.id),
+      SSA_DB.from("reviews").select("course_slug,rating,review_text").eq("user_id", user.id)
+    ]).then(function (res) {
+      if (res[3].error) {
+        reviewsEl.innerHTML = '<p class="empty-note">রিভিউ দেওয়ার ব্যবস্থা শীঘ্রই চালু হচ্ছে।</p>';
+        return;
+      }
+      if (res[0].error) {
+        reviewsEl.innerHTML = '<p class="empty-note">রিভিউ লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+        return;
+      }
+      var slugs = [];
+      (res[0].data || []).forEach(function (row) {
+        var it = ssaFindItem(row.course_slug);
+        if (it && it.type === "course" && slugs.indexOf(row.course_slug) === -1) slugs.push(row.course_slug);
+      });
+      if (!slugs.length) {
+        reviewsEl.innerHTML = '<p class="empty-note">আপনি এখনো কোনো কোর্সে ভর্তি হননি — ভর্তি হলেই এখানে রিভিউ দিতে পারবেন।</p>';
+        return;
+      }
+      var slugByLesson = {}, totalBySlug = {};
+      if (!res[1].error && res[1].data) {
+        res[1].data.forEach(function (l) {
+          slugByLesson[l.id] = l.course_slug;
+          totalBySlug[l.course_slug] = (totalBySlug[l.course_slug] || 0) + 1;
+        });
+      }
+      var doneBySlug = {};
+      if (!res[2].error && res[2].data) {
+        res[2].data.forEach(function (p) {
+          var s = slugByLesson[p.lesson_id];
+          if (s) doneBySlug[s] = (doneBySlug[s] || 0) + 1;
+        });
+      }
+      var mine = {};
+      (res[3].data || []).forEach(function (rv) { mine[rv.course_slug] = rv; });
+
+      reviewsEl.innerHTML = slugs.map(function (slug) {
+        var it = ssaFindItem(slug);
+        var total = totalBySlug[slug] || (it.lessons ? it.lessons.length : 0);
+        var done = doneBySlug[slug] || 0;
+        var finished = total > 0 && done >= total;
+        var rv = mine[slug] || null;
+        var stars = "";
+        for (var s = 1; s <= 5; s++) {
+          stars += '<button type="button" class="star-btn' +
+            (rv && s <= rv.rating ? " on" : "") + '" data-star="' + s +
+            '" aria-label="' + s + ' স্টার">★</button>';
+        }
+        return '<div class="review-card" data-review-card="' + esc(slug) + '">' +
+          '<div class="o-top"><b class="en">' + esc(it.title) + '</b>' +
+          (finished ? '<span class="tag tag-ok">কোর্স সম্পন্ন ✅</span>' : '') + '</div>' +
+          '<div class="star-picker" data-rating="' + (rv ? rv.rating : 0) + '">' + stars + '</div>' +
+          '<textarea class="review-text" rows="3" placeholder="আপনার মতামত লিখুন…">' +
+          esc(rv ? (rv.review_text || "") : "") + '</textarea>' +
+          '<p class="review-msg" style="display:none"></p>' +
+          '<button class="btn sm" type="button" data-review-save="' + esc(slug) + '">' +
+          (rv ? "রিভিউ আপডেট করুন" : "রিভিউ দিন") + '</button></div>';
+      }).join("");
+
+      var cards = reviewsEl.querySelectorAll("[data-review-card]");
+      for (var c = 0; c < cards.length; c++) {
+        (function (card) {
+          var slug = card.getAttribute("data-review-card");
+          var picker = card.querySelector(".star-picker");
+          var msg = card.querySelector(".review-msg");
+          function paint(n) {
+            picker.setAttribute("data-rating", n);
+            var btns = picker.querySelectorAll(".star-btn");
+            for (var b = 0; b < btns.length; b++) {
+              btns[b].className = "star-btn" + (b < n ? " on" : "");
+            }
+          }
+          function say(text, ok) {
+            msg.textContent = text;
+            msg.className = "review-msg " + (ok ? "ok" : "err");
+            msg.style.display = "";
+          }
+          picker.addEventListener("click", function (ev) {
+            var t = ev.target;
+            if (t.getAttribute && t.getAttribute("data-star")) {
+              paint(Number(t.getAttribute("data-star")) || 0);
+            }
+          });
+          card.querySelector("[data-review-save]").addEventListener("click", function () {
+            var rating = Number(picker.getAttribute("data-rating")) || 0;
+            var text = card.querySelector(".review-text").value.replace(/^\s+|\s+$/g, "");
+            if (!rating) { say("অনুগ্রহ করে প্রথমে স্টার দিন (১–৫)।", false); return; }
+            var btn = this;
+            btn.disabled = true;
+            SSA_DB.from("reviews").upsert({
+              user_id: user.id,
+              course_slug: slug,
+              rating: rating,
+              review_text: text || null,
+              updated_at: new Date().toISOString()
+            }, { onConflict: "user_id,course_slug" }).then(function (r) {
+              btn.disabled = false;
+              if (r.error) { say("রিভিউ সেভ করা যায়নি। আবার চেষ্টা করুন।", false); return; }
+              btn.textContent = "রিভিউ আপডেট করুন";
+              say("ধন্যবাদ! আপনার রিভিউ সেভ হয়েছে।", true);
+            }, function () {
+              btn.disabled = false;
+              say("রিভিউ সেভ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখুন।", false);
+            });
+          });
+        })(cards[c]);
+      }
+    }, function () {
+      reviewsEl.innerHTML = '<p class="empty-note">রিভিউ লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+    });
+
+    SSA_DB.from("orders").select("items,total,status").eq("user_id", user.id).then(function (r) {
+      if (r.error) {
+        ordersEl.innerHTML = '<p class="empty-note">অর্ডারের তালিকা লোড করা যায়নি। কিছুক্ষণ পরে আবার দেখুন।</p>';
+        return;
+      }
+      var rows = r.data || [];
+      if (!rows.length) {
+        ordersEl.innerHTML = '<p class="empty-note">এখনো কোনো অর্ডার নেই।</p>';
+        return;
+      }
+      ordersEl.innerHTML = rows.map(function (o) {
+        var titles = (o.items || []).map(function (it) {
+          return esc(it.title || it.slug || "");
+        }).join(", ");
+        return '<div class="order-card"><div class="o-top"><b>' + titles + '</b>' +
+          statusTag(o.status) + '</div>' +
+          '<div class="o-items">সর্বমোট: ৳' + o.total + '</div></div>';
+      }).join("");
+    });
+  });
+})();
+</script>
+</body>
+</html>

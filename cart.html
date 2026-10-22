@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>কার্ট ও চেকআউট — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy কার্ট ও চেকআউট — বিকাশে পেমেন্ট করে TrxID দিন, অনুমোদনের পর অ্যাক্সেস।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="cart-layout">
+    <section class="panel">
+      <h2>আপনার নির্বাচিত কোর্স</h2>
+      <div id="cartItems"></div>
+      <div class="cart-total"><span>সর্বমোট</span><span class="amt" id="cartTotal">৳0</span></div>
+      <p style="margin-top:12px"><a href="courses.html">← আরও কোর্স বা পণ্য যোগ করুন</a></p>
+    </section>
+
+    <section class="panel">
+      <h2>চেকআউট — অর্ডার ফর্ম</h2>
+      <div id="checkoutArea">
+        <div class="pay-box">
+          প্রথমে বিকাশে <span class="bkash">01738601121</span> নম্বরে <b>Send Money</b> করে সর্বমোট টাকা পাঠান, তারপর নিচের ফর্মটি পূরণ করুন। আমরা আপনার TrxID যাচাই করে অনুমোদন দিলে আপনার অ্যাকাউন্টে অ্যাক্সেস চালু হয়ে যাবে।
+        </div>
+        <div class="form-error" id="checkoutError"></div>
+        <form class="form-grid" id="checkoutForm">
+          <div class="field">
+            <label for="fName">আপনার পুরো নাম *</label>
+            <input id="fName" name="name" type="text" required placeholder="যেমন: মোঃ আব্দুল্লাহ">
+          </div>
+          <div class="field">
+            <label for="fMobile">মোবাইল নম্বর *</label>
+            <input id="fMobile" name="mobile" type="tel" required placeholder="01XXXXXXXXX">
+          </div>
+          <div class="field">
+            <label for="fEmail">ইমেইল ঠিকানা *</label>
+            <input id="fEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="fBkash">বিকাশ নম্বর (যে নম্বর থেকে টাকা পাঠিয়েছেন) *</label>
+            <input id="fBkash" name="bkash_from" type="tel" required placeholder="01XXXXXXXXX">
+          </div>
+          <div class="field">
+            <label for="fTrxid">বিকাশ TrxID *</label>
+            <input id="fTrxid" name="trxid" type="text" required placeholder="যেমন: 9HXXXXXXX">
+            <small>পেমেন্ট সফল হলে বিকাশ থেকে পাওয়া Transaction ID-টি এখানে লিখুন।</small>
+          </div>
+          <div class="field" style="display:none" aria-hidden="true">
+            <label for="fWebsite">Website</label>
+            <input id="fWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="fUser">পছন্দের ইউজারনেম *</label>
+            <input id="fUser" name="username" type="text" required placeholder="যেমন: abdullah2026">
+            <small>এই ইউজারনেম দিয়ে আপনার লগইন অ্যাকাউন্ট তৈরি হবে।</small>
+          </div>
+          <div class="field" id="fPassWrap" style="display:none">
+            <label for="fPass">আপনার অ্যাকাউন্টের পাসওয়ার্ড *</label>
+            <input id="fPass" name="password" type="password" placeholder="কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড" autocomplete="new-password">
+            <small>আপনি এখনো লগইন করেননি — এই ইমেইল ও পাসওয়ার্ড দিয়ে আপনার লগইন অ্যাকাউন্ট তৈরি হবে। পরে এই অ্যাকাউন্টেই আপনার কোর্সের অ্যাক্সেস পাবেন।</small>
+          </div>
+          <button class="btn lg" type="submit" id="checkoutBtn" style="width:100%">অর্ডার জমা দিন</button>
+        </form>
+        <p class="help-line">কোনো সমস্যা হলে WhatsApp করুন: <a href="https://wa.me/8801782911601">01782911601</a> (এটি যোগাযোগের নম্বর — পেমেন্টের নম্বর নয়)</p>
+      </div>
+      <div id="successArea"></div>
+    </section>
+  </div>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>অর্ডার করতে কোথাও আটকে গেছেন? Nowshin আপনাকে ধাপে ধাপে সাহায্য করবেন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="content.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Cart page (Phase 2): render items + REAL checkout against Supabase.
+   - Signed-in student: profile prefilled, the order inserts directly.
+   - Visitor: the form also creates the account (signUp + profiles row),
+     then inserts the order. The order lands with status "pending" —
+     access opens only after the Founder approves the bKash TrxID.
+   - After a successful insert, the Founder is notified on Telegram via
+     the ssa-telegram order-notify endpoint (fire-and-forget: it can
+     never block or break the success screen).
+   - On any failure the cart is left exactly as it was. */
+(function () {
+  var itemsEl = document.getElementById("cartItems");
+  var totalEl = document.getElementById("cartTotal");
+  var form = document.getElementById("checkoutForm");
+  var errEl = document.getElementById("checkoutError");
+  var btn = document.getElementById("checkoutBtn");
+  var passWrap = document.getElementById("fPassWrap");
+  var FORM_OPENED_AT = Date.now();
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function trim(id) { return document.getElementById(id).value.replace(/^\s+|\s+$/g, ""); }
+  function showErr(html) {
+    errEl.innerHTML = html;
+    errEl.classList.add("show");
+    if (errEl.scrollIntoView) errEl.scrollIntoView({ block: "center" });
+  }
+  function hideErr() { errEl.classList.remove("show"); }
+  function setBusy(busy) {
+    btn.disabled = busy;
+    btn.textContent = busy ? "জমা দেওয়া হচ্ছে…" : "অর্ডার জমা দিন";
+  }
+
+  function render() {
+    var ids = SSA_CART.get();
+    if (!ids.length) {
+      itemsEl.innerHTML = '<p class="empty-note">আপনার কার্ট খালি আছে।<br><a href="courses.html">সকল কোর্স দেখুন →</a></p>';
+    } else {
+      itemsEl.innerHTML = ids.map(function (id) {
+        var it = ssaFindItem(id);
+        if (!it) return "";
+        return '<div class="cart-row"><img src="' + it.cover + '" alt="">' +
+          '<div class="ci"><b class="en">' + it.title + '</b><span>' + it.titleBn + '</span></div>' +
+          '<span class="cp">৳' + it.price + '</span>' +
+          '<button class="remove-btn" type="button" data-remove="' + id + '" aria-label="Remove">✕</button></div>';
+      }).join("");
+    }
+    totalEl.textContent = "৳" + SSA_CART.total();
+  }
+  /* content.js calls this after the database catalog replaces static
+     course data, so prices/covers in the cart refresh too. */
+  window.ssaRenderCart = render;
+  itemsEl.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.getAttribute && t.getAttribute("data-remove")) {
+      SSA_CART.remove(t.getAttribute("data-remove"));
+      render();
+    }
+  });
+
+  /* Who is checking out? Prefill for a signed-in student; a visitor gets
+     the extra password field so the account is created with the order. */
+  var signedInUser = null;
+  if (window.SSA_AUTH) {
+    SSA_AUTH.ready.then(function () {
+      signedInUser = SSA_AUTH.getUser();
+      if (signedInUser) {
+        var p = SSA_AUTH.getProfile();
+        if (p) {
+          if (p.name) document.getElementById("fName").value = p.name;
+          if (p.mobile) document.getElementById("fMobile").value = p.mobile;
+          if (p.username) {
+            var fu = document.getElementById("fUser");
+            fu.value = p.username;
+            fu.readOnly = true;
+          }
+        }
+        if (signedInUser.email) document.getElementById("fEmail").value = signedInUser.email;
+        passWrap.style.display = "none";
+      } else {
+        passWrap.style.display = "";
+      }
+    });
+  } else {
+    passWrap.style.display = "";
+  }
+
+  function showSuccess(name, items, total) {
+    SSA_CART.clear();
+    document.getElementById("checkoutArea").style.display = "none";
+    document.getElementById("successArea").innerHTML =
+      '<div class="success-box"><h3>✅ আপনার অর্ডার পৌঁছেছে</h3>' +
+      '<p>ধন্যবাদ, ' + escapeHtml(name) + '। আপনার অর্ডারটি এখন <b>অনুমোদনের অপেক্ষায়</b> আছে। আমরা আপনার বিকাশ TrxID যাচাই করে সাধারণত ২৪ ঘণ্টার মধ্যে আপনার অ্যাকাউন্টে অ্যাক্সেস চালু করে দেব।</p>' +
+      '<div class="ord"><b>অর্ডারের বিবরণ</b><br>পণ্য: ' + items.map(function (i) { return i.title; }).join(", ") +
+      '<br>সর্বমোট: ৳' + total + ' (বিকাশ পেমেন্ট: ' + SSA_DATA.bkashNumber + ')</div></div>';
+    render();
+    window.scrollTo(0, 0);
+  }
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    hideErr();
+    var ids = SSA_CART.get();
+    if (!ids.length) {
+      ssaToast("আপনার কার্ট খালি — আগে একটি কোর্স বা পণ্য যোগ করুন।");
+      return;
+    }
+    if (!window.SSA_DB) {
+      showErr("দুঃখিত, অর্ডার জমা দিতে ইন্টারনেট সংযোগ প্রয়োজন। আপনার সংযোগ দেখে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    var name = trim("fName");
+    var mobile = trim("fMobile");
+    var email = trim("fEmail");
+    var bkash = trim("fBkash");
+    var trxid = trim("fTrxid");
+    var username = trim("fUser");
+    var items = ids.map(function (id) {
+      var it = ssaFindItem(id);
+      return it ? { slug: it.id, title: it.title, price: it.price } : { slug: id, title: id, price: 0 };
+    });
+    var total = SSA_CART.total();
+
+    /* Authentic-input guards (Founder order 2026-10-22): the mobile must
+       be a real Bangladeshi number, the email a real address shape, and
+       the TrxID the real 10-character bKash format. A hidden honeypot
+       field, a minimum fill time and an attempt throttle stop bots and
+       scripts; the database enforces the same formats again on its side,
+       so nothing fake can be pushed in through the API either. */
+    if (document.getElementById("fWebsite").value) {
+      showErr("দুঃখিত, আপনার অর্ডার জমা দেওয়া যায়নি। আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    if (Date.now() - FORM_OPENED_AT < 3000) {
+      showErr("ফর্মটি একটু সময় নিয়ে পূরণ করে আবার জমা দিন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    mobile = mobile.replace(/[\s-]/g, "");
+    bkash = bkash.replace(/[\s-]/g, "");
+    trxid = trxid.replace(/\s/g, "").toUpperCase();
+    var BD_MOBILE = /^01[3-9][0-9]{8}$/;
+    if (!BD_MOBILE.test(mobile)) {
+      showErr("সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (01 দিয়ে শুরু হতে হবে)। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showErr("সঠিক ইমেইল ঠিকানা দিন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    if (!BD_MOBILE.test(bkash)) {
+      showErr("যে নম্বর থেকে বিকাশে টাকা পাঠিয়েছেন, সেই সঠিক ১১ সংখ্যার নম্বরটি দিন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    if (!/^[A-Z0-9]{10}$/.test(trxid)) {
+      showErr("সঠিক বিকাশ TrxID দিন — TrxID হয় ১০ অক্ষরের (বড় হাতের অক্ষর ও সংখ্যা)। বিকাশের কনফার্মেশন মেসেজে TrxID-টি পাবেন। (আপনার কার্ট আগের মতোই আছে।)");
+      return;
+    }
+    try {
+      var nowMs = Date.now();
+      var attempts = JSON.parse(localStorage.getItem("ssa_order_attempts") || "[]").filter(function (t) { return nowMs - t < 600000; });
+      if (attempts.length >= 3) {
+        showErr("অনেকবার চেষ্টা করা হয়েছে — ১০ মিনিট পরে আবার চেষ্টা করুন। সাহায্য দরকার হলে WhatsApp করুন: 01782911601।");
+        return;
+      }
+      attempts.push(nowMs);
+      localStorage.setItem("ssa_order_attempts", JSON.stringify(attempts));
+    } catch (e) {}
+
+    var user = signedInUser || (window.SSA_AUTH ? SSA_AUTH.getUser() : null);
+    var pass = "";
+    if (!user) {
+      pass = document.getElementById("fPass").value;
+      if (!pass || pass.length < 6) {
+        showErr("আপনার অ্যাকাউন্টের জন্য কমপক্ষে ৬ অক্ষরের একটি পাসওয়ার্ড দিন।");
+        return;
+      }
+    }
+    setBusy(true);
+    function fail(html) { setBusy(false); showErr(html); }
+
+    /* Fire-and-forget: tell the Telegram bridge a new order exists.
+       The endpoint re-reads the order from the database before it
+       messages the Founder, so this ping carries only the row id.
+       Fully guarded — a failure here must never touch the success UI. */
+    function notifyOrder(orderId) {
+      if (!orderId) return;
+      try {
+        var ctrl = ("AbortController" in window) ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 4000) : null;
+        var done = function () { if (timer) clearTimeout(timer); };
+        fetch("https://ssa-telegram.vercel.app/api/order-notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_id: orderId }),
+          signal: ctrl ? ctrl.signal : undefined
+        }).then(done, done);
+      } catch (e) { /* never break checkout */ }
+    }
+
+    /* Fire-and-forget: also copy the new order into the Founder's
+       Google Sheet (Sales tab, status "pending") through the Google
+       Bridge — the URL lives in nowshin.js as window.SSA_SHEET_URL.
+       Fully guarded: no URL or any failure here never touches the
+       checkout flow or the success screen. */
+    function logSaleToSheet() {
+      try {
+        var sheetUrl = window.SSA_SHEET_URL;
+        if (!sheetUrl) return;
+        fetch(sheetUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            type: "sale",
+            t: new Date().toISOString(),
+            name: name,
+            mobile: mobile,
+            item: items.map(function (i) { return i.title; }).join(", "),
+            amount: total,
+            trxid: trxid,
+            status: "pending"
+          })
+        }).catch(function () { /* best-effort only */ });
+      } catch (e) { /* never break checkout */ }
+    }
+
+    function placeOrder(userId) {
+      SSA_DB.from("orders").insert({
+        user_id: userId,
+        name: name,
+        mobile: mobile,
+        email: email,
+        username: username,
+        items: items,
+        total: total,
+        bkash_sender: bkash,
+        trxid: trxid,
+        status: "pending"
+      }).select("id").then(function (r) {
+        if (r.error) {
+          if (r.error.code === "23505") {
+            fail("এই TrxID দিয়ে ইতিমধ্যে একটি অর্ডার জমা দেওয়া হয়েছে। সঠিক TrxID লিখে আবার চেষ্টা করুন — অথবা সাহায্যের জন্য WhatsApp করুন: 01782911601। (আপনার কার্ট আগের মতোই আছে।)");
+          } else {
+            fail("দুঃখিত, আপনার অর্ডার জমা দেওয়া যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+          }
+          return;
+        }
+        notifyOrder((r.data && r.data[0] && r.data[0].id) || null);
+        logSaleToSheet();
+        showSuccess(name, items, total);
+      }).catch(function () {
+        fail("দুঃখিত, আপনার অর্ডার জমা দেওয়া যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+      });
+    }
+
+    if (user) { placeOrder(user.id); return; }
+
+    SSA_DB.auth.signUp({ email: email, password: pass }).then(function (res) {
+      if (res.error) {
+        var m = (res.error.message || "").toLowerCase();
+        if (m.indexOf("already") !== -1) {
+          fail('এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে। অনুগ্রহ করে প্রথমে <a href="login.html">লগইন</a> করুন, তারপর আবার অর্ডার করুন। (আপনার কার্ট আগের মতোই আছে।)');
+        } else if (m.indexOf("password") !== -1) {
+          fail("পাসওয়ার্ডটি কমপক্ষে ৬ অক্ষরের হতে হবে। (আপনার কার্ট আগের মতোই আছে।)");
+        } else {
+          fail("দুঃখিত, অ্যাকাউন্ট তৈরি করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+        }
+        return;
+      }
+      var newUser = res.data.user;
+      if (!newUser) {
+        fail("দুঃখিত, অ্যাকাউন্ট তৈরি করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+        return;
+      }
+      try {
+        localStorage.setItem("ssa_pending_profile", JSON.stringify({
+          id: newUser.id, name: name, mobile: mobile, username: username
+        }));
+      } catch (e) {}
+      if (res.data.session) {
+        SSA_DB.from("profiles").insert({
+          id: newUser.id, name: name, mobile: mobile, username: username
+        }).then(function (ir) {
+          if (ir.error && ir.error.code === "23505") {
+            fail("এই ইউজারনেমটি ইতিমধ্যে অন্য কেউ ব্যবহার করছেন। অন্য একটি ইউজারনেম লিখে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+            return;
+          }
+          if (!ir.error) {
+            try { localStorage.removeItem("ssa_pending_profile"); } catch (e) {}
+          }
+          placeOrder(newUser.id);
+        });
+      } else {
+        /* No session yet (email confirmation first) — orders may be placed
+           by anyone, and auth.js saves the profile row after first login. */
+        placeOrder(newUser.id);
+      }
+    }).catch(function () {
+      fail("দুঃখিত, অ্যাকাউন্ট তৈরি করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন। (আপনার কার্ট আগের মতোই আছে।)");
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

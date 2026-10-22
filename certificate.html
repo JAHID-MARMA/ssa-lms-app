@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>সার্টিফিকেট — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy কোর্স সম্পন্নের সার্টিফিকেট।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Certificate sheet — V8 design (Founder-approved 2026-10-22): A4
+     landscape, print-perfect. The sheet scales as ONE sheet at any
+     width: inner sizes use cqw units (1cqw = 1% of the sheet width),
+     so text and art shrink together on narrow screens.
+     Screen: centered with shadow. Print: only the sheet is visible
+     (visibility technique), so the header, footer, chat widget and
+     buttons never reach paper. */
+  .cert-toolbar{text-align:center;margin:6px 0 18px}
+  .cert{
+    position:relative;width:min(1122px,100%);aspect-ratio:1122/793;margin:0 auto;
+    background:#fff;border:1px solid #d8dde3;box-shadow:0 18px 50px rgba(23,58,94,.28);
+    overflow:hidden;container-type:inline-size;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .cert *{-webkit-print-color-adjust:exact;print-color-adjust:exact;box-sizing:border-box}
+  .cert p{margin:0}
+  /* sweeping curves, top-right + bottom-right */
+  .cert-swoosh{position:absolute;right:0;z-index:2}
+  .cert-swoosh svg{display:block;width:100%;height:auto}
+  .cert-swoosh-top{top:0;width:55.26cqw}
+  .cert-swoosh-bot{bottom:0;width:57.04cqw}
+  /* right dark pinstripe panel with curved left edge */
+  .cert-panel{position:absolute;top:21%;right:0;width:31.5%;height:58%;z-index:1}
+  .cert-panel-bg{position:absolute;inset:0;width:100%;height:100%;
+    filter:drop-shadow(-0.53cqw 0 0 #ffffff) drop-shadow(0 0.53cqw 1.25cqw rgba(23,58,94,.25))}
+  .cert-rosette{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);z-index:3;width:16.76cqw}
+  .cert-rosette svg{display:block;width:100%;height:auto;filter:drop-shadow(0 0.89cqw 1.43cqw rgba(0,0,0,.45))}
+  .cert-qrbox{position:absolute;left:50%;transform:translateX(-50%);bottom:6.5%;z-index:3;background:#fff;
+    border-radius:0.71cqw;padding:0.62cqw 0.71cqw 0.45cqw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+  .cert-qrbox svg{width:6.6cqw;height:auto;display:block}
+  .cert-qrbox span{display:block;font-size:0.89cqw;font-weight:700;color:#173A5E;margin-top:0.27cqw;line-height:1.35;font-family:'Poppins',sans-serif}
+  /* left text column, centered stack */
+  .cert-col{position:absolute;left:4.5%;top:9%;width:60%;z-index:5;text-align:center}
+  .cert-brandline{display:flex;align-items:center;justify-content:center;gap:1.16cqw}
+  .cert-logo-inline{width:3.57cqw;height:3.57cqw;object-fit:cover;flex:none;box-shadow:0 1px 5px rgba(23,58,94,.22)}
+  .cert-company{font-family:'Poppins',sans-serif;font-size:1.60cqw;font-weight:600;letter-spacing:0.45cqw;color:#3A4654;line-height:1;text-shadow:0 0.09cqw 0.18cqw rgba(34,48,63,.18)}
+  .cert-title{font-family:'Poppins',sans-serif;font-size:5.61cqw;font-weight:800;letter-spacing:0.53cqw;color:#E2136E;margin-top:1.25cqw;line-height:1;text-shadow:0 0.18cqw 0 rgba(185,14,89,.22),0 0.71cqw 1.60cqw rgba(226,19,110,.20)}
+  .cert-title-sub{font-family:'Poppins',sans-serif;font-size:1.78cqw;font-weight:600;letter-spacing:0.98cqw;color:#263646;margin-top:0.62cqw;text-shadow:0 0.09cqw 0.18cqw rgba(34,48,63,.20)}
+  .cert-banner{display:inline-block;margin-top:1.78cqw;background:#22303F;color:#fff;font-family:'Poppins',sans-serif;
+    font-size:1.20cqw;font-weight:600;letter-spacing:0.31cqw;padding:0.71cqw 2.67cqw;position:relative}
+  .cert-banner::before,.cert-banner::after{content:"";position:absolute;top:0;border-style:solid}
+  .cert-banner::before{left:-1.33cqw;border-width:1.51cqw 1.34cqw 1.51cqw 0;border-color:transparent #22303F transparent transparent}
+  .cert-banner::after{right:-1.33cqw;border-width:1.51cqw 0 1.51cqw 1.34cqw;border-color:transparent transparent transparent #22303F}
+  .cert-sname{font-family:'Great Vibes','Poppins',cursive;font-size:5.88cqw;color:#22303F;margin-top:1.25cqw;line-height:1.15;text-shadow:0 0.18cqw 0.27cqw rgba(34,48,63,.28),0 0.89cqw 1.96cqw rgba(34,48,63,.12)}
+  .cert-orn{margin:0.18cqw auto 0;width:20.50cqw}
+  .cert-orn svg{display:block;width:100%;height:auto}
+  .cert-desc{font-size:1.56cqw;color:#3A4654;margin-top:0.89cqw}
+  .cert-course{font-family:'Poppins','Hind Siliguri',sans-serif;font-size:1.96cqw;font-weight:700;color:#173A5E;margin-top:1.07cqw;text-shadow:0 0.09cqw 0.18cqw rgba(23,58,94,.18)}
+  .cert-skills{font-size:1.20cqw;color:#5D6B7A;margin-top:0.80cqw;line-height:1.55;max-width:49.91cqw;margin-left:auto;margin-right:auto}
+  .cert-skills b{color:#B90E59;font-family:'Poppins',sans-serif;font-size:1.07cqw;letter-spacing:0.13cqw}
+  .cert-meta{font-size:1.20cqw;color:#5D6B7A;margin-top:0.62cqw}
+  .cert-meta b{color:#26303B}
+  /* bottom row: date (left) / signature (right) */
+  .cert-bottom{position:absolute;left:7%;bottom:8.5%;width:56%;z-index:5;display:flex;justify-content:space-between;align-items:flex-end}
+  .cert-dblock{text-align:center}
+  .cert-dblock .val{font-family:'Poppins',sans-serif;font-size:1.29cqw;font-weight:600;color:#26303B;margin-bottom:0.45cqw}
+  .cert-dblock .line{width:15.15cqw;border-top:1.8px solid #26303B;margin:0 auto}
+  .cert-dblock .lab{font-family:'Poppins',sans-serif;font-size:1.16cqw;color:#3A4654;margin-top:0.53cqw;letter-spacing:0.09cqw}
+  .cert-sblock{text-align:center;flex:none}
+  .cert-sblock img{height:4.63cqw;display:block;margin:0 auto -0.36cqw;object-fit:contain}
+  .cert-sblock .line{width:18.72cqw;border-top:1.8px solid #26303B;margin:0 auto}
+  .cert-sblock .who{font-family:'Poppins',sans-serif;font-size:1.25cqw;font-weight:700;color:#26303B;margin-top:0.53cqw}
+  .cert-sblock .role{font-size:1.05cqw;color:#5D6B7A;line-height:1.45}
+  .cert-certid{position:absolute;left:4.5%;bottom:2.6%;z-index:5;font-size:0.98cqw;color:#8A97A5;font-family:'Poppins',sans-serif}
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    body *{visibility:hidden}
+    .cert,.cert *{visibility:visible}
+    .cert{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:none}
+    /* Page chrome leaves the print layout entirely, so the hidden
+       header/footer can never push a blank second page. */
+    .site-header,.site-footer,.nowshin-strip,.cert-toolbar,#certMsg{display:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section style="margin-top:26px">
+    <div id="certMsg"><p class="empty-note">আপনার সার্টিফিকেট যাচাই করা হচ্ছে…</p></div>
+    <div id="certHolder"></div>
+  </section>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>সার্টিফিকেট নিয়ে কোনো প্রশ্ন আছে? আমাদের Customer Manager Nowshin-কে জিজ্ঞেস করুন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<!-- QR Code Generator for JavaScript — Copyright (c) 2009 Kazuhiko Arase, MIT License (assets/qrcode.js) -->
+<script src="assets/qrcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Certificate of Completion (Phase 6). Eligibility is verified from the
+   database itself — an enrollments row for this course AND a
+   lesson_progress row for every lesson of the course. Anything less
+   shows a clear message instead of the certificate. */
+(function () {
+  var msgEl = document.getElementById("certMsg");
+  var holderEl = document.getElementById("certHolder");
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function say(html) {
+    msgEl.innerHTML = '<div class="panel" style="text-align:center">' + html + '</div>';
+  }
+  function longDate(iso) {
+    var d = iso ? new Date(iso) : new Date();
+    if (isNaN(d.getTime())) d = new Date();
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  }
+  function coursePageFor(slug) {
+    var it = (typeof ssaFindItem === "function") ? ssaFindItem(slug) : null;
+    if (it && it.page) return it.page;
+    if (slug === "spoken") return "course-spoken.html";
+    if (slug === "phonics") return "course-phonics.html";
+    return "course.html?slug=" + encodeURIComponent(slug);
+  }
+
+  var m = /[?&]slug=([^&]+)/.exec(window.location.search);
+  var slug = m ? decodeURIComponent(m[1]) : "";
+  var item = slug && (typeof ssaFindItem === "function") ? ssaFindItem(slug) : null;
+
+  if (!slug || !item || item.type !== "course") {
+    say('<p style="font-size:18px;margin-bottom:14px">কোর্সটি পাওয়া যায়নি।</p>' +
+      '<p><a class="btn lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+    return;
+  }
+  if (!window.SSA_DB || !window.SSA_AUTH) {
+    say('<p style="font-size:18px;margin-bottom:14px">সার্টিফিকেট যাচাই করা যায়নি — আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>' +
+      '<p><a class="btn lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+    return;
+  }
+
+  window.SSA_AUTH.ready.then(function () {
+    var user = window.SSA_AUTH.getUser();
+    if (!user) {
+      say('<p style="font-size:18px;margin-bottom:14px">সার্টিফিকেট দেখতে হলে আগে লগইন করুন।</p>' +
+        '<p><a class="btn lg" href="login.html">লগইন করুন</a></p>');
+      return;
+    }
+    var profile = window.SSA_AUTH.getProfile();
+    var studentName = (profile && profile.name) ? profile.name :
+      ((profile && profile.username) ? profile.username : (user.email || "Student"));
+    var username = (profile && profile.username) ? profile.username : "";
+
+    Promise.all([
+      window.SSA_DB.from("enrollments").select("course_slug")
+        .eq("user_id", user.id).eq("course_slug", slug).maybeSingle(),
+      window.SSA_DB.from("lessons").select("id").eq("course_slug", slug),
+      window.SSA_DB.from("lesson_progress").select("lesson_id, completed_at").eq("user_id", user.id),
+      window.SSA_DB.from("quizzes").select("id").eq("course_slug", slug),
+      window.SSA_DB.from("courses").select("title, title_bn").eq("slug", slug).maybeSingle()
+    ]).then(function (res) {
+      var enr = res[0], les = res[1], prog = res[2];
+      if (enr.error || les.error || prog.error) {
+        say('<p style="font-size:18px;margin-bottom:14px">সার্টিফিকেট যাচাই করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।</p>' +
+          '<p><a class="btn lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+        return;
+      }
+      if (!enr.data) {
+        say('<p style="font-size:18px;margin-bottom:14px">আপনি এই কোর্সে ভর্তি নন — তাই সার্টিফিকেট পাওয়া যাবে না।</p>' +
+          '<p><a class="btn lg" href="' + coursePageFor(slug) + '">কোর্সে ভর্তি হোন</a> ' +
+          '<a class="btn ghost lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+        return;
+      }
+      var lessonIds = {};
+      (les.data || []).forEach(function (l) { lessonIds[l.id] = true; });
+      var total = (les.data || []).length;
+      var done = 0, lastDone = null;
+      (prog.data || []).forEach(function (p) {
+        if (lessonIds[p.lesson_id]) {
+          done++;
+          if (!lastDone || String(p.completed_at) > String(lastDone)) lastDone = p.completed_at;
+        }
+      });
+      if (total === 0 || done < total) {
+        say('<p style="font-size:18px;margin-bottom:10px">আপনি এই কোর্সের <b>' + done + ' / ' + total + '</b> টি লেসন শেষ করেছেন।</p>' +
+          '<p style="color:var(--muted);margin-bottom:14px">সবগুলো লেসন শেষ করলেই আপনার সার্টিফিকেট এখানে তৈরি হয়ে যাবে।</p>' +
+          '<p><a class="btn lg" href="' + coursePageFor(slug) + '">কোর্সে ফিরে যান</a> ' +
+          '<a class="btn ghost lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+        return;
+      }
+
+      /* Eligible. Course quiz totals (nice-to-have — never blocking). */
+      var quizIds = {};
+      if (!res[3].error && res[3].data) res[3].data.forEach(function (q) { quizIds[q.id] = true; });
+      var courseTitle = item.titleBn || item.title;
+      if (!res[4].error && res[4].data) {
+        courseTitle = res[4].data.title_bn || res[4].data.title || courseTitle;
+      }
+      window.SSA_DB.from("quiz_results").select("quiz_id, score, total").eq("user_id", user.id)
+        .then(function (qr) {
+          var qs = 0, qt = 0;
+          if (!qr.error && qr.data) {
+            qr.data.forEach(function (r) {
+              if (quizIds[r.quiz_id]) { qs += Number(r.score) || 0; qt += Number(r.total) || 0; }
+            });
+          }
+          renderCert({
+            name: studentName, username: username, title: courseTitle,
+            dateIso: lastDone, qScore: qs, qTotal: qt,
+            learn: (item && item.learn && item.learn.length) ? item.learn : null
+          });
+        }, function () {
+          renderCert({
+            name: studentName, username: username, title: courseTitle,
+            dateIso: lastDone, qScore: 0, qTotal: 0,
+            learn: (item && item.learn && item.learn.length) ? item.learn : null
+          });
+        });
+    }, function () {
+      say('<p style="font-size:18px;margin-bottom:14px">সার্টিফিকেট যাচাই করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>' +
+        '<p><a class="btn lg" href="dashboard.html">ড্যাশবোর্ডে যান</a></p>');
+    });
+  });
+
+  function renderCert(d) {
+    var dateObj = d.dateIso ? new Date(d.dateIso) : new Date();
+    if (isNaN(dateObj.getTime())) dateObj = new Date();
+    function p2(n) { return (n < 10 ? "0" : "") + n; }
+    var certId = "SSA-" + (d.username || "student") + "-" + slug.toUpperCase() + "-" +
+      dateObj.getFullYear() + p2(dateObj.getMonth() + 1);
+
+    /* Skills row — the course's own learn points (data.js, the same
+       source the course page uses). Shown only when that data exists,
+       and capped so the sheet can never overflow. */
+    var skillsHtml = "";
+    if (d.learn && d.learn.length) {
+      var pts = [], ptsLen = 0;
+      for (var li = 0; li < d.learn.length && pts.length < 4; li++) {
+        var lt = String(d.learn[li] == null ? "" : d.learn[li]).replace(/\s+/g, " ").trim();
+        if (!lt) continue;
+        if (pts.length && ptsLen + lt.length > 185) break;
+        pts.push(lt); ptsLen += lt.length + 3;
+      }
+      if (pts.length) {
+        skillsHtml = '<p class="cert-skills"><b>SKILLS GAINED</b><br>' +
+          pts.map(function (t) { return esc(t); }).join(" • ") + '</p>';
+      }
+    }
+    var metaHtml = "";
+    if (d.qTotal > 0) {
+      metaHtml = '<p class="cert-meta">Total Quiz Score: <b>' + d.qScore + ' / ' + d.qTotal + '</b></p>';
+    }
+
+    msgEl.innerHTML = "";
+    holderEl.innerHTML =
+      '<div class="cert-toolbar">' +
+      '<button class="btn lg" type="button" id="certPrintBtn">🖨️ প্রিন্ট / PDF সেভ করুন</button>' +
+      '<p style="color:var(--muted);font-size:14px;margin-top:8px">প্রিন্টের সময় "Background graphics" অপশনটি চালু রাখলে রঙগুলো ঠিকমতো আসবে।</p></div>' +
+      '<div class="cert">' +
+      '<div class="cert-swoosh cert-swoosh-top"><svg viewBox="0 0 620 215" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M60,0 H620 V118 C520,168 420,120 330,86 C240,52 150,44 60,0 Z" fill="#22303F"/>' +
+      '<path d="M0,0 H620 V86 C540,150 450,112 360,74 C260,32 130,34 0,0 Z" fill="#E2136E"/>' +
+      '</svg></div>' +
+      '<div class="cert-swoosh cert-swoosh-bot"><svg viewBox="0 0 640 205" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M40,205 H640 V92 C540,44 440,88 350,124 C250,164 140,168 40,205 Z" fill="#22303F"/>' +
+      '<path d="M0,205 H640 V128 C560,66 460,104 370,140 C260,184 120,190 0,205 Z" fill="#E2136E"/>' +
+      '</svg></div>' +
+      '<div class="cert-panel">' +
+      '<svg class="cert-panel-bg" viewBox="0 0 353 460" preserveAspectRatio="none" aria-hidden="true">' +
+      '<defs><pattern id="certStripes" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+      '<rect width="13" height="13" fill="#212f3f"/><rect width="2" height="13" fill="#263646"/></pattern></defs>' +
+      '<path d="M24,0 C50,138 50,322 24,460 L353,460 L353,0 Z" transform="translate(-7,0)" fill="#ffffff"/>' +
+      '<path d="M24,0 C50,138 50,322 24,460 L353,460 L353,0 Z" fill="url(#certStripes)"/>' +
+      '</svg>' +
+      '<div class="cert-rosette"><svg viewBox="0 0 172 196" aria-hidden="true">' +
+      '<defs>' +
+      '<radialGradient id="certGoldGrad" cx="38%" cy="30%" r="82%"><stop offset="0%" stop-color="#F9E48F"/><stop offset="52%" stop-color="#DDAA2B"/><stop offset="100%" stop-color="#9C720E"/></radialGradient>' +
+      '<linearGradient id="certGoldEdge" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F7E08B"/><stop offset="100%" stop-color="#A97B12"/></linearGradient>' +
+      '</defs>' +
+      '<path d="M62,156 L50,196 L76,176 L86,194 L96,176 L122,196 L110,156 Z" fill="#B90E59"/>' +
+      '<path d="M67,154 L59,186 L77,170 L86,186 L95,170 L113,186 L105,154 Z" fill="#22303F" opacity=".92"/>' +
+      '<polygon points="86.0,11.0 90.8,16.7 96.4,11.7 100.3,18.0 106.6,14.0 109.6,20.8 116.3,17.6 118.3,24.8 125.5,22.6 126.5,30.0 133.8,28.8 133.7,36.3 141.2,36.2 140.0,43.5 147.4,44.5 145.2,51.7 152.4,53.7 149.2,60.4 156.0,63.4 152.0,69.7 158.3,73.6 153.3,79.2 159.0,84.0 153.3,88.8 158.3,94.4 152.0,98.3 156.0,104.6 149.2,107.6 152.4,114.3 145.2,116.3 147.4,123.5 140.0,124.5 141.2,131.8 133.7,131.7 133.8,139.2 126.5,138.0 125.5,145.4 118.3,143.2 116.3,150.4 109.6,147.2 106.6,154.0 100.3,150.0 96.4,156.3 90.8,151.3 86.0,157.0 81.2,151.3 75.6,156.3 71.7,150.0 65.4,154.0 62.4,147.2 55.7,150.4 53.7,143.2 46.5,145.4 45.5,138.0 38.2,139.2 38.3,131.7 30.8,131.8 32.0,124.5 24.6,123.5 26.8,116.3 19.6,114.3 22.8,107.6 16.0,104.6 20.0,98.3 13.7,94.4 18.7,88.8 13.0,84.0 18.7,79.2 13.7,73.6 20.0,69.7 16.0,63.4 22.8,60.4 19.6,53.7 26.8,51.7 24.6,44.5 32.0,43.5 30.8,36.2 38.3,36.3 38.2,28.8 45.5,30.0 46.5,22.6 53.7,24.8 55.7,17.6 62.4,20.8 65.4,14.0 71.7,18.0 75.6,11.7 81.2,16.7" fill="url(#certGoldEdge)" stroke="#8A6508" stroke-width="5" stroke-linejoin="round"/>' +
+      '<circle cx="86" cy="84" r="57" fill="url(#certGoldGrad)" stroke="#8A6508" stroke-width="1.6"/>' +
+      '<circle cx="86" cy="84" r="48" fill="none" stroke="rgba(255,246,200,.85)" stroke-width="1.4"/>' +
+      '<circle cx="86" cy="84" r="44" fill="none" stroke="rgba(138,101,8,.5)" stroke-width="1"/>' +
+      '<ellipse cx="64" cy="52" rx="30" ry="15" fill="#ffffff" opacity=".30" transform="rotate(-22 64 52)"/>' +
+      '<text x="86" y="88" text-anchor="middle" font-family="Poppins,sans-serif" font-size="24" font-weight="800" letter-spacing="1.5" fill="#173A5E">SSA</text>' +
+      '<text x="86" y="108" text-anchor="middle" font-size="11" fill="#7A5A06">★ ★ ★</text>' +
+      '</svg></div>' +
+      '<div class="cert-qrbox"><div class="cert-qr" id="certQr"></div><span>Scan to verify</span></div>' +
+      '</div>' +
+      '<div class="cert-col">' +
+      '<div class="cert-brandline"><img class="cert-logo-inline" src="assets/logo.png" alt="Self Scale Academy"><span class="cert-company">SELF SCALE ACADEMY</span></div>' +
+      '<div class="cert-title">CERTIFICATE</div>' +
+      '<div class="cert-title-sub">OF COMPLETION</div>' +
+      '<div class="cert-banner">THIS IS TO CERTIFY THAT</div>' +
+      '<div class="cert-sname">' + esc(d.name) + '</div>' +
+      '<div class="cert-orn"><svg viewBox="0 0 230 18" aria-hidden="true">' +
+      '<line x1="0" y1="9" x2="86" y2="9" stroke="#22303F" stroke-width="1.4"/>' +
+      '<line x1="144" y1="9" x2="230" y2="9" stroke="#22303F" stroke-width="1.4"/>' +
+      '<g fill="none" stroke="#B90E59" stroke-width="1.5"><circle cx="115" cy="9" r="4.5"/>' +
+      '<path d="M100,9 q5,-7 10,0 q-5,7 -10,0 M120,9 q5,-7 10,0 q-5,7 -10,0"/></g>' +
+      '<circle cx="115" cy="9" r="1.8" fill="#B90E59"/>' +
+      '</svg></div>' +
+      '<p class="cert-desc">has successfully completed the course</p>' +
+      '<div class="cert-course">' + esc(d.title) + '</div>' +
+      skillsHtml +
+      metaHtml +
+      '</div>' +
+      '<div class="cert-bottom">' +
+      '<div class="cert-dblock"><div class="val">' + esc(longDate(d.dateIso)) + '</div><div class="line"></div><div class="lab">Date</div></div>' +
+      '<div class="cert-sblock">' +
+      '<img src="assets/signature.png" alt="" onerror="this.style.display=\'none\'">' +
+      '<div class="line"></div>' +
+      '<div class="who">Muhammad Jahid Hasan</div>' +
+      '<div class="role">English Language Teacher<br>Founder, Self Scale Academy</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="cert-certid">Certificate ID: ' + esc(certId) + ' • Self Scale Academy, Jamalpur Sadar, Jamalpur</div>' +
+      '</div>';
+    document.getElementById("certPrintBtn").addEventListener("click", function () {
+      window.print();
+    });
+
+    /* Verify QR — a real QR code generated locally at runtime with
+       assets/qrcode.js (QR Code Generator by Kazuhiko Arase, MIT).
+       It points at this certificate's URL with its certificate ID.
+       Fully offline: no CDN, and print-safe (inline SVG). */
+    try {
+      if (typeof qrcode === "function") {
+        var qrBase = (window.location.origin && window.location.origin !== "null")
+          ? window.location.origin : "https://ssa-lms-app.vercel.app";
+        var qr = qrcode(0, "M");
+        qr.addData(qrBase + "/certificate.html?id=" + certId);
+        qr.make();
+        var qrEl = document.getElementById("certQr");
+        if (qrEl) qrEl.innerHTML = qr.createSvgTag(4, 8);
+      }
+    } catch (e) { /* the certificate stands even if the QR cannot render */ }
+  }
+})();
+</script>
+</body>
+</html>

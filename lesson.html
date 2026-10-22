@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>লেসন — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy-র লেসন — ভিডিও, PDF ও কুইজ।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p style="margin-top:22px"><a id="lessonBack" href="courses.html">← কোর্সের পেজে ফিরে যান</a></p>
+
+  <section class="panel" style="margin-top:14px">
+    <h2 id="lessonTitle" class="en">লোড হচ্ছে…</h2>
+    <p id="lessonDesc" style="color:var(--muted);margin-bottom:6px"></p>
+    <div id="lessonMsg"></div>
+    <div id="lessonContent" style="margin-top:14px"></div>
+    <div id="lessonComplete" style="margin-top:22px"></div>
+    <div id="lessonQuizzes" style="margin-top:20px"></div>
+    <div class="prev-next" id="lessonNav"></div>
+  </section>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>এই লেসন নিয়ে কোনো প্রশ্ন আছে? আমাদের Customer Manager Nowshin-কে জিজ্ঞেস করুন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Lesson viewer (Phase 4). The lesson row itself is public; the CONTENT
+   (video / PDF / text) comes from lesson_content, which the database
+   only hands out for preview lessons, enrolled students and the admin.
+   An empty answer therefore means "locked" (or "not added yet"). */
+(function () {
+  var titleEl = document.getElementById("lessonTitle");
+  var descEl = document.getElementById("lessonDesc");
+  var msgEl = document.getElementById("lessonMsg");
+  var contentEl = document.getElementById("lessonContent");
+  var quizzesEl = document.getElementById("lessonQuizzes");
+  var completeEl = document.getElementById("lessonComplete");
+  var navEl = document.getElementById("lessonNav");
+  var backEl = document.getElementById("lessonBack");
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function note(html) { msgEl.innerHTML = '<p class="empty-note">' + html + '</p>'; }
+  function coursePageFor(slug) {
+    var it = (typeof ssaFindItem === "function") ? ssaFindItem(slug) : null;
+    if (it && it.page) return it.page;
+    if (slug === "spoken") return "course-spoken.html";
+    if (slug === "phonics") return "course-phonics.html";
+    return "course.html?slug=" + encodeURIComponent(slug);
+  }
+
+  var m = /[?&]id=([^&]+)/.exec(window.location.search);
+  var lessonId = m ? parseInt(decodeURIComponent(m[1]), 10) : NaN;
+
+  if (!window.SSA_DB) {
+    titleEl.textContent = "লেসন";
+    note("ডাটাবেসে সংযোগ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+    return;
+  }
+  if (!lessonId || isNaN(lessonId)) {
+    titleEl.textContent = "লেসন";
+    note("লেসনটি পাওয়া যায়নি।");
+    return;
+  }
+
+  var lesson = null;
+
+  function lockedView(loggedIn) {
+    contentEl.innerHTML =
+      '<div style="text-align:center;padding:10px 0 4px">' +
+      '<div style="font-size:44px;line-height:1.2">🔒</div>' +
+      '<p style="font-size:17px;margin:8px 0 14px">এই লেসনটি শুধু ভর্তি হওয়া শিক্ষার্থীদের জন্য।</p>' +
+      '<p><a class="btn lg" href="' + coursePageFor(lesson.course_slug) + '">কোর্সে ভর্তি হোন</a>' +
+      (loggedIn ? '' : ' <a class="btn ghost lg" href="login.html">লগইন করুন</a>') +
+      '</p></div>';
+  }
+
+  function handleNoContent() {
+    if (lesson.is_preview) {
+      note("এই লেসনের ভিডিও/PDF এখনো যোগ করা হয়নি। শীঘ্রই আসছে।");
+      return;
+    }
+    var ready = (window.SSA_AUTH && window.SSA_AUTH.ready) ? window.SSA_AUTH.ready : Promise.resolve();
+    ready.then(function () {
+      var user = window.SSA_AUTH ? window.SSA_AUTH.getUser() : null;
+      if (!user) { lockedView(false); return; }
+      var prof = window.SSA_AUTH.getProfile ? window.SSA_AUTH.getProfile() : null;
+      if (prof && prof.role === "admin") {
+        note("এই লেসনে এখনো কোনো কনটেন্ট যোগ করা হয়নি। Admin প্যানেলের লেসন অংশ থেকে ভিডিও/PDF যোগ করুন।");
+        return;
+      }
+      window.SSA_DB.from("enrollments").select("course_slug")
+        .eq("user_id", user.id).eq("course_slug", lesson.course_slug).maybeSingle()
+        .then(function (r) {
+          if (r && r.data) note("এই লেসনের ভিডিও/PDF এখনো যোগ করা হয়নি। শীঘ্রই আসছে।");
+          else lockedView(true);
+        }, function () { lockedView(true); });
+    });
+  }
+
+  function ytId(url) {
+    var mm = /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.exec(url);
+    return mm ? mm[1] : null;
+  }
+
+  function videoHtml(url) {
+    var yid = ytId(url);
+    if (yid) {
+      return '<div class="video-box"><iframe src="https://www.youtube-nocookie.com/embed/' + yid +
+        '" title="Lesson video" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+    }
+    if (/\.mp4($|\?)/i.test(url)) {
+      return '<div class="video-box"><video controls src="' + escapeHtml(url) + '"></video></div>';
+    }
+    return '<p style="margin-bottom:14px"><a class="btn" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">🎬 ভিডিওটি দেখুন</a></p>';
+  }
+
+  function renderContent(c) {
+    var html = "";
+    if (c.video_url) html += videoHtml(c.video_url);
+    if (c.body_text) {
+      html += '<div class="lesson-body">' + escapeHtml(c.body_text).split(/\n\s*\n/).map(function (p) {
+        return "<p>" + p.replace(/\n/g, "<br>") + "</p>";
+      }).join("") + '</div>';
+    }
+    html += '<div id="pdfArea"></div>';
+    contentEl.innerHTML = html;
+    setupCompleteButton();
+
+    if (c.pdf_path) {
+      var area = document.getElementById("pdfArea");
+      if (c.pdf_is_link) {
+        area.innerHTML = '<p style="margin-top:16px"><a class="btn lg" href="' + escapeHtml(c.pdf_path) +
+          '" target="_blank" rel="noopener">📄 PDF খুলুন</a></p>';
+      } else {
+        window.SSA_DB.storage.from("course-files").createSignedUrl(c.pdf_path, 3600)
+          .then(function (r) {
+            if (r.error || !r.data || !r.data.signedUrl) {
+              area.innerHTML = '<p class="empty-note">PDF টি এখন খোলা যাচ্ছে না। কিছুক্ষণ পরে আবার চেষ্টা করুন।</p>';
+              return;
+            }
+            var u = r.data.signedUrl;
+            area.innerHTML = '<p style="margin-top:16px"><a class="btn lg" href="' + escapeHtml(u) +
+              '" target="_blank" rel="noopener">📄 PDF খুলুন</a></p>' +
+              '<iframe class="pdf-frame" src="' + escapeHtml(u) + '" title="Lesson PDF"></iframe>';
+          }, function () {
+            area.innerHTML = '<p class="empty-note">PDF টি এখন খোলা যাচ্ছে না। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।</p>';
+          });
+      }
+    }
+  }
+
+  /* Lesson completion (Phase 6): shown only when the content actually
+     loaded (enrolled student / admin / preview-with-account) AND the
+     visitor is signed in. The click upserts one row into
+     lesson_progress — the database allows students their own rows only,
+     and the dashboard / certificate read the same table. */
+  function setupCompleteButton() {
+    var ready = (window.SSA_AUTH && window.SSA_AUTH.ready) ? window.SSA_AUTH.ready : null;
+    if (!ready) return;
+    ready.then(function () {
+      var user = window.SSA_AUTH.getUser ? window.SSA_AUTH.getUser() : null;
+      if (!user) return; /* visitors: no button */
+      window.SSA_DB.from("lesson_progress").select("id")
+        .eq("user_id", user.id).eq("lesson_id", lessonId).maybeSingle()
+        .then(function (r) {
+          renderCompleteButton(user, !!(r && r.data));
+        }, function () {
+          renderCompleteButton(user, false);
+        });
+    });
+  }
+
+  function renderCompleteButton(user, done) {
+    if (done) {
+      completeEl.innerHTML =
+        '<button class="btn green lg" type="button" disabled style="opacity:.85;cursor:default">✅ এই লেসনটি শেষ করেছেন</button>';
+      return;
+    }
+    completeEl.innerHTML =
+      '<button class="btn lg" type="button" id="markDoneBtn">✓ এই লেসনটি শেষ করেছি</button>' +
+      '<p id="markDoneErr" class="empty-note" style="display:none;padding:8px 0 0;text-align:left"></p>';
+    var btn = document.getElementById("markDoneBtn");
+    btn.addEventListener("click", function () {
+      var errEl = document.getElementById("markDoneErr");
+      errEl.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "সেভ হচ্ছে…";
+      var prof = window.SSA_AUTH.getProfile ? window.SSA_AUTH.getProfile() : null;
+      window.SSA_DB.from("lesson_progress")
+        .upsert({
+          user_id: user.id,
+          username: prof ? (prof.username || null) : null,
+          lesson_id: lessonId
+        }, { onConflict: "user_id,lesson_id" })
+        .then(function (r) {
+          if (r.error) {
+            btn.disabled = false;
+            btn.textContent = "✓ এই লেসনটি শেষ করেছি";
+            errEl.textContent = "দুঃখিত, সেভ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।";
+            errEl.style.display = "";
+            return;
+          }
+          renderCompleteButton(user, true);
+        }, function () {
+          btn.disabled = false;
+          btn.textContent = "✓ এই লেসনটি শেষ করেছি";
+          errEl.textContent = "দুঃখিত, সেভ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।";
+          errEl.style.display = "";
+        });
+    });
+  }
+
+  function loadQuizzes() {
+    window.SSA_DB.from("quizzes").select("id, title").eq("lesson_id", lessonId).order("id", { ascending: true })
+      .then(function (r) {
+        if (r.error || !r.data || !r.data.length) return;
+        var html = '<h3 style="margin-bottom:10px">এই লেসনের কুইজ</h3>';
+        html += r.data.map(function (q) {
+          return '<p style="margin-bottom:10px"><a class="btn green" href="quiz.html?id=' + q.id + '">কুইজ দিন → ' +
+            escapeHtml(q.title) + '</a></p>';
+        }).join("");
+        quizzesEl.innerHTML = html;
+      }, function () { /* quizzes are optional — stay silent */ });
+  }
+
+  function loadNav() {
+    window.SSA_DB.from("lessons").select("id, position, title")
+      .eq("course_slug", lesson.course_slug).order("position", { ascending: true })
+      .then(function (r) {
+        if (r.error || !r.data) return;
+        var idx = -1;
+        for (var i = 0; i < r.data.length; i++) {
+          if (String(r.data[i].id) === String(lessonId)) { idx = i; break; }
+        }
+        if (idx === -1) return;
+        var html = "";
+        if (idx > 0) html += '<a class="btn ghost" href="lesson.html?id=' + r.data[idx - 1].id + '">← আগের লেসন</a>';
+        else html += '<span></span>';
+        if (idx < r.data.length - 1) html += '<a class="btn ghost" href="lesson.html?id=' + r.data[idx + 1].id + '">পরের লেসন →</a>';
+        navEl.innerHTML = html;
+      }, function () { /* navigation is optional */ });
+  }
+
+  window.SSA_DB.from("lessons")
+    .select("id, course_slug, position, title, descr, is_preview")
+    .eq("id", lessonId).maybeSingle()
+    .then(function (r) {
+      if (r.error || !r.data) {
+        titleEl.textContent = "লেসন";
+        note("লেসনটি পাওয়া যায়নি।");
+        return;
+      }
+      lesson = r.data;
+      document.title = lesson.title + " — Self Scale Academy";
+      titleEl.textContent = lesson.title;
+      descEl.textContent = lesson.descr || "";
+      backEl.href = coursePageFor(lesson.course_slug);
+      loadNav();
+      loadQuizzes();
+      window.SSA_DB.from("lesson_content").select("*").eq("lesson_id", lessonId).maybeSingle()
+        .then(function (cr) {
+          if (cr.error || !cr.data || (!cr.data.video_url && !cr.data.pdf_path && !cr.data.body_text)) {
+            handleNoContent();
+            return;
+          }
+          renderContent(cr.data);
+        }, function () { handleNoContent(); });
+    }, function () {
+      titleEl.textContent = "লেসন";
+      note("লেসনটি লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+    });
+})();
+</script>
+</body>
+</html>

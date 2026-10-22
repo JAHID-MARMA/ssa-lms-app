@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>লগইন — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy-তে লগইন করুন — আপনার কোর্স, অর্ডার ও অ্যাক্সেস দেখুন।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="auth-layout">
+    <section class="panel">
+      <h2 style="text-align:center">লগইন করুন</h2>
+      <p style="text-align:center;color:var(--muted);margin-bottom:16px">আপনার অ্যাকাউন্টে লগইন করে আপনার কোর্সগুলো দেখুন।</p>
+      <div class="form-error" id="loginError"></div>
+      <form class="form-grid" id="loginForm">
+        <div class="field">
+          <label for="lEmail">ইমেইল ঠিকানা *</label>
+          <input id="lEmail" type="email" required placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="lPass">পাসওয়ার্ড *</label>
+          <input id="lPass" type="password" required placeholder="আপনার পাসওয়ার্ড" autocomplete="current-password">
+        </div>
+        <button class="btn lg" type="submit" id="loginBtn" style="width:100%">লগইন</button>
+        <p style="text-align:right;margin-top:2px"><a href="reset.html">পাসওয়ার্ড ভুলে গেছেন?</a></p>
+      </form>
+      <p class="auth-alt">অ্যাকাউন্ট নেই? <a href="signup.html">নতুন অ্যাকাউন্ট খুলুন</a></p>
+    </section>
+  </div>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>লগইন করতে সমস্যা হচ্ছে? Nowshin-কে জিজ্ঞেস করুন — সঙ্গে সঙ্গে সাহায্য পাবেন।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script>
+/* Login page: email + password → Supabase signInWithPassword → dashboard. */
+(function () {
+  var form = document.getElementById("loginForm");
+  var err = document.getElementById("loginError");
+  var btn = document.getElementById("loginBtn");
+  function showErr(html) { err.innerHTML = html; err.classList.add("show"); }
+  function setBusy(busy) {
+    btn.disabled = busy;
+    btn.textContent = busy ? "লগইন হচ্ছে…" : "লগইন";
+  }
+  if (window.SSA_AUTH) {
+    SSA_AUTH.ready.then(function () {
+      if (SSA_AUTH.getUser()) window.location.href = "dashboard.html";
+    });
+  }
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    err.classList.remove("show");
+    if (!window.SSA_DB) {
+      showErr("দুঃখিত, লগইন করতে ইন্টারনেট সংযোগ প্রয়োজন। আপনার সংযোগ দেখে আবার চেষ্টা করুন।");
+      return;
+    }
+    setBusy(true);
+    var email = document.getElementById("lEmail").value.replace(/^\s+|\s+$/g, "");
+    var pass = document.getElementById("lPass").value;
+    SSA_DB.auth.signInWithPassword({ email: email, password: pass }).then(function (res) {
+      if (res.error) {
+        setBusy(false);
+        var m = (res.error.message || "").toLowerCase();
+        if (m.indexOf("invalid login credentials") !== -1) {
+          showErr("ইমেইল বা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।");
+        } else if (m.indexOf("email not confirmed") !== -1) {
+          showErr("আপনার ইমেইল এখনো নিশ্চিত হয়নি। ইমেইলে পাঠানো লিংকে ক্লিক করে নিশ্চিত করুন, তারপর লগইন করুন।");
+        } else {
+          showErr("দুঃখিত, লগইন করা যায়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন।");
+        }
+        return;
+      }
+      window.location.href = "dashboard.html";
+    }).catch(function () {
+      setBusy(false);
+      showErr("দুঃখিত, লগইন করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।");
+    });
+  });
+})();
+</script>
+</body>
+</html>

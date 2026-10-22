@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>Super Admin — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy Super Admin — সকল অর্ডার, কাস্টমার ও কোর্স অ্যাক্সেস পরিচালনা।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="adminGate" style="margin-top:26px">
+    <section class="panel"><p class="empty-note">যাচাই করা হচ্ছে…</p></section>
+  </div>
+
+  <div id="adminApp" style="display:none">
+    <div class="admin-tabs" id="adminTabs">
+      <button type="button" class="admin-tab active" data-tab="orders">অর্ডার</button>
+      <button type="button" class="admin-tab" data-tab="customers">কাস্টমার</button>
+      <button type="button" class="admin-tab" data-tab="access">অ্যাক্সেস</button>
+      <button type="button" class="admin-tab" data-tab="courses">কোর্স</button>
+      <button type="button" class="admin-tab" data-tab="lessons">লেসন</button>
+      <button type="button" class="admin-tab" data-tab="quizzes">কুইজ</button>
+      <button type="button" class="admin-tab" data-tab="results">কুইজের ফলাফল</button>
+      <button type="button" class="admin-tab" data-tab="reports">রিপোর্ট</button>
+      <button type="button" class="admin-tab" data-tab="revenue">বিক্রয় ও আয়</button>
+      <button type="button" class="admin-tab" data-tab="finance">আয়-ব্যয়</button>
+      <button type="button" class="admin-tab" data-tab="reviews">রিভিউ</button>
+      <button type="button" class="admin-tab" data-tab="nowshin">Nowshin</button>
+      <button type="button" class="admin-tab" data-tab="analyst" id="analystTabBtn">🤖 AI Analyst</button>
+      <button type="button" class="admin-tab" data-tab="products">প্রোডাক্ট</button>
+      <button type="button" class="admin-tab" data-tab="support">সাপোর্ট</button>
+      <button type="button" class="admin-tab" data-tab="settings">সেটিংস</button>
+    </div>
+
+    <section class="panel" id="sec-orders" style="margin-top:26px">
+      <h2>সকল অর্ডার</h2>
+      <p id="ordersMsg" class="admin-msg" style="display:none"></p>
+      <div class="report-tools" id="tools-orders">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-orders">তারিখ থেকে</label>
+            <input type="date" id="fFrom-orders">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-orders">পর্যন্ত</label>
+            <input type="date" id="fTo-orders">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="orders">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="orders">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="orders">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="orders">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="orders">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-orders"></p>
+      </div>
+      <div id="ordersWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-customers" style="margin-top:20px;display:none">
+      <h2>কাস্টমার তালিকা</h2>
+      <p id="customersMsg" class="admin-msg" style="display:none"></p>
+      <div id="customersWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-access" style="margin-top:20px;display:none">
+      <h2>কোর্স অ্যাক্সেস</h2>
+      <form class="form-grid" id="assignForm" style="margin-bottom:18px">
+        <div class="field">
+          <label for="assignUser">কাস্টমার নির্বাচন করুন</label>
+          <select id="assignUser"></select>
+        </div>
+        <div class="field">
+          <label for="assignCourse">কোর্স নির্বাচন করুন</label>
+          <select id="assignCourse">
+            <option value="spoken">Spoken English for Kids</option>
+            <option value="phonics">Phonics Course</option>
+          </select>
+        </div>
+        <button class="btn" type="submit" id="assignBtn">Access দিন</button>
+        <p id="assignMsg" class="admin-msg" style="display:none"></p>
+      </form>
+      <div id="accessWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-courses" style="margin-top:20px;display:none">
+      <h2>কোর্স পরিচালনা</h2>
+      <div id="pmCoursesWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 style="margin:22px 0 10px" id="pmCourseFormTitle">নতুন কোর্স যোগ করুন</h3>
+      <form class="form-grid" id="courseForm">
+        <div class="field">
+          <label for="pmSlug">কোর্সের Slug (ইংরেজি ছোট হাতের, যেমন: grammar)</label>
+          <input id="pmSlug" type="text" placeholder="যেমন: grammar">
+        </div>
+        <div class="field">
+          <label for="pmTitle">কোর্সের নাম (English)</label>
+          <input id="pmTitle" type="text">
+        </div>
+        <div class="field">
+          <label for="pmTitleBn">কোর্সের নাম (বাংলা)</label>
+          <input id="pmTitleBn" type="text">
+        </div>
+        <div class="field">
+          <label for="pmPrice">দাম (৳)</label>
+          <input id="pmPrice" type="number" min="0">
+        </div>
+        <div class="field">
+          <label for="pmRegular">নিয়মিত দাম (৳)</label>
+          <input id="pmRegular" type="number" min="0">
+        </div>
+        <div class="field">
+          <label for="pmAges">বয়সের গ্রুপ</label>
+          <input id="pmAges" type="text" placeholder="যেমন: বয়স ৫–১২ বছর">
+        </div>
+        <div class="field">
+          <label for="pmCoverFile">কভার ছবি (ফাইল থেকে আপলোড)</label>
+          <input id="pmCoverFile" type="file" accept="image/*">
+        </div>
+        <div class="field">
+          <label for="pmCoverUrl">অথবা কভারের লিংক / ঠিকানা</label>
+          <input id="pmCoverUrl" type="text" placeholder="https://… অথবা assets/cover-spoken.jpg">
+          <small>ফাইল দিলে সেটিই ব্যবহার হবে; না দিলে এই লিংকটি নেওয়া হবে।</small>
+        </div>
+        <div class="field">
+          <label for="pmLearn">যা শিখবে (প্রতি লাইনে একটি পয়েন্ট)</label>
+          <textarea id="pmLearn" rows="6"></textarea>
+        </div>
+        <div class="field">
+          <label for="pmSort">ক্রম (Sort — ছোট সংখ্যা আগে দেখাবে)</label>
+          <input id="pmSort" type="number" value="0">
+        </div>
+        <div class="field">
+          <label class="check-line"><input id="pmPublished" type="checkbox" checked> Published (সবাই দেখতে পাবে)</label>
+        </div>
+        <button class="btn" type="submit" id="pmCourseSave">সেভ করুন</button>
+        <button class="btn neutral" type="button" id="pmCourseNew">নতুন কোর্স</button>
+        <p id="pmCourseMsg" class="admin-msg" style="display:none"></p>
+      </form>
+    </section>
+
+    <section class="panel" id="sec-lessons" style="margin-top:20px;display:none">
+      <h2>লেসন পরিচালনা</h2>
+      <div class="field" style="margin-bottom:14px">
+        <label for="lmCourseSel">কোর্স নির্বাচন করুন</label>
+        <select id="lmCourseSel"></select>
+      </div>
+      <div id="lmLessonsWrap"><p class="empty-note">আগে একটি কোর্স নির্বাচন করুন।</p></div>
+      <h3 style="margin:22px 0 10px" id="lmFormTitle">নতুন লেসন যোগ করুন</h3>
+      <form class="form-grid" id="lessonForm">
+        <div class="field">
+          <label for="lmTitle">লেসনের নাম</label>
+          <input id="lmTitle" type="text">
+        </div>
+        <div class="field">
+          <label for="lmDescr">ছোট বর্ণনা</label>
+          <input id="lmDescr" type="text">
+        </div>
+        <div class="field">
+          <label for="lmPosition">ক্রম (Position)</label>
+          <input id="lmPosition" type="number" min="1" value="1">
+        </div>
+        <div class="field">
+          <label class="check-line"><input id="lmPreview" type="checkbox"> ফ্রি প্রিভিউ (সবাই দেখতে পারবে)</label>
+        </div>
+        <div class="field">
+          <label for="lmVideo">ভিডিওর লিংক (YouTube অথবা .mp4)</label>
+          <input id="lmVideo" type="text" placeholder="https://www.youtube.com/watch?v=…">
+        </div>
+        <div class="field">
+          <label for="lmPdfFile">PDF ফাইল (আপলোড)</label>
+          <input id="lmPdfFile" type="file" accept="application/pdf">
+        </div>
+        <div class="field">
+          <label for="lmPdfPath">অথবা PDF এর ঠিকানা / লিংক</label>
+          <input id="lmPdfPath" type="text" placeholder="spoken/lesson-1.pdf অথবা https://…">
+          <small>ফাইল আপলোড করলে ঠিকানাটি নিজে নিজে বসে যাবে।</small>
+        </div>
+        <div class="field">
+          <label class="check-line"><input id="lmPdfIsLink" type="checkbox"> PDF টি একটি ওয়েব লিংক</label>
+        </div>
+        <div class="field">
+          <label for="lmBody">লেসনের লেখা (Body text)</label>
+          <textarea id="lmBody" rows="6"></textarea>
+        </div>
+        <button class="btn" type="submit" id="lmSave">সেভ করুন</button>
+        <button class="btn neutral" type="button" id="lmNew">নতুন লেসন</button>
+        <p id="lmMsg" class="admin-msg" style="display:none"></p>
+      </form>
+    </section>
+
+    <section class="panel" id="sec-quizzes" style="margin-top:20px;display:none">
+      <h2>কুইজ পরিচালনা</h2>
+      <div class="field" style="margin-bottom:14px">
+        <label for="qzCourseSel">কোর্স নির্বাচন করুন</label>
+        <select id="qzCourseSel"></select>
+      </div>
+      <div id="qzListWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 style="margin:22px 0 10px" id="qzFormTitle">নতুন কুইজ বানান</h3>
+      <form class="form-grid" id="quizForm">
+        <div class="field">
+          <label for="qzTitle">কুইজের নাম</label>
+          <input id="qzTitle" type="text">
+        </div>
+        <div class="field">
+          <label for="qzLessonSel">লেসন (ঐচ্ছিক)</label>
+          <select id="qzLessonSel"><option value="">পুরো কোর্সের জন্য</option></select>
+        </div>
+        <div id="qzQuestions"></div>
+        <button class="btn neutral" type="button" id="qzAddQ">আরেকটি প্রশ্ন যোগ করুন</button>
+        <button class="btn" type="submit" id="qzSave">কুইজ সেভ করুন</button>
+        <button class="btn neutral" type="button" id="qzNew">নতুন কুইজ</button>
+        <p id="qzMsg" class="admin-msg" style="display:none"></p>
+      </form>
+    </section>
+
+    <section class="panel" id="sec-results" style="margin-top:20px;display:none">
+      <h2>কুইজের ফলাফল</h2>
+      <div class="report-tools" id="tools-results">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-results">তারিখ থেকে</label>
+            <input type="date" id="fFrom-results">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-results">পর্যন্ত</label>
+            <input type="date" id="fTo-results">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="results">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="results">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="results">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="results">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="results">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-results"></p>
+      </div>
+      <div id="resultsWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-reports" style="margin-top:20px;display:none">
+      <h2>রিপোর্ট — কাস্টমারের পূর্ণ তথ্য</h2>
+      <div class="report-tools" id="tools-reports">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-reports">তারিখ থেকে</label>
+            <input type="date" id="fFrom-reports">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-reports">পর্যন্ত</label>
+            <input type="date" id="fTo-reports">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="reports">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="reports">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="reports">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="reports">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="reports">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-reports"></p>
+      </div>
+      <div id="reportsWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 style="margin:26px 0 10px">কোর্স সম্পন্নকারী — Completions</h3>
+      <p style="margin:0 0 10px;color:var(--muted)">কোন ছাত্র কোন কোর্সে কতদূর এগিয়েছে — সব লেসন শেষ হলেই "সম্পন্ন ✅" এবং সার্টিফিকেটের যোগ্য। ওপরের তারিখ ফিল্টারটি এই তালিকাতেও কাজ করে (ভর্তির তারিখ অনুযায়ী)।</p>
+      <div id="completionsWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-revenue" style="margin-top:20px;display:none">
+      <h2>বিক্রয় ও আয়</h2>
+      <div class="report-tools" id="tools-revenue">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-revenue">তারিখ থেকে</label>
+            <input type="date" id="fFrom-revenue">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-revenue">পর্যন্ত</label>
+            <input type="date" id="fTo-revenue">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="revenue">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="revenue">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="revenue">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="revenue">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="revenue">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-revenue"></p>
+      </div>
+      <div id="revenueWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-finance" style="margin-top:20px;display:none">
+      <h2>আয়-ব্যয় — Income &amp; Expense</h2>
+      <div class="report-tools" id="tools-finance">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-finance">তারিখ থেকে</label>
+            <input type="date" id="fFrom-finance">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-finance">পর্যন্ত</label>
+            <input type="date" id="fTo-finance">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="finance">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="finance">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="finance">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="finance">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="finance">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-finance"></p>
+      </div>
+      <div id="finSummary"></div>
+      <div style="margin-bottom:16px">
+        <button type="button" class="btn sm" id="finSheetSyncBtn">📤 আয়-ব্যয় Google Sheet-এ পাঠান</button>
+        <span id="finSheetMsg" style="color:var(--muted);font-size:14.5px"></span>
+      </div>
+      <h3 style="margin:6px 0 10px" id="finFormTitle">নতুন এন্ট্রি যোগ করুন</h3>
+      <form class="form-grid" id="finForm" style="margin-bottom:18px">
+        <div class="field">
+          <label for="finType">ধরন *</label>
+          <select id="finType">
+            <option value="income">আয় (Income)</option>
+            <option value="expense">ব্যয় (Expense)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="finDate">তারিখ *</label>
+          <input id="finDate" type="date">
+        </div>
+        <div class="field">
+          <label for="finTitle">শিরোনাম / ক্যাটাগরি *</label>
+          <input id="finTitle" type="text" placeholder="যেমন: স্কুলের বেতন, ছাপার খরচ">
+        </div>
+        <div class="field">
+          <label for="finAmount">টাকার পরিমাণ (৳) *</label>
+          <input id="finAmount" type="number" min="0" step="any" placeholder="যেমন: 500">
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label for="finNote">নোট (ঐচ্ছিক)</label>
+          <input id="finNote" type="text" placeholder="যদি কিছু লিখতে চান">
+        </div>
+        <button class="btn" type="submit" id="finSave">এন্ট্রি সেভ করুন</button>
+        <button class="btn neutral" type="button" id="finCancelEdit" style="display:none">সম্পাদনা বাতিল</button>
+        <p id="finMsg" class="admin-msg" style="display:none"></p>
+      </form>
+      <div id="finWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-reviews" style="margin-top:20px;display:none">
+      <h2>ছাত্রদের রিভিউ — Reviews</h2>
+      <div class="report-tools" id="tools-reviews">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-reviews">তারিখ থেকে</label>
+            <input type="date" id="fFrom-reviews">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-reviews">পর্যন্ত</label>
+            <input type="date" id="fTo-reviews">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="reviews">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="reviews">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="reviews">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="reviews">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="reviews">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-reviews"></p>
+      </div>
+      <div id="reviewsSummary"></div>
+      <div id="reviewsWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-nowshin" style="margin-top:20px;display:none">
+      <h2>Nowshin — মানুষ কী জিজ্ঞেস করে, উত্তরে খুশি তো?</h2>
+      <div class="report-tools" id="tools-nowshin">
+        <div class="rt-row">
+          <div class="field rt-field">
+            <label for="fFrom-nowshin">তারিখ থেকে</label>
+            <input type="date" id="fFrom-nowshin">
+          </div>
+          <div class="field rt-field">
+            <label for="fTo-nowshin">পর্যন্ত</label>
+            <input type="date" id="fTo-nowshin">
+          </div>
+          <div class="rt-quick">
+            <button type="button" class="btn sm neutral" data-quick="today" data-scope="nowshin">আজ</button>
+            <button type="button" class="btn sm neutral" data-quick="month" data-scope="nowshin">এই মাস</button>
+            <button type="button" class="btn sm neutral" data-quick="year" data-scope="nowshin">এই বছর</button>
+            <button type="button" class="btn sm neutral" data-quick="all" data-scope="nowshin">সব</button>
+          </div>
+          <button type="button" class="btn sm rt-pdf" data-pdf="nowshin">📄 PDF ডাউনলোড</button>
+        </div>
+        <p class="rt-count" id="fCount-nowshin"></p>
+      </div>
+      <div id="nowshinSummary"></div>
+      <div id="nowshinWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-analyst" style="margin-top:20px;display:none">
+      <h2>🤖 AI Analyst — সব রিপোর্টের তাৎক্ষণিক বিশ্লেষণ</h2>
+      <p style="margin-top:0">শুধুমাত্র Super Admin-এর জন্য। প্রশ্ন করলেই Analyst অর্ডার, বিক্রয় ও আয়, আয়-ব্যয়, কোর্স সম্পন্নকারী, কুইজ ফলাফল, ছাত্রদের রিভিউ আর Nowshin-এর ফিডব্যাক — সব দেখে সঙ্গে সঙ্গে উত্তর দেবে।</p>
+      <p id="analystMsg" class="admin-msg" style="display:none"></p>
+      <div class="analyst-chips">
+        <button type="button" class="btn sm neutral" data-ask="এই মাসের মোট আয় কত?">এই মাসের আয় কত?</button>
+        <button type="button" class="btn sm neutral" data-ask="কে কে পূর্ণ কোর্স সম্পন্ন করেছে?">কে কে কোর্স সম্পন্ন করেছে?</button>
+        <button type="button" class="btn sm neutral" data-ask="শিক্ষার্থীরা রিভিউতে কী বলছে?">শিক্ষার্থীরা রিভিউতে কী বলছে?</button>
+        <button type="button" class="btn sm neutral" data-ask="Nowshin-কে মানুষ কী জিজ্ঞেস করে? মানুষ কি তার উত্তরে খুশি?">Nowshin-কে মানুষ কী জিজ্ঞেস করে? খুশি তো?</button>
+        <button type="button" class="btn sm neutral" data-ask="সবচেয়ে বেশি বিক্রি কোন কোর্সের?">সবচেয়ে বেশি বিক্রি কোন কোর্সের?</button>
+      </div>
+      <div id="analystLog" class="analyst-log"></div>
+      <form class="form-grid" id="analystForm" style="margin-top:14px">
+        <div class="field" style="grid-column:1/-1">
+          <label for="analystQ">আপনার প্রশ্ন লিখুন</label>
+          <input id="analystQ" type="text" placeholder="যেমন: এই মাসে খরচের চেয়ে আয় বেশি তো?">
+        </div>
+        <button class="btn" type="submit" id="analystSend">বিশ্লেষণ করুন</button>
+      </form>
+    </section>
+
+    <section class="panel" id="sec-products" style="margin-top:20px;display:none">
+      <h2>প্রোডাক্ট (ই-বুক / প্যাক)</h2>
+      <p id="productsMsg" class="admin-msg" style="display:none"></p>
+      <div id="productsWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 id="productFormTitle" style="margin:22px 0 8px">প্রোডাক্ট সম্পাদনা</h3>
+      <form class="form-grid" id="productForm">
+        <div class="field">
+          <label for="pdSlug">Slug (বদলানো যাবে না)</label>
+          <input id="pdSlug" class="en" type="text" readonly>
+        </div>
+        <div class="field">
+          <label for="pdTitle">নাম (English) *</label>
+          <input id="pdTitle" class="en" type="text" required>
+        </div>
+        <div class="field">
+          <label for="pdTitleBn">নাম (বাংলা)</label>
+          <input id="pdTitleBn" type="text">
+        </div>
+        <div class="field">
+          <label for="pdPrice">দাম (৳) *</label>
+          <input id="pdPrice" class="en" type="number" min="0" required>
+        </div>
+        <div class="field">
+          <label for="pdRegular">নিয়মিত দাম (৳)</label>
+          <input id="pdRegular" class="en" type="number" min="0">
+        </div>
+        <div class="field">
+          <label for="pdPublished">অবস্থা</label>
+          <select id="pdPublished"><option value="true">Published</option><option value="false">Unpublished</option></select>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label for="pdDescr">বর্ণনা</label>
+          <textarea id="pdDescr" rows="3"></textarea>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label for="pdFile">ডেলিভারির ফাইল (PDF) — ক্রেতা ড্যাশবোর্ড থেকে ডাউনলোড করবেন</label>
+          <input id="pdFile" type="file" accept="application/pdf">
+          <small id="pdFileNow">বর্তমান ফাইল: নেই</small>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <button class="btn" type="submit" id="pdSave">সেভ করুন</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" id="sec-support" style="margin-top:20px;display:none">
+      <h2>সাপোর্ট বার্তা</h2>
+      <p id="supportMsg" class="admin-msg" style="display:none"></p>
+      <div id="supportWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+    <section class="panel" id="sec-settings" style="margin-top:20px;display:none">
+      <h2>সাইট সেটিংস</h2>
+      <p style="margin-top:0">এখানে বদলালেই পুরো সাইটে সঙ্গে সঙ্গে বদলে যাবে।</p>
+      <p id="settingsMsg" class="admin-msg" style="display:none"></p>
+      <form class="form-grid" id="settingsForm">
+        <div class="field">
+          <label for="stBkash">বিকাশ পেমেন্ট নম্বর</label>
+          <input id="stBkash" class="en" type="tel">
+        </div>
+        <div class="field">
+          <label for="stWhatsapp">WhatsApp নম্বর</label>
+          <input id="stWhatsapp" class="en" type="tel">
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label for="stAnnouncement">ঘোষণা (সাইটের ওপরে দেখাবে — খালি রাখলে দেখাবে না)</label>
+          <input id="stAnnouncement" type="text" placeholder="যেমন: নতুন ব্যাচে ভর্তি চলছে!">
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <button class="btn" type="submit">সেটিংস সেভ করুন</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <section class="nowshin-strip">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>আমাদের AI Customer Manager — কোর্স, ফি বা ভর্তি নিয়ে যেকোনো প্রশ্নের উত্তর পাবেন এখনই, দিনে-রাতে যেকোনো সময়।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

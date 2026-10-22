@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>Self Scale Academy — বাচ্চাদের Spoken English ও Phonics কোর্স</title>
+<meta name="description" content="Self Scale Academy — বাচ্চাদের জন্য Spoken English for Kids ও Phonics Course মাত্র ৳499। বিকাশে পেমেন্ট, TrxID দিলেই অনুমোদনের পর অ্যাক্সেস।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="preload" as="image" href="assets/slide-1.jpg">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- Slider -->
+  <div class="slider" id="slider">
+    <div class="slide active">
+      <img src="assets/slide-1.jpg" alt="Self Scale Academy-তে স্বাগতম">
+      <div class="slide-cap">
+        <h2>Self Scale Academy-তে স্বাগতম</h2>
+        <p>বাচ্চাদের জন্য Spoken English ও Phonics — ঘরে বসে, অনলাইনে।</p>
+        <a class="btn" href="courses.html">এখনই ভর্তি হোন — মাত্র ৳499</a>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="assets/slide-2.jpg" alt="Spoken English for Kids" loading="lazy">
+      <div class="slide-cap">
+        <h2 class="en">Spoken English for Kids</h2>
+        <p>আত্মবিশ্বাসের সঙ্গে ইংরেজিতে কথা বলা শিখবে আপনার সন্তান। <span class="slide-price">৳499 <s>৳5,000</s></span></p>
+        <a class="btn" href="cart.html" data-add="spoken">ভর্তি হোন</a>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="assets/slide-3.jpg" alt="Phonics Course" loading="lazy">
+      <div class="slide-cap">
+        <h2 class="en">Phonics Course</h2>
+        <p>ধ্বনি শিখে নিজে নিজে ইংরেজি পড়তে শিখবে আপনার সন্তান। <span class="slide-price">৳499 <s>৳5,000</s></span></p>
+        <a class="btn" href="cart.html" data-add="phonics">ভর্তি হোন</a>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="assets/slide-4.jpg" alt="Question Paper Packs ও Touchstone E-book" loading="lazy">
+      <div class="slide-cap">
+        <h2>বই ও প্রশ্নপত্র প্যাক</h2>
+        <p>পরীক্ষার প্রস্তুতির জন্য Question Paper Packs ও অনুশীলনের Touchstone E-book।</p>
+        <a class="btn" href="courses.html#card-packs">অর্ডার করুন</a>
+      </div>
+    </div>
+    <button class="slider-arrow prev" id="slidePrev" type="button" aria-label="আগের স্লাইড">‹</button>
+    <button class="slider-arrow next" id="slideNext" type="button" aria-label="পরের স্লাইড">›</button>
+    <div class="dots"></div>
+  </div>
+
+  <!-- Teacher strip -->
+  <section class="teacher-strip reveal" id="about">
+    <img src="assets/teacher-cut.png" alt="Muhammad Jahid Hasan — English Language Teacher">
+    <div>
+      <h2 class="en">Muhammad Jahid Hasan</h2>
+      <p class="t-cap">Your English Language Teacher</p>
+      <p>১০ বছরের বেশি অভিজ্ঞতাসম্পন্ন ইংরেজি শিক্ষক। Self Scale Academy-তে তিনি নিজে প্রতিটি কোর্সের লেসন তৈরি করেছেন — যেন আপনার সন্তান সহজে, মজায় ও সঠিক উচ্চারণে ইংরেজি শিখতে পারে।</p>
+    </div>
+  </section>
+</div>
+
+<!-- Courses -->
+<section class="section reveal">
+  <div class="wrap">
+    <h2 class="sec-title">আমাদের কোর্সসমূহ</h2>
+    <p class="sec-sub">প্রতিটি কোর্সে ২২টি লেসন, প্রথম লেসন ফ্রি প্রিভিউ, কুইজ ও শেষে সার্টিফিকেট।</p>
+    <div class="grid reveal" id="courseCards"></div>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="section reveal">
+  <div class="wrap">
+    <h2 class="sec-title">বই ও প্রশ্নপত্র</h2>
+    <p class="sec-sub">পরীক্ষার প্রস্তুতি ও ঘরে বসে অনুশীলনের জন্য আমাদের বিশেষ পণ্য।</p>
+    <div class="grid reveal" id="productCards"></div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section reveal">
+  <div class="wrap">
+    <h2 class="sec-title">কীভাবে ভর্তি হবেন</h2>
+    <p class="sec-sub">মাত্র ৩টি সহজ ধাপে আপনার সন্তানের কোর্স চালু হয়ে যাবে।</p>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>বিকাশে পেমেন্ট করুন</h3>
+        <p><span class="bkash">01738601121</span><br>এই নম্বরে Send Money করুন (কোর্স ফি ৳499)।</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>TrxID দিন</h3>
+        <p>কার্ট পেজের ফর্মে আপনার নাম, মোবাইল নম্বর, বিকাশ নম্বর ও TrxID জমা দিন।</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>অনুমোদনের পর অ্যাক্সেস</h3>
+        <p>আমরা TrxID যাচাই করে অনুমোদন দিলেই আপনার অ্যাকাউন্টে কোর্স চালু হয়ে যাবে।</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section reveal" id="faq">
+  <div class="wrap">
+    <h2 class="sec-title">সাধারণ প্রশ্ন ও উত্তর</h2>
+    <p class="sec-sub">ভর্তি, পেমেন্ট ও রিফান্ড নিয়ে সবচেয়ে বেশি করা প্রশ্নগুলো।</p>
+    <div class="faq-list" id="faqList"></div>
+    <div class="policy-note" id="privacy">
+      <b>Privacy Policy:</b> আমরা আপনার নাম, মোবাইল নম্বর, ইমেইল ও পেমেন্ট তথ্য শুধু ভর্তি, কোর্স অ্যাক্সেস ও সেবা দেওয়ার কাজে ব্যবহার করি। আপনার তথ্য কোনো তৃতীয় পক্ষের কাছে বিক্রি বা হস্তান্তর করা হয় না।
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <!-- Meet Nowshin -->
+  <section class="nowshin-strip reveal">
+    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
+    <div>
+      <h3 class="en">Meet Nowshin Jannat</h3>
+      <p>আমাদের AI Customer Manager — কোর্স, ফি বা ভর্তি নিয়ে যেকোনো প্রশ্নের উত্তর পাবেন এখনই, দিনে-রাতে যেকোনো সময়।</p>
+    </div>
+    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
+  </section>
+</div>
+
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+      <p style="margin-top:10px">WhatsApp: <a style="display:inline" href="https://wa.me/8801782911601">01782911601</a></p>
+      <p>বিকাশ (পেমেন্ট): <span class="en">01738601121</span></p>
+      <p>ঠিকানা: Jamalpur Sadar, Jamalpur</p>
+    </div>
+  </div>
+  <div class="copy-bar">© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="content.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="nowshin.js"></script>
+</body>
+</html>
