@@ -152,9 +152,11 @@ a{color:var(--pink);text-decoration:none}
   border-radius:20px;padding:28px;display:flex;gap:28px;align-items:center;box-shadow:var(--shadow-sm);
 }
 .teacher-strip img{
-  width:250px;flex:none;background:transparent;
+  width:250px;height:auto;flex:none;border-radius:18px;
   filter:drop-shadow(0 14px 22px rgba(38,48,59,.20));
 }
+.teacher-strip>div{min-width:0}
+.teacher-strip h2,.teacher-strip p{overflow-wrap:break-word}
 .teacher-strip h2{font-size:26px}
 .teacher-strip .t-cap{font-family:'Poppins',sans-serif;color:var(--pink);font-weight:600;font-size:18px;margin:2px 0 8px}
 .teacher-strip p{color:var(--muted)}
