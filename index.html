@@ -25,19 +25,27 @@
     <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
     <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
     <nav class="main-nav">
+      <a class="nav-dash" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
       <a href="index.html">Home</a>
       <a href="courses.html">সকল কোর্স</a>
-      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn" type="button">E-book <span class="caret">▾</span></button>
+        <div class="nav-drop-menu">
+          <a href="courses.html#card-ebook">Touchstone E-book</a>
+          <span class="drop-soon">Phonics Ebook <em>শীঘ্রই আসছে</em></span>
+        </div>
+      </div>
       <a href="index.html#about">আমাদের সম্পর্কে</a>
       <a href="index.html#contact">যোগাযোগ</a>
     </nav>
     <div class="header-actions">
       <button class="search-btn" type="button" aria-label="Search">🔍</button>
-      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
-      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      
+      
       <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
       <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
       <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
     </div>
   </div>
 </header>

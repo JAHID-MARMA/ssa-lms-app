@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="SS Academy">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
-<title>সাপোর্ট — Self Scale Academy</title>
+<title>কোম্পানি ও পলিসি — Self Scale Academy</title>
 <meta name="description" content="Self Scale Academy সাপোর্ট — কোর্স, পেমেন্ট বা অ্যাক্সেস নিয়ে সাহায্য নিন।">
 <link rel="icon" href="assets/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -24,19 +24,27 @@
     <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
     <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
     <nav class="main-nav">
+      <a class="nav-dash" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
       <a href="index.html">Home</a>
       <a href="courses.html">সকল কোর্স</a>
-      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <div class="nav-drop">
+        <button class="nav-drop-btn" type="button">E-book <span class="caret">▾</span></button>
+        <div class="nav-drop-menu">
+          <a href="courses.html#card-ebook">Touchstone E-book</a>
+          <span class="drop-soon">Phonics Ebook <em>শীঘ্রই আসছে</em></span>
+        </div>
+      </div>
       <a href="index.html#about">আমাদের সম্পর্কে</a>
       <a href="index.html#contact">যোগাযোগ</a>
     </nav>
     <div class="header-actions">
       <button class="search-btn" type="button" aria-label="Search">🔍</button>
-      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
-      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      
+      
       <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
       <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
       <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
     </div>
   </div>
 </header>
@@ -75,6 +83,16 @@
   <section class="panel policy-sec" id="teacher" style="margin-top:20px">
     <h2>শিক্ষক হিসাবে যোগ দিন <span class="soon-badge">শীঘ্রই আসছে</span></h2>
     <p>অভিজ্ঞ ও যোগ্য শিক্ষকগণ Self Scale Academy-তে নিজের কোর্স প্রকাশ করতে পারবেন। আবেদন যাচাইয়ের পর অনুমোদিত শিক্ষকদের কোর্স আমাদের মান-নিয়ন্ত্রণ প্রক্রিয়া শেষে প্রকাশিত হবে। শিক্ষকদের জন্য আকর্ষণীয় আয়-ভাগের (রেভিনিউ শেয়ার) নীতিমালা রয়েছে — অনুমোদনের সময় চুক্তিতে সব শর্ত লিখিতভাবে দেওয়া হবে।</p>
+<div style="border:1.5px solid #BFE6CD;background:#F4FBF6;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.85">
+        <b>📋 শিক্ষক চুক্তির শর্তাবলি — আবেদনের আগে পড়ে নিন:</b>
+        <ol style="margin:8px 0 0;padding-left:20px">
+          <li>আবেদনে সব তথ্য সঠিক দিতে হবে; অভিজ্ঞতার প্রমাণ দিতে হতে পারে।</li>
+          <li>আপনার কোর্স Academy-র মান-যাচাই (Quality Check) শেষে প্রকাশিত হবে।</li>
+          <li>আয়-ভাগ ও সব শর্ত লিখিত চুক্তি অনুযায়ী হবে; পেমেন্ট প্রতি মাসে বিকাশে, জমা সর্বনিম্ন ৳৫০০ হলে।</li>
+          <li>অন্যের লেখা/ভিডিও/কনটেন্ট কপি করা সম্পূর্ণ নিষেধ।</li>
+          <li>মিথ্যা তথ্য বা নিয়ম ভাঙলে চুক্তি বাতিল হতে পারে।</li>
+        </ol>
+      </div>
 <div style="border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.9">
         <b>কীভাবে আবেদন করবেন:</b> ধাপ ১ — নিচের ফর্মটি সঠিক তথ্য দিয়ে পূরণ করুন। ধাপ ২ — নিয়ম ও চুক্তিতে সম্মতি (✓) দিয়ে জমা দিন। ধাপ ৩ — আমাদের টিম যাচাই করে আপনার মোবাইলে জানিয়ে দেবে; অনুমোদন হলেই কাজ শুরু।
       </div>
@@ -86,13 +104,24 @@
         <div class="field"><label for="tExp">অভিজ্ঞতা</label><input id="tExp" type="text" placeholder="যেমন: ৩ বছর, ABC School"></div>
         <div class="field"><label for="tMsg">নিজের সম্পর্কে এক লাইনে</label><input id="tMsg" type="text" placeholder="ঐচ্ছিক"></div>
       </form>
-      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="tAgree" style="margin-top:5px"> আমি Self Scale Academy-র শিক্ষক নীতিমালা ও চুক্তির শর্ত মেনে আবেদন করছি। *</label>
-      <button type="button" class="btn pink" id="tSubmit">📩 আবেদন জমা দিন</button>
+      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="tAgree" style="margin-top:5px"> আমি উপরের শর্তাবলি ভালোভাবে পড়েছি এবং সব শর্ত মেনে আবেদন করছি। *</label>
+      <button type="button" class="btn pink" id="tSubmit" disabled style="opacity:.55">📩 আবেদন জমা দিন</button>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:13.5px">শর্তাবলিতে সম্মতি (✓) দিলেই জমা বাটন চালু হবে।</p>
       <p id="tMsgOut" style="display:none;margin-top:10px;font-weight:600"></p>
   </section>
   <section class="panel policy-sec" id="affiliate" style="margin-top:20px">
     <h2>অ্যাফিলিয়েট রেজিস্ট্রেশন <span class="soon-badge">শীঘ্রই আসছে</span></h2>
     <p>শিক্ষক, কনটেন্ট ক্রিয়েটর ও শিক্ষা-উদ্যোক্তারা অ্যাফিলিয়েট হিসেবে নিবন্ধন করে নিজের প্রোমো কোড ও লিংকের মাধ্যমে কোর্স প্রচার করতে পারবেন এবং প্রতিটি বিক্রিতে কমিশন অর্জন করবেন। অনুমোদন হলেই আপনার ব্যক্তিগত প্রোমো কোড তৈরি হয়ে যাবে। কমিশনের হার ও পেমেন্ট (বিকাশ) চুক্তিতে লিখিতভাবে দেওয়া হবে।</p>
+<div style="border:1.5px solid #BFE6CD;background:#F4FBF6;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.85">
+        <b>📋 অ্যাফিলিয়েট চুক্তির শর্তাবলি — আবেদনের আগে পড়ে নিন:</b>
+        <ol style="margin:8px 0 0;padding-left:20px">
+          <li>শুধু আপনার নিজের অনুমোদিত প্রোমো কোড ও লিংক ব্যবহার করবেন।</li>
+          <li>সৎ প্রচার: ভুয়া প্রতিশ্রুতি, ভুল দাম বা গ্যারান্টি দেওয়া যাবে না।</li>
+          <li>কমিশন শুধু সম্পন্ন বিক্রিতে পাওয়া যাবে; রিফান্ড হলে কমিশন বাতিল হবে।</li>
+          <li>কমিশনের হার লিখিত চুক্তি অনুযায়ী (বিক্রির ধাপ অনুযায়ী ১৫%–২০%); পেমেন্ট প্রতি মাসে বিকাশে, জমা সর্বনিম্ন ৳৫০০ হলে।</li>
+          <li>স্প্যাম বা প্রতারণা করলে অ্যাকাউন্ট ও বকেয়া কমিশন বাতিল হবে।</li>
+        </ol>
+      </div>
 <div style="border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.9">
         <b>কীভাবে আবেদন করবেন:</b> ধাপ ১ — নিচের ফর্মটি সঠিক তথ্য দিয়ে পূরণ করুন। ধাপ ২ — নিয়ম ও চুক্তিতে সম্মতি (✓) দিয়ে জমা দিন। ধাপ ৩ — আমাদের টিম যাচাই করে আপনার মোবাইলে জানিয়ে দেবে; অনুমোদন হলেই কাজ শুরু।
       </div>
@@ -104,8 +133,9 @@
         <div class="field"><label for="aAudience">আপনার দর্শক সংখ্যা (প্রায়)</label><input id="aAudience" type="text" placeholder="যেমন: 5,000 followers"></div>
         <div class="field"><label for="aMsg">কীভাবে প্রচার করবেন</label><input id="aMsg" type="text" placeholder="এক লাইনে লিখুন (ঐচ্ছিক)"></div>
       </form>
-      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="aAgree" style="margin-top:5px"> আমি Self Scale Academy-র অ্যাফিলিয়েট নীতিমালা (সৎ প্রচার, কোনো ভুয়া প্রতিশ্রুতি নয়) ও চুক্তির শর্ত মেনে আবেদন করছি। *</label>
-      <button type="button" class="btn pink" id="aSubmit">📩 আবেদন জমা দিন</button>
+      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="aAgree" style="margin-top:5px"> আমি উপরের শর্তাবলি ভালোভাবে পড়েছি এবং সব শর্ত মেনে আবেদন করছি। *</label>
+      <button type="button" class="btn pink" id="aSubmit" disabled style="opacity:.55">📩 আবেদন জমা দিন</button>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:13.5px">শর্তাবলিতে সম্মতি (✓) দিলেই জমা বাটন চালু হবে।</p>
       <p id="aMsgOut" style="display:none;margin-top:10px;font-weight:600"></p>
   </section>
   <section class="panel policy-sec" id="affiliate-verify" style="margin-top:20px">
@@ -230,6 +260,9 @@
     var t = $("tSubmit"), a = $("aSubmit");
     if (t) t.addEventListener("click", function () { submit("teacher"); });
     if (a) a.addEventListener("click", function () { submit("affiliate"); });
+    var tA = $("tAgree"), aA = $("aAgree");
+    function gate(box, btn) { if (box && btn) box.addEventListener("change", function () { btn.disabled = !box.checked; btn.style.opacity = box.checked ? "1" : ".55"; }); }
+    gate(tA, t); gate(aA, a);
   });
 })();
 </script>

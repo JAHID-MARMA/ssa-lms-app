@@ -76,6 +76,19 @@
       .then(function () { return null; }, function () { return null; });
   }
 
+  /* Founder order 2026-10-22: once the student has bought anything, the
+     Dashboard button turns light-green, glassy and premium. */
+  function markPurchased(user) {
+    if (!user || !window.SSA_DB) return;
+    window.SSA_DB.from("enrollments").select("course_slug").eq("user_id", user.id).limit(1)
+      .then(function (r) {
+        if (r && r.data && r.data.length) {
+          var dash = document.getElementById("ssaDashLink");
+          if (dash) dash.classList.add("has-purchase");
+        }
+      }, function () {});
+  }
+
   function unlockCourse(user) {
     var hero = document.getElementById("courseHero");
     if (!hero || !user) return;
@@ -110,6 +123,7 @@
     }
     ensureProfile(state.user).then(function () {
       setHeader();
+      markPurchased(state.user);
       unlockCourse(state.user);
       finish();
     });

@@ -1864,12 +1864,12 @@
     }
     area.className = landscape ? "p-land" : "";
     area.innerHTML =
-      '<div class="p-brand">Self Scale Academy</div>' +
+      '<div class="p-head"><img class="p-logo" src="assets/logo-mark.png" alt="Self Scale Academy logo"><div><div class="p-brand">Self Scale Academy</div><div class="p-tag">Explore Yourself</div></div></div>' +
       '<div class="p-title">' + escapeHtml(title) + '</div>' +
       '<div class="p-meta">সময়কাল: ' + escapeHtml(periodText(st)) + '</div>' +
       '<div class="p-meta">তৈরির তারিখ: ' + escapeHtml(fmtDate(new Date().toISOString())) + '</div>' +
       body +
-      '<div class="p-foot">Self Scale Academy — Super Admin রিপোর্ট</div>';
+      '<div class="p-foot">Self Scale Academy — Explore Yourself • Super Admin রিপোর্ট • ssa-lms-app.vercel.app</div>';
     document.body.classList.add("ssa-printing");
     setTimeout(function () {
       try { window.print(); } catch (e) {}
