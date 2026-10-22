@@ -201,8 +201,13 @@ a{color:var(--pink);text-decoration:none}
 .nowshin-strip .btn{margin-left:auto}
 
 /* ---------- footer ---------- */
-.site-footer{margin-top:56px;background:linear-gradient(135deg,#146636,#1F9D55);color:#EAF7EE}
-.footer-grid{max-width:1140px;margin:0 auto;padding:42px 16px 26px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:28px}
+/* Layered wave divider above the footer (Jolly-structure, SSA green):
+   three soft green layers, the front one a gradient matching the
+   footer's own top so the two sit flush with no seam. */
+.footer-wave{margin-top:56px;line-height:0}
+.footer-wave svg{display:block;width:100%;height:clamp(56px,8vw,110px)}
+.site-footer{background:linear-gradient(135deg,#146636,#1F9D55);color:#EAF7EE}
+.footer-grid{max-width:1140px;margin:0 auto;padding:42px 16px 26px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:28px;align-items:start}
 .site-footer h4{color:#fff;font-size:17px;margin-bottom:12px;font-family:'Hind Siliguri',sans-serif}
 .site-footer a{color:#DFF3E4;display:block;padding:3px 0;font-size:15px;transition:color .15s}
 .site-footer a:hover{color:#fff}
@@ -210,7 +215,16 @@ a{color:var(--pink);text-decoration:none}
 .footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .footer-brand img{width:40px;height:40px;border-radius:9px}
 .footer-brand span{font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:18px}
-.copy-bar{border-top:1px solid rgba(255,255,255,.25);text-align:center;padding:15px 16px;font-size:14px;color:#CDEED6}
+.social-row{display:flex;gap:10px;margin-top:14px}
+.site-footer .soc{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding:0}
+.site-footer .soc:hover{background:rgba(255,255,255,.34)}
+.site-footer .soc svg{width:19px;height:19px;fill:#fff;display:block}
+.copy-bar{border-top:1px solid rgba(255,255,255,.25);max-width:1140px;margin:0 auto;padding:15px 16px;font-size:14px;color:#CDEED6;display:flex;justify-content:space-between;align-items:center;gap:6px 22px;flex-wrap:wrap}
+.copy-bar a{display:inline;color:#CDEED6;padding:0;font-size:14px}
+.copy-bar a:hover{color:#fff}
+@media (max-width:760px){
+  .copy-bar{flex-direction:column;justify-content:center;text-align:center}
+}
 
 /* ---------- course page ---------- */
 .course-hero{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:center;margin-top:26px}

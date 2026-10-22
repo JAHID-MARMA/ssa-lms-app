@@ -2,7 +2,7 @@
    Rules: same-origin GET pages/assets are cached stale-while-revalidate;
    EVERYTHING cross-origin (Supabase, Telegram bridge, Nowshin API) is
    never touched — accounts, orders and chat always go live to the server. */
-var CACHE = "ssa-lms-v14";
+var CACHE = "ssa-lms-v15";
 var CORE = [
   "./", "index.html", "courses.html", "course.html", "course-spoken.html",
   "course-phonics.html", "cart.html", "login.html", "signup.html",
