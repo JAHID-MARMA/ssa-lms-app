@@ -390,9 +390,10 @@ a{color:var(--pink);text-decoration:none}
   .login-btn,.user-chip{display:none}
   .grid,.grid-4{grid-template-columns:1fr}
   .learn-list{grid-template-columns:1fr}
-  .slider{aspect-ratio:10/11.5}
+  .slider{aspect-ratio:16/10}
   .slide,.slide:first-child{position:absolute;inset:0}
   .slide img{object-position:top center}
+  .slide.active img{animation:none}
   .slide-cap{left:0;right:0;top:auto;bottom:0;width:auto;max-width:none;border-radius:0;padding:14px 16px 34px;background:rgba(255,255,255,.6);box-shadow:0 -8px 28px rgba(31,41,55,.12)}
   .slide-cap h2{font-size:19px;line-height:1.35;margin-bottom:3px}
   .slide-cap p{font-size:14px;line-height:1.5;margin-bottom:10px}
