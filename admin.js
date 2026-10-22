@@ -422,6 +422,7 @@
     if (name === "support") loadSupport();
     if (name === "settings") loadSettings();
     if (name === "settings" && window.SSA_loadNotices) window.SSA_loadNotices();
+    if (name === "settings" && window.SSA_loadSecReports) window.SSA_loadSecReports();
     if (name === "partners" && window.SSA_loadPartners) window.SSA_loadPartners();
   }
 
@@ -550,7 +551,7 @@
       q.then(function (r) {
         btn.disabled = false;
         if (r.error) {
-          showMsg(msg, "কোর্সটি সেভ করা যায়নি। Slug টি আগে থেকে থাকলে অন্য নাম দিন, আবার চেষ্টা করুন।", false);
+          showMsg(msg, "কোর্সটি সেভ করা যায়নি। Slug টি আগে থেকে থাকলে অন্য নাম দিন, আবার চেষ্টা করুন। (" + (r.error.message || "") + ")", false);
           return;
         }
         showMsg(msg, "কোর্সটি সেভ হয়েছে — " + title, true);
@@ -568,15 +569,16 @@
       window.SSA_DB.storage.from("public-assets").upload(path, file, { upsert: true, contentType: file.type || "image/jpeg" })
         .then(function (r) {
           if (r.error) {
-            btn.disabled = false;
-            showMsg(msg, "কভার ছবিটি আপলোড করা যায়নি। আবার চেষ্টা করুন।", false);
+            showMsg(msg, "কভার ছবিটি আপলোড হয়নি — কোর্সটি কভার ছাড়াই সেভ হচ্ছে…", false);
+            proceed($("pmCoverUrl").value.replace(/^\s+|\s+$/g, "") || "");
             return;
           }
           var url = window.SSA_DB.storage.from("public-assets").getPublicUrl(path).data.publicUrl;
           proceed(url);
         }, function () {
           btn.disabled = false;
-          showMsg(msg, "কভার ছবিটি আপলোড করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।", false);
+          showMsg(msg, "কভার আপলোডে সমস্যা — কোর্সটি কভার ছাড়াই সেভ হচ্ছে…", false);
+          proceed($("pmCoverUrl").value.replace(/^\s+|\s+$/g, "") || "");
         });
     } else {
       var urlVal = $("pmCoverUrl").value.replace(/^\s+|\s+$/g, "");
@@ -3385,4 +3387,34 @@
       });
     });
   });
+})();
+
+/* ---- Security reports viewer (Founder order 2026-10-22): Settings tab ---- */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function fmtDate(iso) { try { return new Date(iso).toLocaleString("en-GB"); } catch (e) { return ""; } }
+  function loadSecReports() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    window.SSA_DB.from("security_reports").select("*").order("created_at", { ascending: false }).limit(50).then(function (r) {
+      var el = $("secReportList"); if (!el) return;
+      var rows = r.data || [];
+      if (!rows.length) { el.innerHTML = '<p class="empty-note">এখনো কোনো নিরাপত্তা রিপোর্ট আসেনি।</p>'; return; }
+      el.innerHTML = '<p class="empty-note">যাচাই হচ্ছে…</p>';
+      var checks = rows.map(function (rep) {
+        return window.SSA_DB.from("profiles").select("username,name").eq("mobile", rep.mobile).limit(1).then(function (pr) {
+          var p = pr.data && pr.data[0];
+          rep.legal = p ? ("✓ নিবন্ধিত শিক্ষার্থী (" + (p.username || p.name || "") + ")") : "✗ রেজিস্টারে নেই";
+          return rep;
+        }, function () { rep.legal = "—"; return rep; });
+      });
+      Promise.all(checks).then(function (doneRows) {
+        el.innerHTML = '<div class="table-scroll"><table class="admin-table"><thead><tr><th>পরিচয়</th><th>কারণ</th><th>Legal যাচাই</th><th>সময়</th></tr></thead><tbody>' +
+          doneRows.map(function (rep) {
+            return "<tr><td><b>" + esc(rep.name) + "</b><br><span class='en'>" + esc(rep.mobile) + "</span></td><td>" + esc(rep.reason || "") + "<br><small>" + esc(rep.page || "") + "</small></td><td>" + esc(rep.legal) + "</td><td>" + fmtDate(rep.created_at) + "</td></tr>";
+          }).join("") + "</tbody></table></div>";
+      });
+    }, function () {});
+  }
+  window.SSA_loadSecReports = loadSecReports;
 })();

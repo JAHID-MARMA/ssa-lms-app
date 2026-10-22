@@ -729,19 +729,68 @@ html.io-on .reveal.in{opacity:1;transform:none}
   .slide-cap{padding-bottom:12px}
 }
 
-/* ——— Notice ticker + footer notice board (Founder 2026-10-22) ——— */
-.notice-ticker{display:flex;align-items:stretch;background:linear-gradient(90deg,#B90E59,#E2136E 55%,#F2548A);color:#fff;overflow:hidden;box-shadow:0 6px 18px rgba(185,14,89,.22);position:relative;z-index:2}
-.ticker-label{flex:none;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#B90E59;font-weight:800;font-size:14.5px;padding:9px 16px;letter-spacing:.2px;box-shadow:4px 0 12px rgba(0,0,0,.12);z-index:2}
-.ticker-view{flex:1;overflow:hidden;display:flex;align-items:center;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
-.ticker-track{display:inline-flex;align-items:center;white-space:nowrap;will-change:transform;animation:ssaTick 30s linear infinite;padding-left:12px}
-.notice-ticker:hover .ticker-track{animation-play-state:paused}
-.ticker-item{font-size:15px;font-weight:600;padding:0 6px}
-.ticker-sep{opacity:.75;font-size:12px;padding:0 8px}
-@keyframes ssaTick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
-.notice-box{max-width:1280px;margin:0 auto 20px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.35);border-radius:16px;padding:14px 18px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-.notice-box h4{margin:0 0 8px;font-size:16.5px;color:#fff}
-.notice-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
-.notice-list li{display:flex;gap:10px;align-items:baseline;color:#fff;font-size:14.5px;line-height:1.55}
-.notice-date{flex:none;background:rgba(255,255,255,.9);color:#0d6e33;font-weight:700;font-size:12px;padding:2px 9px;border-radius:99px}
-@media (max-width:760px){.ticker-label{font-size:13px;padding:8px 11px}.ticker-item{font-size:13.5px}.notice-box{margin:0 0 16px}}
+/* ——— Notice icon + glassy green notice board (Founder redesign 2026-10-22) ——— */
+.notice-fab{position:fixed;left:14px;bottom:14px;z-index:900;width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:linear-gradient(135deg,rgba(24,140,80,.92),rgba(13,110,51,.92));color:#fff;font-size:24px;cursor:pointer;box-shadow:0 14px 30px rgba(13,110,51,.4),inset 0 1px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.notice-fab:hover{transform:translateY(-2px)}
+.notice-fab-dot{position:absolute;top:9px;right:10px;width:11px;height:11px;border-radius:50%;background:#FF4D8D;border:2px solid #fff}
+.notice-panel{position:fixed;left:14px;bottom:78px;z-index:901;width:350px;max-width:calc(100vw - 28px);background:linear-gradient(150deg,rgba(20,122,66,.88),rgba(10,84,40,.9));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.45);border-radius:18px;box-shadow:0 26px 55px rgba(7,60,30,.45),inset 0 1px 0 rgba(255,255,255,.5);color:#fff;padding:16px 18px 12px;transform:translateX(-115%);opacity:0;transition:transform .55s cubic-bezier(.22,.9,.3,1),opacity .45s}
+.notice-panel.open{transform:translateX(0);opacity:1}
+.notice-panel-head{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:16.5px;margin-bottom:10px}
+.notice-panel-close{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;line-height:1}
+.notice-panel-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.notice-panel-list li{display:flex;gap:9px;align-items:flex-start;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:9px 11px;line-height:1.55;font-size:14px}
+.np-date{flex:none;background:#fff;color:#0d6e33;font-weight:700;font-size:11.5px;padding:2px 8px;border-radius:99px;margin-top:1px}
+.np-text b{font-weight:700}
+.notice-panel-foot{margin:10px 0 2px;font-size:12.5px;opacity:.85;text-align:center}
+.sec-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(24px);z-index:9995;background:#263238;color:#fff;font-size:14.5px;font-weight:600;padding:12px 20px;border-radius:99px;box-shadow:0 16px 36px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s;max-width:calc(100vw - 32px);text-align:center;line-height:1.5}
+.sec-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ——— Visitor Guard suspension popup + first-visit tour (Founder 2026-10-22) ——— */
+.sec-overlay{position:fixed;inset:0;z-index:9999;background:rgba(38,10,24,.72);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:26px 14px}
+.sec-card{background:#fff;border-radius:20px;max-width:520px;width:100%;padding:26px 26px 20px;box-shadow:0 30px 70px rgba(0,0,0,.4);border-top:6px solid #B90E59}
+.sec-card .sec-icon{font-size:38px;text-align:center}
+.sec-card h2{text-align:center;font-size:21px;margin:6px 0 8px;color:#B90E59}
+.sec-card .sec-why{color:var(--muted);line-height:1.65;text-align:center;margin:0 0 14px}
+.sec-box{border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.sec-box h3{margin:0 0 10px;font-size:15.5px}
+.sec-box input{width:100%;padding:11px 13px;border:1.5px solid #E3D5DE;border-radius:10px;font-size:15px;font-family:inherit;margin-bottom:9px;background:#fff}
+.sec-box input:focus{outline:none;border-color:var(--pink)}
+.sec-btn{width:100%;border:0;border-radius:99px;padding:12px;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;color:#fff}
+.sec-btn.pink{background:linear-gradient(135deg,#E2136E,#B90E59)}
+.sec-btn.navy{background:linear-gradient(135deg,#27407C,#16294F)}
+.sec-msg{margin:8px 0 0;font-size:14px;font-weight:600;min-height:18px}
+.sec-note{color:var(--muted);font-size:13px;text-align:center;margin:4px 0 0;line-height:1.6}
+.tour-invite{position:fixed;inset:0;z-index:9998;background:rgba(38,10,24,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.tour-invite-card{background:#fff;border-radius:20px;max-width:400px;width:100%;padding:26px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35);border-top:6px solid var(--pink)}
+.tour-invite-card h3{margin:8px 0 6px;font-size:20px}
+.tour-invite-card p{color:var(--muted);line-height:1.6;margin:0 0 16px}
+.tour-shade{position:fixed;inset:0;z-index:9996;background:rgba(38,10,24,.45)}
+.tour-card{position:fixed;z-index:9999;background:#fff;border-radius:16px;width:340px;max-width:calc(100vw - 24px);padding:18px 18px 14px;box-shadow:0 24px 60px rgba(0,0,0,.4);border-top:5px solid var(--pink)}
+.tour-count{font-size:12px;color:var(--pink);font-weight:700;letter-spacing:.4px}
+.tour-card h3{margin:5px 0 5px;font-size:17.5px}
+.tour-card p{color:var(--muted);line-height:1.6;margin:0 0 14px;font-size:14.5px}
+.tour-btns{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tour-btns.center{justify-content:center}
+.tour-go{background:linear-gradient(135deg,#E2136E,#B90E59);color:#fff;border:0;border-radius:99px;padding:11px 22px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+.tour-skip{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.tour-nav{display:inline-flex;gap:8px}
+.tour-back{background:#fff;border:1.5px solid #E3D5DE;border-radius:99px;padding:9px 15px;font-size:14px;cursor:pointer;font-family:inherit}
+.tour-next{background:linear-gradient(135deg,#E2136E,#B90E59);color:#fff;border:0;border-radius:99px;padding:9px 17px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.tour-hi{position:relative;z-index:9997;box-shadow:0 0 0 3px #E2136E,0 0 0 7px rgba(226,19,110,.3);border-radius:10px}
+
+/* ——— Logged-in header de-crowding (Founder 2026-10-22: brand overlapped in admin) ——— */
+@media (max-width:1280px){
+  .header-in{gap:10px}
+  .main-nav{gap:14px}
+  .main-nav a,.nav-drop-btn{font-size:15px}
+  .brand .bname{font-size:17.5px}
+}
+@media (max-width:1120px){
+  .main-nav{gap:11px}
+  .main-nav a,.nav-drop-btn{font-size:14px;white-space:nowrap}
+  .brand .bname{font-size:16px}
+  .brand .bname small{display:none}
+  .brand img{width:38px;height:38px}
+  .user-chip{max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .header-actions{gap:7px}
+}

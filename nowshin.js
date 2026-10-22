@@ -268,6 +268,7 @@
     ev.preventDefault();
     var text = input.value.replace(/^\s+|\s+$/g, "");
     if (!text || busy) return;
+    if (window.SSA_secFail) window.SSA_secFail("chat");
     input.value = "";
     addMsg(text, "me");
     history.push({ role: "user", text: text });

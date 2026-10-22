@@ -122,6 +122,7 @@
       return;
     }
     ensureProfile(state.user).then(function () {
+      if (window.SSA_secClear) window.SSA_secClear();
       setHeader();
       markPurchased(state.user);
       unlockCourse(state.user);
