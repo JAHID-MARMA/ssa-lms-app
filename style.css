@@ -390,18 +390,18 @@ a{color:var(--pink);text-decoration:none}
   .login-btn,.user-chip{display:none}
   .grid,.grid-4{grid-template-columns:1fr}
   .learn-list{grid-template-columns:1fr}
-  .slider{aspect-ratio:16/10}
-  .slide,.slide:first-child{position:absolute;inset:0}
-  .slide img{object-position:top center}
+  .slider{aspect-ratio:auto}
+  .slide{display:flex;flex-direction:column}
+  .slide img{height:auto;aspect-ratio:16/10;flex:none}
   .slide.active img{animation:none}
-  .slide-cap{left:0;right:0;top:auto;bottom:0;width:auto;max-width:none;border-radius:0;padding:14px 16px 34px;background:rgba(255,255,255,.6);box-shadow:0 -8px 28px rgba(31,41,55,.12)}
+  .slide-cap{position:static;flex:1;width:auto;max-width:none;border:0;border-radius:0;background:#fff;padding:14px 16px 42px;box-shadow:none}
   .slide-cap h2{font-size:19px;line-height:1.35;margin-bottom:3px}
   .slide-cap p{font-size:14px;line-height:1.5;margin-bottom:10px}
   .slide-cap .btn{padding:9px 20px;font-size:15px}
   .dots{bottom:8px}
   .dot{background:#EBC9DA;box-shadow:none}
   .dot.active{background:var(--pink)}
-  .slider-arrow{width:36px;height:36px;font-size:22px;top:23%}
+  .slider-arrow{width:36px;height:36px;font-size:22px;top:30%}
   .copy-bar{padding-bottom:96px}
   .slider-arrow.prev{left:6px}
   .slider-arrow.next{right:6px}
