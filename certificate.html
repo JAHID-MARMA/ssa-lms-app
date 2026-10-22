@@ -14,7 +14,7 @@
 <title>সার্টিফিকেট — Self Scale Academy</title>
 <meta name="description" content="Self Scale Academy কোর্স সম্পন্নের সার্টিফিকেট।">
 <link rel="icon" href="assets/logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
   /* Certificate sheet — V8 design (Founder-approved 2026-10-22): A4
@@ -60,7 +60,7 @@
   .cert-banner::before,.cert-banner::after{content:"";position:absolute;top:0;border-style:solid}
   .cert-banner::before{left:-1.33cqw;border-width:1.51cqw 1.34cqw 1.51cqw 0;border-color:transparent #22303F transparent transparent}
   .cert-banner::after{right:-1.33cqw;border-width:1.51cqw 0 1.51cqw 1.34cqw;border-color:transparent transparent transparent #22303F}
-  .cert-sname{font-family:'Great Vibes','Poppins',cursive;font-size:5.88cqw;color:#22303F;margin-top:0.85cqw;line-height:1.15;text-shadow:0 0.13cqw 0.22cqw rgba(34,48,63,.25),0 0.36cqw 0.80cqw rgba(34,48,63,.10)}
+  .cert-sname{font-family:'Allura','Poppins',cursive;font-size:6.3cqw;white-space:nowrap;color:#22303F;margin-top:0.85cqw;line-height:1.15;text-shadow:0 0.13cqw 0.22cqw rgba(34,48,63,.25),0 0.36cqw 0.80cqw rgba(34,48,63,.10)}
   .cert-orn{margin:0.18cqw auto 0;width:20.50cqw}
   .cert-orn svg{display:block;width:100%;height:auto}
   .cert-desc{font-size:1.90cqw;color:#3A4654;margin-top:0.60cqw}
@@ -121,15 +121,6 @@
     <div id="certMsg"><p class="empty-note">আপনার সার্টিফিকেট যাচাই করা হচ্ছে…</p></div>
     <div id="certHolder"></div>
   </section>
-
-  <section class="nowshin-strip">
-    <span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>
-    <div>
-      <h3 class="en">Meet Nowshin Jannat</h3>
-      <p>সার্টিফিকেট নিয়ে কোনো প্রশ্ন আছে? আমাদের Customer Manager Nowshin-কে জিজ্ঞেস করুন।</p>
-    </div>
-    <button class="btn" type="button" data-nowshin="1">Ask Nowshin</button>
-  </section>
 </main>
 
 <div class="footer-wave" aria-hidden="true"><svg viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="footGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#146636"/><stop offset="1" stop-color="#1F9D55"/></linearGradient></defs><path d="M0,58 C240,18 480,96 720,70 C960,44 1200,92 1440,52 L1440,110 L0,110 Z" fill="#1F9D55" opacity="0.30"/><path d="M0,78 C260,44 520,106 780,84 C1040,62 1240,102 1440,74 L1440,110 L0,110 Z" fill="#1F9D55" opacity="0.55" style="filter:drop-shadow(0 5px 5px rgba(13,74,38,.28))"/><path d="M0,94 C300,70 560,110 840,96 C1100,84 1280,106 1440,92 L1440,110 L0,110 Z" fill="url(#footGrad)"/></svg></div>
@@ -184,6 +175,7 @@
 <script src="supabase-client.js"></script>
 <script src="app.js"></script>
 <script src="auth.js"></script>
+<script src="success.js"></script>
 <script src="nowshin.js"></script>
 <script>
 /* Certificate of Completion (Phase 6). Eligibility is verified from the
@@ -428,6 +420,21 @@
         if (qrEl) qrEl.innerHTML = qr.createSvgTag(4, 8);
       }
     } catch (e) { /* the certificate stands even if the QR cannot render */ }
+
+    /* Fit the student's name on one line: shrink the script font
+       until the whole name fits the text column — long names stay
+       fully readable, never clipped or wrapped. */
+    try {
+      var nm = holderEl.querySelector(".cert-sname");
+      if (nm) {
+        var sz = 6.3;
+        nm.style.fontSize = sz + "cqw";
+        while (nm.scrollWidth > nm.clientWidth + 1 && sz > 3.2) {
+          sz = Math.round((sz - 0.22) * 100) / 100;
+          nm.style.fontSize = sz + "cqw";
+        }
+      }
+    } catch (e) {}
   }
 })();
 </script>
