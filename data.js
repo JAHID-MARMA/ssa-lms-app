@@ -116,8 +116,8 @@ var SSA_DATA = {
     {
       id: "ebook",
       type: "product",
-      title: "Touchstone E-book",
-      titleBn: "Touchstone ই-বুক — ঘরে বসে অনুশীলন",
+      title: "Touchstone Phonics E-book",
+      titleBn: "Touchstone Phonics ই-বুক — ঘরে বসে Phonics অনুশীলন",
       price: 299,
       regular: 1000,
       cover: "assets/cover-ebook.jpg",
@@ -129,7 +129,7 @@ var SSA_DATA = {
   faq: [
     {
       q: "কোর্সের ফি কত?",
-      a: "Spoken English for Kids ও Phonics Course — প্রতিটি মাত্র ৳499 (নিয়মিত মূল্য ৳5,000)। এছাড়া Question Paper Packs ৳199 এবং Touchstone E-book ৳299।"
+      a: "Spoken English for Kids ও Phonics Course — প্রতিটি মাত্র ৳499 (নিয়মিত মূল্য ৳5,000)। এছাড়া Question Paper Packs ৳199 এবং Touchstone Phonics E-book ৳299।"
     },
     {
       q: "কীভাবে পেমেন্ট করব?",
