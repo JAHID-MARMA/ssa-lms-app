@@ -198,10 +198,11 @@
 
     startBtn.addEventListener("click", function () {
       var nm = nameIn.value.replace(/^\s+|\s+$/g, "");
-      var mb = mobileIn.value.replace(/[\s-]/g, "");
+      function SSA_NORM_MOBILE(v){var m=String(v||"").replace(/[\s-]/g,"");if(m.indexOf("+880")===0)m="0"+m.slice(4);else if(m.indexOf("880")===0)m="0"+m.slice(3);return m;}
+      var mb = SSA_NORM_MOBILE(mobileIn.value);
       if (!nm) { showLeadErr("অনুগ্রহ করে আপনার নামটি লিখুন।"); nameIn.focus(); return; }
       if (!/^01[3-9][0-9]{8}$/.test(mb)) {
-        showLeadErr("সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (01 দিয়ে শুরু হতে হবে)।");
+        showLeadErr("সঠিক মোবাইল নম্বর দিন — 01… অথবা +8801…।");
         mobileIn.focus();
         return;
       }

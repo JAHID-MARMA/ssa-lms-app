@@ -244,11 +244,12 @@
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
-      var mobile = document.getElementById("tMobile").value.trim();
+      function SSA_NORM_MOBILE(v){var m=String(v||"").replace(/[\s-]/g,"");if(m.indexOf("+880")===0)m="0"+m.slice(4);else if(m.indexOf("880")===0)m="0"+m.slice(3);return m;}
+      var mobile = SSA_NORM_MOBILE(document.getElementById("tMobile").value);
       var message = document.getElementById("tMessage").value.trim();
       if (!/^01[3-9][0-9]{8}$/.test(mobile)) {
         msgEl.style.display = "";
-        msgEl.textContent = "সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন।";
+        msgEl.textContent = "সঠিক মোবাইল নম্বর দিন — 01… অথবা +8801…।";
         return;
       }
       if (message.length < 5) {

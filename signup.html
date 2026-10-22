@@ -181,9 +181,10 @@
       showErr("ফর্মটি একটু সময় নিয়ে পূরণ করে আবার জমা দিন।");
       return;
     }
-    mobile = mobile.replace(/[\s-]/g, "");
+    function SSA_NORM_MOBILE(v){var m=String(v||"").replace(/[\s-]/g,"");if(m.indexOf("+880")===0)m="0"+m.slice(4);else if(m.indexOf("880")===0)m="0"+m.slice(3);return m;}
+    mobile = SSA_NORM_MOBILE(mobile);
     if (!/^01[3-9][0-9]{8}$/.test(mobile)) {
-      showErr("সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন (01 দিয়ে শুরু হতে হবে)।");
+      showErr("সঠিক মোবাইল নম্বর দিন — 01 দিয়ে শুরু হওয়া ১১ সংখ্যা, অথবা +880 সহ নম্বর।");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

@@ -19,7 +19,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
+body{overflow-x:clip;
   font-family:'Hind Siliguri','Poppins',sans-serif;
   background:var(--bg);color:var(--ink);line-height:1.6;font-size:17px;
 }
@@ -132,8 +132,9 @@ a{color:var(--pink);text-decoration:none}
   display:flex;flex-direction:column;
 }
 .card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(226,19,110,.16),0 6px 14px rgba(38,48,59,.10)}
-.card .cover{position:relative;overflow:hidden}
-.card .cover img{width:100%;height:auto;transition:transform .45s ease}
+.card{height:100%}
+.card .cover{position:relative;overflow:hidden;aspect-ratio:16/10}
+.card .cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s ease}
 .card:hover .cover img{transform:scale(1.04)}
 .badge-off{
   position:absolute;top:12px;left:12px;background:var(--green);color:#fff;font-weight:700;
@@ -142,10 +143,10 @@ a{color:var(--pink);text-decoration:none}
 .card-body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:7px;flex:1}
 .card-body h3{font-size:21px}
 .card-body .bn{color:var(--muted);font-size:15px}
-.price-row{display:flex;align-items:baseline;gap:10px;margin-top:2px}
-.price-now{font-size:26px;font-weight:700;color:var(--pink);font-family:'Poppins',sans-serif}
-.price-was{color:var(--muted);text-decoration:line-through;font-size:16px}
-.price-save{color:var(--green);font-weight:600;font-size:14px}
+.price-row{display:flex;align-items:baseline;gap:7px;margin-top:2px;flex-wrap:nowrap}
+.price-now{font-size:23px;font-weight:700;color:var(--pink);font-family:'Poppins',sans-serif}
+.price-was{color:var(--muted);text-decoration:line-through;font-size:13.5px;white-space:nowrap}
+.price-save{color:var(--green);font-weight:600;font-size:12.5px;white-space:nowrap}
 .card-body .btn{margin-top:auto;text-align:center}
 
 
@@ -349,6 +350,18 @@ a{color:var(--pink);text-decoration:none}
 
 /* ---------- responsive ---------- */
 @media (max-width:900px){
+  .header-in{gap:9px;padding:10px 13px}
+  .brand{flex:none}
+  .brand .bname{font-size:16px;white-space:nowrap}
+  .brand .bname small{font-size:11px;letter-spacing:1.9px}
+  .main-nav{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;gap:0;padding:10px 18px 16px;box-shadow:0 14px 24px rgba(38,48,59,.12)}
+  .main-nav.open{display:flex}
+  .main-nav a{padding:10px 2px;border-bottom:1px solid #F6E8F0}
+  .nav-toggle{display:block;margin-left:auto}
+  .search-btn{display:none}
+  .login-btn{padding:6px 11px;font-size:13px;white-space:nowrap}
+  .order-pill{padding:7px 11px;font-size:12.5px;white-space:nowrap}
+  .header-actions{gap:6px;margin-left:0}
   .footer-grid{grid-template-columns:1fr 1fr}
   .course-hero{grid-template-columns:1fr}
   .cart-layout{grid-template-columns:1fr}
