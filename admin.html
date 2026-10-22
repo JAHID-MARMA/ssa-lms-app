@@ -64,6 +64,7 @@
       <button type="button" class="admin-tab" data-tab="products">প্রোডাক্ট</button>
       <button type="button" class="admin-tab" data-tab="support">সাপোর্ট</button>
       <button type="button" class="admin-tab" data-tab="settings">সেটিংস</button>
+      <button type="button" class="admin-tab" data-tab="partners" id="partnersTabBtn">🤝 পলিসি ও পার্টনার</button>
     </div>
 
     <section class="panel" id="sec-orders" style="margin-top:26px">
@@ -509,7 +510,46 @@
       <div id="supportWrap"><p class="empty-note">লোড হচ্ছে…</p></div>
     </section>
 
-    <section class="panel" id="sec-settings" style="margin-top:20px;display:none">
+    <section class="panel" id="sec-partners" style="margin-top:20px;display:none">
+      <h2>🤝 পলিসি ও পার্টনার — স্ট্র্যাটেজি, আবেদন, অনুমোদন ও পেমেন্ট</h2>
+      <p style="margin-top:0">সবকিছু এখান থেকেই চলবে — শিক্ষক ও অ্যাফিলিয়েটরা ওয়েবসাইটে আবেদন করবে, আবেদন এখানে দেখা যাবে, আপনি অনুমোদন দিলে তারা কাজ শুরু করবে, আর পেমেন্টও এখান থেকেই হিসাব ও পরিশোধ হবে। সব চুক্তি ও নিয়ম মেনে।</p>
+      <div style="border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:12px;padding:14px 16px;margin:12px 0">
+        <h3 style="margin:0 0 8px">📖 কীভাবে কাজ করে — ধাপে ধাপে</h3>
+        <ol style="margin:0;padding-left:20px;line-height:1.9">
+          <li><b>আবেদন আসবে:</b> শিক্ষক/অ্যাফিলিয়েট policies পেজের ফর্মে আবেদন জমা দিলে নিচের তালিকায় “অপেক্ষমাণ” হিসেবে দেখা যাবে।</li>
+          <li><b>যাচাই করুন:</b> নাম, মোবাইল ও অভিজ্ঞতা/প্ল্যাটফর্ম দেখুন; প্রয়োজনে কল করুন। “চুক্তিতে সম্মত” ✓ থাকা বাধ্যতামূলক।</li>
+          <li><b>অনুমোদন দিন:</b> “✅ অনুমোদন” বাটনে ক্লিক করলেই তিনি পার্টনার — অ্যাফিলিয়েট হলে সঙ্গে সঙ্গে একটি প্রোমো কোড তৈরি হয়ে দেখা যাবে; কোডটি কপি করে তাকে পাঠিয়ে দিন।</li>
+          <li><b>বিক্রি ও কমিশন:</b> তার কোডে বিক্রি হলে মাস শেষে নিচের পেআউট ফর্মে পরিমাণটি যোগ করুন (কমিশনের হার নিচের স্ট্র্যাটেজিতে)।</li>
+          <li><b>পেমেন্ট:</b> বিকাশে টাকা পাঠিয়ে “💰 Paid করুন” বাটনে ক্লিক করুন — তারিখসহ রেকর্ড থেকে যাবে।</li>
+        </ol>
+      </div>
+      <h3>📋 স্ট্র্যাটেজি ও নিয়ম (সারসংক্ষেপ)</h3>
+      <ul style="line-height:1.9;margin-top:4px">
+        <li><b>অ্যাফিলিয়েট কমিশন:</b> Starter 15% (মাসে ১–২৯ বিক্রি) • Bronze 16% (৩০–৭৪) • Silver 17% (৭৫–১৪৯) • Gold 18% (১৫০–২৯৯) • Platinum 20% (৩০০+) — কমিশন হিসাব হবে ছাড়ের পর প্রাপ্ত টাকার উপর।</li>
+        <li><b>প্রোমো কোড:</b> শিক্ষার্থী ১০% ছাড় পায়; কোড শুধু অ্যাডমিন তৈরি করে; ক্যাম্পেইনে সর্বোচ্চ ২০% ছাড় শুধু Founder-এর অনুমতিতে।</li>
+        <li><b>শিক্ষকের আয়-ভাগ:</b> নিজের কোর্সে — ছাড় ও অ্যাফিলিয়েট কমিশনের পর বাকি টাকার শিক্ষক ৪০%, Academy ৬০%।</li>
+        <li><b>পেআউট:</b> মাসে একবার, বিকাশে, সর্বনিম্ন জমা ৳৫০০ হলে। রিফান্ড হলে ওই বিক্রির কমিশন বাতিল।</li>
+        <li><b>রিফান্ড:</b> পেমেন্টের ৪৮ ঘণ্টার মধ্যে সাপোর্ট পেজে আবেদন; সার্টিফিকেট পেলে বা ৫টির বেশি লেসন শেষ হলে রিফান্ড নয়; ই-বুক রিফান্ড নয়।</li>
+        <li><b>বড় হওয়া ও স্থানান্তর:</b> সব ডেটা স্ট্যান্ডার্ড ফরম্যাটে (CSV/SQL) এক্সপোর্টযোগ্য — Academy বড় হলেও একই Super Admin ও একই শিক্ষার্থী অ্যাকাউন্ট অটুট রেখে সিস্টেম আপগ্রেড বা অন্য সার্ভারে স্থানান্তর করা যাবে, কোনো সংযোগ হারাবে না।</li>
+        <li><b>ডেটা সুরক্ষা:</b> রেজিস্ট্রেশন ও অর্ডারের কপি Google Drive-এ থাকবে (আসছে); পুরো সাইটের কোড GitHub-এ; ডেটাবেস Supabase-এ — যেকোনো একটি নষ্ট হলেও বাকিগুলো থেকে সব ফিরে পাওয়া যাবে।</li>
+      </ul>
+      <p id="partnersMsg" class="admin-msg" style="display:none"></p>
+      <h3 style="margin-top:22px">👩‍🏫 শিক্ষক আবেদন <button type="button" class="btn sm neutral" id="expTeacher">⬇ CSV Export</button></h3>
+      <div id="teacherApps"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 style="margin-top:22px">📣 অ্যাফিলিয়েট আবেদন <button type="button" class="btn sm neutral" id="expAffiliate">⬇ CSV Export</button></h3>
+      <div id="affiliateApps"><p class="empty-note">লোড হচ্ছে…</p></div>
+      <h3 style="margin-top:22px">💰 পেআউট (কমিশন / আয়-ভাগ) <button type="button" class="btn sm neutral" id="expPayouts">⬇ CSV Export</button></h3>
+      <form class="form-grid" id="payoutForm">
+        <div class="field"><label for="poName">পার্টনারের নাম</label><input id="poName" type="text" placeholder="যেমন: Rahim Uddin"></div>
+        <div class="field"><label for="poType">ধরন</label><select id="poType"><option value="affiliate">অ্যাফিলিয়েট কমিশন</option><option value="teacher">শিক্ষক আয়-ভাগ</option></select></div>
+        <div class="field"><label for="poAmount">পরিমাণ (৳)</label><input id="poAmount" type="number" min="1" step="1" placeholder="যেমন: 750"></div>
+        <div class="field"><label for="poNote">নোট (ঐচ্ছিক)</label><input id="poNote" type="text" placeholder="যেমন: অক্টোবর মাসের কমিশন"></div>
+      </form>
+      <button type="button" class="btn green" id="poAddBtn">➕ পেআউট যোগ করুন</button>
+      <div id="payoutList" style="margin-top:14px"><p class="empty-note">লোড হচ্ছে…</p></div>
+    </section>
+
+<section class="panel" id="sec-settings" style="margin-top:20px;display:none">
       <h2>সাইট সেটিংস</h2>
       <p style="margin-top:0">এখানে বদলালেই পুরো সাইটে সঙ্গে সঙ্গে বদলে যাবে।</p>
       <p id="settingsMsg" class="admin-msg" style="display:none"></p>
@@ -563,6 +603,15 @@
       <a href="cart.html">কার্ট ও চেকআউট</a>
       <a href="login.html">লগইন</a>
       <a href="dashboard.html">ড্যাশবোর্ড</a>
+    </div>
+    <div>
+      <h4>কোম্পানি</h4>
+      <a href="policies.html#teacher">শিক্ষক হিসাবে যোগ দিন</a>
+      <a href="policies.html#affiliate">অ্যাফিলিয়েট রেজিস্ট্রেশন</a>
+      <a href="policies.html#affiliate-verify">অ্যাফিলিয়েট ভেরিফিকেশন পোর্টাল</a>
+      <a href="policies.html#privacy">প্রাইভেসি পলিসি</a>
+      <a href="policies.html#refund">রিফান্ড পলিসি</a>
+      <a href="policies.html#terms">ব্যবহারকারীর শর্তাবলি</a>
     </div>
     <div>
       <h4>হেল্প ও যোগাযোগ</h4>

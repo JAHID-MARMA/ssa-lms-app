@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E2136E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="SS Academy">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<title>সাপোর্ট — Self Scale Academy</title>
+<meta name="description" content="Self Scale Academy সাপোর্ট — কোর্স, পেমেন্ট বা অ্যাক্সেস নিয়ে সাহায্য নিন।">
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-in">
+    <a class="brand" href="index.html"><img src="assets/logo-mark.png" alt="Self Scale Academy logo"><span class="bname">Self Scale Academy<small>Explore Yourself</small></span></a>
+    <button class="nav-toggle" type="button" aria-label="Menu">☰</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="index.html#about">আমাদের সম্পর্কে</a>
+      <a href="index.html#contact">যোগাযোগ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-btn" type="button" aria-label="Search">🔍</button>
+      <a class="login-btn" id="ssaLoginLink" href="login.html">Login</a>
+      <a class="login-btn" id="ssaDashLink" href="dashboard.html" style="display:none">Dashboard</a>
+      <a class="login-btn" id="ssaAdminLink" href="admin.html" style="display:none">Admin</a>
+      <a class="user-chip" id="ssaUserChip" href="dashboard.html" style="display:none"></a>
+      <a class="order-pill" href="courses.html">অর্ডার করুন</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <style>
+    .soon-badge{display:inline-block;background:linear-gradient(135deg,#E2136E,#B90E59);color:#fff;font-size:12.5px;font-weight:700;padding:3px 12px;border-radius:99px;vertical-align:middle;margin-left:8px;box-shadow:0 4px 12px rgba(226,19,110,.3)}
+    .policy-sec{scroll-margin-top:96px}
+    .policy-sec p{color:var(--muted);line-height:1.75;margin:6px 0 0}
+    .feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+    @media (max-width:700px){.feat-grid{grid-template-columns:1fr}}
+    .feat{border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:14px;padding:16px 18px}
+    .feat h3{margin:0 0 6px;font-size:16.5px}
+    .feat p{margin:0}
+  </style>
+
+  <section class="panel" style="margin-top:26px">
+    <h1 style="font-size:26px;margin:0 0 8px">কোম্পানি ও পলিসি</h1>
+    <p style="margin:0">Self Scale Academy একটি সম্পূর্ণ অনলাইন শিক্ষা প্ল্যাটফর্ম। শিক্ষক, অ্যাফিলিয়েট ও শিক্ষার্থী — সবার জন্য আমাদের নিয়ম ও সুবিধাগুলো এখানে আনুষ্ঠানিকভাবে প্রকাশ করা হচ্ছে। শিক্ষক ও অ্যাফিলিয়েট আবেদন এখনই জমা দেওয়া যাচ্ছে; অনুমোদন Super Admin প্যানেল থেকে দেওয়া হয়।</p>
+  </section>
+
+  <section class="panel" style="margin-top:20px">
+    <h2>নতুন ফিচার <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <div class="feat-grid">
+      <div class="feat">
+        <h3>🗂️ Google Drive-এ রেজিস্ট্রেশন ব্যাকআপ</h3>
+        <p>প্রতিটি রেজিস্ট্রেশন ও অর্ডারের তথ্য স্বয়ংক্রিয়ভাবে Google Drive-এ সংরক্ষিত থাকবে — যেকোনো সময় ডেটা পুনরুদ্ধার করা যাবে, কোনো তথ্য হারানোর ঝুঁকি ছাড়াই।</p>
+      </div>
+      <div class="feat">
+        <h3>🎟️ প্রোমো কোড</h3>
+        <p>অ্যাফিলিয়েট, শিক্ষক ও পার্টনারদের জন্য বিশেষ প্রোমো কোড — শিক্ষার্থীরা ছাড় পাবেন, আর প্রতিটি কোডের বিক্রি স্বয়ংক্রিয়ভাবে হিসাব থাকবে।</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel policy-sec" id="teacher" style="margin-top:20px">
+    <h2>শিক্ষক হিসাবে যোগ দিন <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>অভিজ্ঞ ও যোগ্য শিক্ষকগণ Self Scale Academy-তে নিজের কোর্স প্রকাশ করতে পারবেন। আবেদন যাচাইয়ের পর অনুমোদিত শিক্ষকদের কোর্স আমাদের মান-নিয়ন্ত্রণ প্রক্রিয়া শেষে প্রকাশিত হবে। শিক্ষকদের জন্য আকর্ষণীয় আয়-ভাগের (রেভিনিউ শেয়ার) নীতিমালা রয়েছে — অনুমোদনের সময় চুক্তিতে সব শর্ত লিখিতভাবে দেওয়া হবে।</p>
+<div style="border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.9">
+        <b>কীভাবে আবেদন করবেন:</b> ধাপ ১ — নিচের ফর্মটি সঠিক তথ্য দিয়ে পূরণ করুন। ধাপ ২ — নিয়ম ও চুক্তিতে সম্মতি (✓) দিয়ে জমা দিন। ধাপ ৩ — আমাদের টিম যাচাই করে আপনার মোবাইলে জানিয়ে দেবে; অনুমোদন হলেই কাজ শুরু।
+      </div>
+<form id="tAppForm" class="form-grid">
+        <div class="field"><label for="tName">আপনার নাম *</label><input id="tName" type="text" placeholder="পূর্ণ নাম লিখুন"></div>
+        <div class="field"><label for="tMobile">মোবাইল নম্বর *</label><input id="tMobile" type="tel" placeholder="01XXXXXXXXX"></div>
+        <div class="field"><label for="tEmail">ইমেইল</label><input id="tEmail" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="tSubject">কোন বিষয়ে পড়াবেন *</label><input id="tSubject" type="text" placeholder="যেমন: Phonics / Spoken English"></div>
+        <div class="field"><label for="tExp">অভিজ্ঞতা</label><input id="tExp" type="text" placeholder="যেমন: ৩ বছর, ABC School"></div>
+        <div class="field"><label for="tMsg">নিজের সম্পর্কে এক লাইনে</label><input id="tMsg" type="text" placeholder="ঐচ্ছিক"></div>
+      </form>
+      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="tAgree" style="margin-top:5px"> আমি Self Scale Academy-র শিক্ষক নীতিমালা ও চুক্তির শর্ত মেনে আবেদন করছি। *</label>
+      <button type="button" class="btn pink" id="tSubmit">📩 আবেদন জমা দিন</button>
+      <p id="tMsgOut" style="display:none;margin-top:10px;font-weight:600"></p>
+  </section>
+  <section class="panel policy-sec" id="affiliate" style="margin-top:20px">
+    <h2>অ্যাফিলিয়েট রেজিস্ট্রেশন <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>শিক্ষক, কনটেন্ট ক্রিয়েটর ও শিক্ষা-উদ্যোক্তারা অ্যাফিলিয়েট হিসেবে নিবন্ধন করে নিজের প্রোমো কোড ও লিংকের মাধ্যমে কোর্স প্রচার করতে পারবেন এবং প্রতিটি বিক্রিতে কমিশন অর্জন করবেন। অনুমোদন হলেই আপনার ব্যক্তিগত প্রোমো কোড তৈরি হয়ে যাবে। কমিশনের হার ও পেমেন্ট (বিকাশ) চুক্তিতে লিখিতভাবে দেওয়া হবে।</p>
+<div style="border:1.5px solid #F0D9E6;background:#FFF9FC;border-radius:12px;padding:12px 16px;margin:14px 0;line-height:1.9">
+        <b>কীভাবে আবেদন করবেন:</b> ধাপ ১ — নিচের ফর্মটি সঠিক তথ্য দিয়ে পূরণ করুন। ধাপ ২ — নিয়ম ও চুক্তিতে সম্মতি (✓) দিয়ে জমা দিন। ধাপ ৩ — আমাদের টিম যাচাই করে আপনার মোবাইলে জানিয়ে দেবে; অনুমোদন হলেই কাজ শুরু।
+      </div>
+<form id="aAppForm" class="form-grid">
+        <div class="field"><label for="aName">আপনার নাম *</label><input id="aName" type="text" placeholder="পূর্ণ নাম লিখুন"></div>
+        <div class="field"><label for="aMobile">মোবাইল নম্বর *</label><input id="aMobile" type="tel" placeholder="01XXXXXXXXX"></div>
+        <div class="field"><label for="aEmail">ইমেইল</label><input id="aEmail" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="aPlatform">আপনার পেজ / চ্যানেল / প্ল্যাটফর্ম *</label><input id="aPlatform" type="text" placeholder="Facebook page / YouTube / Group-এর নাম বা লিংক"></div>
+        <div class="field"><label for="aAudience">আপনার দর্শক সংখ্যা (প্রায়)</label><input id="aAudience" type="text" placeholder="যেমন: 5,000 followers"></div>
+        <div class="field"><label for="aMsg">কীভাবে প্রচার করবেন</label><input id="aMsg" type="text" placeholder="এক লাইনে লিখুন (ঐচ্ছিক)"></div>
+      </form>
+      <label style="display:flex;gap:8px;align-items:flex-start;margin:12px 0;line-height:1.6"><input type="checkbox" id="aAgree" style="margin-top:5px"> আমি Self Scale Academy-র অ্যাফিলিয়েট নীতিমালা (সৎ প্রচার, কোনো ভুয়া প্রতিশ্রুতি নয়) ও চুক্তির শর্ত মেনে আবেদন করছি। *</label>
+      <button type="button" class="btn pink" id="aSubmit">📩 আবেদন জমা দিন</button>
+      <p id="aMsgOut" style="display:none;margin-top:10px;font-weight:600"></p>
+  </section>
+  <section class="panel policy-sec" id="affiliate-verify" style="margin-top:20px">
+    <h2>অ্যাফিলিয়েট ভেরিফিকেশন পোর্টাল <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>প্রতিটি অ্যাফিলিয়েটের পরিচয় ও প্রোমো কোড যাচাইয়ের জন্য আলাদা ভেরিফিকেশন পোর্টাল চালু হচ্ছে। শিক্ষার্থীরা যেকোনো প্রোমো কোড আসল কিনা এই পোর্টালে যাচাই করতে পারবেন — প্রতারণা রোধে এটি আমাদের আনুষ্ঠানিক ব্যবস্থা।</p>
+  </section>
+  <section class="panel policy-sec" id="privacy" style="margin-top:20px">
+    <h2>প্রাইভেসি পলিসি <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>আমরা শুধু কোর্স সেবা দেওয়ার জন্য প্রয়োজনীয় তথ্য (নাম, মোবাইল নম্বর, ইমেইল) সংগ্রহ করি। আপনার তথ্য কখনো তৃতীয় পক্ষের কাছে বিক্রি করা হয় না। ডেটা সুরক্ষায় আমরা নিরাপদ সার্ভার ও Google Drive ব্যাকআপ ব্যবহার করি। পূর্ণ প্রাইভেসি পলিসি শীঘ্রই এখানে প্রকাশিত হবে।</p>
+  </section>
+  <section class="panel policy-sec" id="refund" style="margin-top:20px">
+    <h2>রিফান্ড পলিসি <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>ভুলবশত কেনা বা কারিগরি সমস্যার ক্ষেত্রে নির্ধারিত সময়ের মধ্যে সাপোর্ট পেজে আবেদন করলে যাচাই শেষে রিফান্ড বা কোর্স পরিবর্তনের সুবিধা দেওয়া হবে। পূর্ণ রিফান্ড নীতিমালা (সময়সীমা, শর্ত ও প্রক্রিয়া) শীঘ্রই এখানে আনুষ্ঠানিকভাবে প্রকাশিত হবে।</p>
+  </section>
+  <section class="panel policy-sec" id="terms" style="margin-top:20px">
+    <h2>ব্যবহারকারীর শর্তাবলি <span class="soon-badge">শীঘ্রই আসছে</span></h2>
+    <p>একটি অ্যাকাউন্ট শুধু একজন শিক্ষার্থীর জন্য; কোর্সের ভিডিও, PDF বা অন্য কোনো উপাদান অনুলিপি, শেয়ার বা পুনঃবিক্রি করা সম্পূর্ণ নিষিদ্ধ। পূর্ণ শর্তাবলি শীঘ্রই এখানে প্রকাশিত হবে।</p>
+  </section>
+</main>
+
+<div class="footer-wave" aria-hidden="true"><svg viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false"><defs><linearGradient id="footGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#146636"/><stop offset="1" stop-color="#1F9D55"/></linearGradient></defs><path d="M0,58 C240,18 480,96 720,70 C960,44 1200,92 1440,52 L1440,110 L0,110 Z" fill="#1F9D55" opacity="0.30"/><path d="M0,78 C260,44 520,106 780,84 C1040,62 1240,102 1440,74 L1440,110 L0,110 Z" fill="#1F9D55" opacity="0.55" style="filter:drop-shadow(0 5px 5px rgba(13,74,38,.28))"/><path d="M0,94 C300,70 560,110 840,96 C1100,84 1280,106 1440,92 L1440,110 L0,110 Z" fill="url(#footGrad)"/></svg></div>
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand"><img src="assets/logo.png" alt="Self Scale Academy logo"><span>Self Scale Academy</span></div>
+      <p>বাচ্চাদের জন্য সহজ ও মজার ইংরেজি শিক্ষা — Spoken English ও Phonics, ঘরে বসে অনলাইনে।</p>
+      <div class="social-row">
+        <a class="soc" href="https://www.facebook.com/selfscaleacademy" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.6 21v-7.2h2.4l.4-3h-2.8V8.9c0-.9.3-1.5 1.6-1.5h1.3V4.7c-.3 0-1.1-.1-2-.1-2 0-3.4 1.2-3.4 3.5v2.7H8.7v3h2.4V21h2.5z"/></svg></a>
+        <a class="soc" href="https://youtube.com/@muhammadjahidhasan" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2c-.2-1-1-1.7-1.9-1.9C18 5 12 5 12 5s-6 0-7.7.3c-.9.2-1.7.9-1.9 1.9C2 8.9 2 12 2 12s0 3.1.4 4.8c.2 1 1 1.7 1.9 1.9C6 19 12 19 12 19s6 0 7.7-.3c.9-.2 1.7-.9 1.9-1.9.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8zM10 15.2V8.8l5.2 3.2L10 15.2z"/></svg></a>
+        <a class="soc" href="https://wa.me/8801782911601" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+        <a class="soc" href="https://t.me/+8801782911601" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+        <a class="soc" href="mailto:jahidhasan.dmj@gmail.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>কোর্সসমূহ</h4>
+      <a href="course-spoken.html">Spoken English for Kids</a>
+      <a href="course-phonics.html">Phonics Course</a>
+      <a href="courses.html#card-ebook">Touchstone E-book</a>
+      <a href="courses.html#card-packs">Question Paper Packs</a>
+      <a href="courses.html">সকল কোর্স</a>
+    </div>
+    <div>
+      <h4>কুইক লিংক</h4>
+      <a href="index.html">Home</a>
+      <a href="courses.html">সকল কোর্স</a>
+      <a href="cart.html">কার্ট ও চেকআউট</a>
+      <a href="login.html">লগইন</a>
+      <a href="dashboard.html">ড্যাশবোর্ড</a>
+    </div>
+    <div>
+      <h4>কোম্পানি</h4>
+      <a href="policies.html#teacher">শিক্ষক হিসাবে যোগ দিন</a>
+      <a href="policies.html#affiliate">অ্যাফিলিয়েট রেজিস্ট্রেশন</a>
+      <a href="policies.html#affiliate-verify">অ্যাফিলিয়েট ভেরিফিকেশন পোর্টাল</a>
+      <a href="policies.html#privacy">প্রাইভেসি পলিসি</a>
+      <a href="policies.html#refund">রিফান্ড পলিসি</a>
+      <a href="policies.html#terms">ব্যবহারকারীর শর্তাবলি</a>
+    </div>
+    <div>
+      <h4>হেল্প ও যোগাযোগ</h4>
+      <a href="index.html#faq">সাধারণ প্রশ্ন (FAQ)</a>
+      <a href="index.html#refund">Refund Policy</a>
+      <a href="index.html#privacy">Privacy Policy</a>
+      <a href="support.html">সাপোর্ট</a>
+      <a href="#" data-nowshin="1">Ask Nowshin</a>
+    </div>
+  </div>
+  <div class="copy-bar">
+    <span>© 2026 Self Scale Academy — সর্বস্বত্ব সংরক্ষিত।</span>
+    <span class="copy-links"><a href="index.html#privacy">Privacy Policy</a> • <a href="index.html#refund">Refund Policy</a> • <a href="support.html">Support</a></span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script src="success.js"></script>
+<script src="content.js"></script>
+<script src="nowshin.js"></script>
+
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function waitDb(cb, n) {
+    if (window.SSA_DB && typeof window.SSA_DB.from === "function") { cb(); return; }
+    if ((n || 0) < 40) setTimeout(function () { waitDb(cb, (n || 0) + 1); }, 250);
+  }
+  function normMobile(v) { var d = String(v || "").replace(/[^0-9]/g, ""); if (d.indexOf("880") === 0) d = "0" + d.slice(3); return d; }
+  function submit(kind) {
+    var p = kind === "teacher" ? "t" : "a";
+    var out = $(p + "MsgOut");
+    function show(t, ok) { out.textContent = t; out.style.display = ""; out.style.color = ok ? "#14703D" : "#B90E59"; }
+    var name = $(p + "Name").value.trim(), mobile = normMobile($(p + "Mobile").value), email = $(p + "Email").value.trim();
+    if (name.length < 3) { show("অনুগ্রহ করে আপনার সঠিক নাম লিখুন।", false); return; }
+    if (!/^01[0-9]{9}$/.test(mobile)) { show("সঠিক ১১ ডিজিটের মোবাইল নম্বর দিন (01 দিয়ে শুরু)।", false); return; }
+    if (!$(p + "Agree").checked) { show("জমা দিতে নিয়ম ও চুক্তিতে সম্মতি (✓) আবশ্যক।", false); return; }
+    var row, table;
+    if (kind === "teacher") {
+      if (!$("tSubject").value.trim()) { show("কোন বিষয়ে পড়াবেন তা লিখুন।", false); return; }
+      row = { full_name: name, mobile: mobile, email: email || null, subject: $("tSubject").value.trim(), experience: $("tExp").value.trim() || null, message: $("tMsg").value.trim() || null, agreed: true, status: "pending" };
+      table = "teacher_applications";
+    } else {
+      if (!$("aPlatform").value.trim()) { show("আপনার পেজ/চ্যানেলের নাম বা লিংক দিন।", false); return; }
+      row = { full_name: name, mobile: mobile, email: email || null, platform: $("aPlatform").value.trim(), audience: $("aAudience").value.trim() || null, message: $("aMsg").value.trim() || null, agreed: true, status: "pending" };
+      table = "affiliate_applications";
+    }
+    show("জমা হচ্ছে…", true);
+    waitDb(function () {
+      if (!window.SSA_DB) { show("এখন জমা নেওয়া যাচ্ছে না — কিছুক্ষণ পর আবার চেষ্টা করুন, অথবা সাপোর্ট পেজে লিখুন।", false); return; }
+      window.SSA_DB.from(table).insert(row).then(function (r) {
+        if (r.error) { show("জমা হয়নি — আবার চেষ্টা করুন, অথবা সাপোর্ট পেজে লিখুন।", false); return; }
+        show("✅ আবেদন জমা হয়েছে! যাচাই শেষে আমরা আপনার মোবাইলে যোগাযোগ করব। ধন্যবাদ।", true);
+        $(p + "Submit").disabled = true;
+      }, function () { show("জমা হয়নি — ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।", false); });
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    var t = $("tSubmit"), a = $("aSubmit");
+    if (t) t.addEventListener("click", function () { submit("teacher"); });
+    if (a) a.addEventListener("click", function () { submit("affiliate"); });
+  });
+})();
+</script>
+</body>
+</html>

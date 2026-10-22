@@ -394,6 +394,7 @@
     results: "sec-results", reports: "sec-reports", revenue: "sec-revenue",
     finance: "sec-finance", reviews: "sec-reviews", nowshin: "sec-nowshin",
     analyst: "sec-analyst",
+    partners: "sec-partners",
     products: "sec-products", support: "sec-support", settings: "sec-settings"
   };
   var p4Inited = false;
@@ -420,6 +421,7 @@
     if (name === "products") loadProducts();
     if (name === "support") loadSupport();
     if (name === "settings") loadSettings();
+    if (name === "partners" && window.SSA_loadPartners) window.SSA_loadPartners();
   }
 
   /* ---- shared course catalog (admin view, incl. unpublished) ---- */
@@ -2996,6 +2998,8 @@
         if (!IS_SUPER) {
           var analystBtn = $("analystTabBtn");
           if (analystBtn) analystBtn.style.display = "none";
+          var partnersBtn = $("partnersTabBtn");
+          if (partnersBtn) partnersBtn.style.display = "none";
         }
         initPhase4();
         loadCourseSlugs().then(function () {
@@ -3218,4 +3222,114 @@
     }, function () { showMsg($("settingsMsg"), "সেভ করা যায়নি। ইন্টারনেট সংযোগ দেখুন।", false); });
   });
 
+})();
+
+/* ---- Partners: applications, approvals, promo codes, payouts, CSV export (Founder order 2026-10-22) ---- */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function msg(t, ok) { var m = $("partnersMsg"); if (!m) return; m.textContent = t; m.style.display = ""; m.style.color = ok ? "#14703D" : "#B90E59"; }
+  function statusTag(st) { if (st === "approved") return '<span class="tag tag-ok">অনুমোদিত</span>'; if (st === "rejected") return '<span class="tag tag-pend">বাতিল</span>'; return '<span class="tag tag-pend">অপেক্ষমাণ</span>'; }
+  function fmtDate(iso) { try { return new Date(iso).toLocaleDateString("en-GB"); } catch (e) { return ""; } }
+  function makeCode(name) { var base = String(name || "SSA").replace(/[^A-Za-z]/g, "").slice(0, 4).toUpperCase() || "SSA"; return "SSA-" + base + Math.floor(100 + Math.random() * 900); }
+  var lastRows = { teacher: [], affiliate: [], payouts: [] };
+  function toCsv(rows, cols) {
+    function cell(v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }
+    return cols.join(",") + "\n" + rows.map(function (r) { return cols.map(function (c) { return cell(r[c]); }).join(","); }).join("\n");
+  }
+  function downloadCsv(name, text) {
+    var blob = new Blob(["\ufeff" + text], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  }
+  function appRow(r, kind) {
+    var detail = kind === "teacher" ? ((r.subject || "") + (r.experience ? " • " + r.experience : "")) : ((r.platform || "") + (r.audience ? " • " + r.audience : ""));
+    var btns = "";
+    if (r.status === "pending") btns = '<button class="btn sm green" type="button" data-pact="approve" data-kind="' + kind + '" data-id="' + r.id + '">✅ অনুমোদন</button> <button class="btn sm neutral" type="button" data-pact="reject" data-kind="' + kind + '" data-id="' + r.id + '">বাতিল</button>';
+    return "<tr><td><b>" + esc(r.full_name) + "</b><br><span class='en'>" + esc(r.mobile || "") + "</span>" + (r.email ? "<br>" + esc(r.email) : "") + "</td>" +
+      "<td>" + esc(detail) + (r.message ? "<br><i>" + esc(r.message) + "</i>" : "") + "</td>" +
+      "<td>" + (r.agreed ? "✓ সম্মত" : "✗ সম্মত নয়") + (r.promo_code ? "<br><b class='en'>" + esc(r.promo_code) + "</b>" : "") + "<br>" + fmtDate(r.created_at) + "</td>" +
+      "<td>" + statusTag(r.status) + "</td><td class='row-actions'>" + btns + "</td></tr>";
+  }
+  function tableHtml(rows, kind, emptyText) {
+    if (!rows || !rows.length) return '<p class="empty-note">' + emptyText + "</p>";
+    return '<div class="table-scroll"><table class="admin-table"><thead><tr><th>নাম ও যোগাযোগ</th><th>বিবরণ</th><th>চুক্তি / কোড / তারিখ</th><th>অবস্থা</th><th></th></tr></thead><tbody>' +
+      rows.map(function (r) { return appRow(r, kind); }).join("") + "</tbody></table></div>";
+  }
+  function loadPartners() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    window.SSA_DB.from("teacher_applications").select("*").order("created_at", { ascending: false }).then(function (r) {
+      lastRows.teacher = r.data || [];
+      var el = $("teacherApps"); if (el) el.innerHTML = tableHtml(lastRows.teacher, "teacher", "এখনো কোনো শিক্ষক আবেদন আসেনি।");
+    }, function () {});
+    window.SSA_DB.from("affiliate_applications").select("*").order("created_at", { ascending: false }).then(function (r) {
+      lastRows.affiliate = r.data || [];
+      var el = $("affiliateApps"); if (el) el.innerHTML = tableHtml(lastRows.affiliate, "affiliate", "এখনো কোনো অ্যাফিলিয়েট আবেদন আসেনি।");
+    }, function () {});
+    window.SSA_DB.from("partner_payouts").select("*").order("created_at", { ascending: false }).then(function (r) {
+      var el = $("payoutList"); if (!el) return;
+      var rows = r.data || []; lastRows.payouts = rows;
+      if (!rows.length) { el.innerHTML = '<p class="empty-note">এখনো কোনো পেআউট যোগ করা হয়নি।</p>'; return; }
+      el.innerHTML = '<div class="table-scroll"><table class="admin-table"><thead><tr><th>পার্টনার</th><th>ধরন</th><th>পরিমাণ</th><th>নোট</th><th>অবস্থা</th><th></th></tr></thead><tbody>' +
+        rows.map(function (p) {
+          return "<tr><td><b>" + esc(p.partner_name) + "</b><br>" + fmtDate(p.created_at) + "</td><td>" + (p.partner_type === "teacher" ? "শিক্ষক আয়-ভাগ" : "অ্যাফিলিয়েট কমিশন") + "</td><td><b>৳" + esc(p.amount) + "</b></td><td>" + esc(p.note || "") + "</td><td>" + (p.status === "paid" ? '<span class="tag tag-ok">Paid ✓</span>' : '<span class="tag tag-pend">বাকি</span>') + '</td><td class="row-actions">' + (p.status !== "paid" ? '<button class="btn sm green" type="button" data-pact="paid" data-id="' + p.id + '">💰 Paid করুন</button>' : "") + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+    }, function () {});
+  }
+  window.SSA_loadPartners = loadPartners;
+  document.addEventListener("click", function (e) {
+    var b = e.target && e.target.closest ? e.target.closest("[data-pact]") : null;
+    if (!b || !window.SSA_DB) return;
+    var act = b.getAttribute("data-pact"), id = b.getAttribute("data-id");
+    if (act === "paid") {
+      window.SSA_DB.from("partner_payouts").select("*").eq("id", id).single().then(function (pr) {
+        var p = pr.data || {};
+        window.SSA_DB.from("partner_payouts").update({ status: "paid", paid_at: new Date().toISOString() }).eq("id", id).then(function (r) {
+          if (r.error) { msg("পেআউট আপডেট হয়নি — আবার চেষ্টা করুন।", false); return; }
+          var today = new Date().toISOString().slice(0, 10);
+          window.SSA_DB.from("finance_entries").insert({
+            type: "expense",
+            title: "পার্টনার পেআউট — " + (p.partner_name || ""),
+            note: (p.partner_type === "teacher" ? "শিক্ষক আয়-ভাগ" : "অ্যাফিলিয়েট কমিশন") + (p.note ? " • " + p.note : ""),
+            amount: p.amount || 0, entry_date: today
+          }).then(function () {}, function () {});
+          msg("পেআউট Paid ✓ আয়-ব্যয় হিসাবেও খরচ হিসেবে যোগ হয়েছে।", true); loadPartners();
+        });
+      });
+      return;
+    }
+    var kind = b.getAttribute("data-kind");
+    var table = kind === "teacher" ? "teacher_applications" : "affiliate_applications";
+    if (act === "approve") {
+      window.SSA_DB.from(table).select("full_name,promo_code").eq("id", id).single().then(function (r) {
+        var upd = { status: "approved" };
+        if (r.data && !r.data.promo_code) upd.promo_code = makeCode(r.data.full_name);
+        window.SSA_DB.from(table).update(upd).eq("id", id).then(function (r2) {
+          if (r2.error) { msg("অনুমোদন হয়নি — আবার চেষ্টা করুন।", false); return; }
+          msg("অনুমোদিত ✓" + (upd.promo_code ? " প্রোমো কোড: " + upd.promo_code + " — কোডটি পার্টনারকে পাঠিয়ে দিন।" : ""), true); loadPartners();
+        });
+      });
+    } else if (act === "reject") {
+      window.SSA_DB.from(table).update({ status: "rejected" }).eq("id", id).then(function (r) {
+        if (r.error) { msg("বাতিল হয়নি — আবার চেষ্টা করুন।", false); return; }
+        msg("আবেদন বাতিল করা হয়েছে।", true); loadPartners();
+      });
+    }
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    var expT = $("expTeacher"), expA = $("expAffiliate"), expP = $("expPayouts");
+    if (expT) expT.addEventListener("click", function () { downloadCsv("teacher-applications.csv", toCsv(lastRows.teacher, ["id", "full_name", "mobile", "email", "subject", "experience", "message", "agreed", "promo_code", "status", "created_at"])); });
+    if (expA) expA.addEventListener("click", function () { downloadCsv("affiliate-applications.csv", toCsv(lastRows.affiliate, ["id", "full_name", "mobile", "email", "platform", "audience", "message", "agreed", "promo_code", "status", "created_at"])); });
+    if (expP) expP.addEventListener("click", function () { downloadCsv("partner-payouts.csv", toCsv(lastRows.payouts, ["id", "partner_name", "partner_type", "amount", "note", "status", "created_at", "paid_at"])); });
+    var add = $("poAddBtn");
+    if (add) add.addEventListener("click", function () {
+      var name = $("poName").value.trim(), amt = parseFloat($("poAmount").value);
+      if (!name || !amt || amt <= 0) { msg("নাম ও সঠিক পরিমাণ দিন।", false); return; }
+      window.SSA_DB.from("partner_payouts").insert({ partner_name: name, partner_type: $("poType").value, amount: amt, note: $("poNote").value.trim() || null, status: "due" }).then(function (r) {
+        if (r.error) { msg("পেআউট যোগ হয়নি — আবার চেষ্টা করুন।", false); return; }
+        $("poName").value = ""; $("poAmount").value = ""; $("poNote").value = "";
+        msg("পেআউট যোগ হয়েছে ✓ টাকা পাঠিয়ে Paid করুন।", true); loadPartners();
+      });
+    });
+  });
 })();

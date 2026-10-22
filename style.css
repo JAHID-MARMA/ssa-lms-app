@@ -221,7 +221,7 @@ a{color:var(--pink);text-decoration:none}
 .footer-wave{margin-top:56px;line-height:0}
 .footer-wave svg{display:block;width:100%;height:clamp(56px,8vw,110px)}
 .site-footer{background:linear-gradient(135deg,#146636,#1F9D55);color:#EAF7EE}
-.footer-grid{max-width:1140px;margin:0 auto;padding:42px 16px 26px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:28px;align-items:start}
+.footer-grid{max-width:1280px;margin:0 auto;padding:42px 16px 26px;display:grid;grid-template-columns:1.35fr .95fr .95fr .95fr 1.05fr;gap:26px;align-items:start}
 .site-footer h4{color:#fff;font-size:17px;margin-bottom:12px;font-family:'Hind Siliguri',sans-serif}
 .site-footer a{color:#DFF3E4;display:block;padding:3px 0;font-size:15px;transition:color .15s}
 .site-footer a:hover{color:#fff}
