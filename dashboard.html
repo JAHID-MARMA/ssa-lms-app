@@ -64,6 +64,7 @@
 
   <section class="panel" style="margin-top:20px" id="profilePanel">
     <h2>👤 আমার প্রোফাইল ও বিশ্বাসযোগ্যতা</h2>
+    <p class="admin-note">এই তথ্যগুলো <b>সম্পূর্ণ ঐচ্ছিক</b> — দিলে আপনার বিশ্বাসযোগ্যতা স্কোর বাড়বে, না দিলেও সাইটের সবকিছু আগের মতোই চলবে।</p>
     <div class="prof-flex">
       <div class="prof-left">
         <img id="profAvatar" class="prof-avatar" alt="প্রোফাইল ছবি" style="display:none">
@@ -71,7 +72,7 @@
         <label class="btn sm green prof-upload">📷 ছবি দিন / বদলান
           <input type="file" id="profPhoto" accept="image/*" style="display:none">
         </label>
-        <p class="prof-note" id="profPhotoNote">ছবি নিজে নিজেই মাঝখান থেকে কাটা (crop) হয়ে ছোট সাইজে (KB) সেভ হবে।</p>
+        <p class="prof-note" id="profPhotoNote">ঐচ্ছিক — ছবি দিলে নিজে নিজেই মাঝখান থেকে কাটা (crop) হয়ে ছোট সাইজে (KB) সেভ হবে। না দিলেও কোনো সমস্যা নেই।</p>
       </div>
       <div class="prof-right">
         <div class="score-head">
@@ -81,9 +82,9 @@
         <div class="score-bar"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
         <ul class="score-parts" id="scoreParts"></ul>
         <div class="prof-fields">
-          <div class="field"><label for="profOcc">আপনার পেশা</label>
+          <div class="field"><label for="profOcc">আপনার পেশা (ঐচ্ছিক)</label>
             <input type="text" id="profOcc" placeholder="যেমন: ছাত্র / শিক্ষক / চাকরিজীবী"></div>
-          <div class="field"><label for="profInst">স্কুল / কলেজ / বিশ্ববিদ্যালয়</label>
+          <div class="field"><label for="profInst">স্কুল / কলেজ / বিশ্ববিদ্যালয় (ঐচ্ছিক)</label>
             <input type="text" id="profInst" placeholder="আপনার প্রতিষ্ঠানের নাম"></div>
         </div>
         <button class="btn green" type="button" id="profSave">💾 প্রোফাইল সেভ করুন</button>

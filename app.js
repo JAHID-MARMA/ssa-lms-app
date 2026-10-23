@@ -130,12 +130,39 @@
   window.ssaRenderCatalog = renderCatalog;
   renderCatalog();
 
-  /* FAQ */
+  /* FAQ — premium accordion (Founder order 2026-10-23): compact dropdown
+     rows, all closed by default; a tap smoothly spreads the answer open.
+     Only one answer open at a time, so the section stays small. */
   var faqEl = document.getElementById("faqList");
   if (faqEl) {
-    faqEl.innerHTML = SSA_DATA.faq.map(function (f) {
-      return '<div class="faq-item"' + (f.id ? ' id="' + f.id + '"' : '') + '><h3>' + f.q + '</h3><p>' + f.a + '</p></div>';
+    faqEl.innerHTML = SSA_DATA.faq.map(function (f, i) {
+      return '<div class="faq-item"' + (f.id ? ' id="' + f.id + '"' : '') + '>' +
+        '<button type="button" class="faq-q" aria-expanded="false">' +
+          '<span class="faq-n">' + (i + 1) + '</span>' +
+          '<span class="faq-qt">' + f.q + '</span>' +
+          '<span class="faq-chev" aria-hidden="true"></span>' +
+        '</button>' +
+        '<div class="faq-a"><p>' + f.a + '</p></div>' +
+      '</div>';
     }).join("");
+    faqEl.addEventListener("click", function (ev) {
+      var btn = ev.target && ev.target.closest ? ev.target.closest(".faq-q") : null;
+      if (!btn) return;
+      var item = btn.parentNode;
+      var body = item.querySelector(".faq-a");
+      var willOpen = !item.classList.contains("open");
+      var openItems = faqEl.querySelectorAll(".faq-item.open");
+      for (var i = 0; i < openItems.length; i++) {
+        openItems[i].classList.remove("open");
+        openItems[i].querySelector(".faq-a").style.maxHeight = "0px";
+        openItems[i].querySelector(".faq-q").setAttribute("aria-expanded", "false");
+      }
+      if (willOpen) {
+        item.classList.add("open");
+        body.style.maxHeight = body.scrollHeight + "px";
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
   }
 
   /* ---------------- add-to-cart delegation ---------------- */

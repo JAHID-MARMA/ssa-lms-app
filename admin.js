@@ -3520,9 +3520,86 @@
         }).join("") +
         '<h3 class="cca-h">✅ To-Do Plan</h3>' + todo +
         '<p class="admin-note">CCA-এর সব সংখ্যা এই মুহূর্তের লাইভ ডেটা থেকে মাপা। পরামর্শ বাস্তবায়নের পর পরেরবার খুললেই পরিবর্তন দেখা যাবে।</p>';
+      if (window.SSA_loadCCADeep) window.SSA_loadCCADeep();
     }, function () { wrap.innerHTML = '<p class="empty-note">ডেটা লোড করা যায়নি — সংযোগ দেখে আবার চেষ্টা করুন।</p>'; });
   }
   window.SSA_loadCCA = loadCCA;
+
+  /* ---- CCA deep audit (Founder extension 2026-10-23): content quality,
+     authenticity detail, trustworthiness, and REAL-TIME demand (what buyers
+     ask and buy right now — from live Nowshin chats, orders, enrollments). */
+  function loadCCADeep() {
+    var wrap = $("ccaWrap"); if (!wrap || !window.SSA_DB) return;
+    var holder = document.createElement("div");
+    holder.innerHTML = '<h3 class="cca-h">🔬 গভীর পরীক্ষা — Content Quality · Authenticity · Trust · Real-time Demand</h3><p class="empty-note">মাপা হচ্ছে…</p>';
+    wrap.appendChild(holder);
+    var Q = [
+      window.SSA_DB.from("courses").select("slug,title").limit(100),
+      window.SSA_DB.from("lessons").select("id,course_slug,video_url,pdf_url").limit(1000),
+      window.SSA_DB.from("quizzes").select("id,lesson_id,course_slug,questions").limit(1000),
+      window.SSA_DB.from("nowshin_feedback").select("question,vote,created_at").order("created_at", { ascending: false }).limit(300),
+      window.SSA_DB.from("enrollments").select("course_slug").limit(2000),
+      window.SSA_DB.from("orders").select("items,status,created_at").limit(1000),
+      window.SSA_DB.from("profiles").select("email,occupation,institution,avatar_url").limit(2000)
+    ];
+    Promise.all(Q.map(function (p) { return p.then(function (r) { return r; }, function () { return { data: null, error: true }; }); })).then(function (R) {
+      var courses = R[0].data || [], lessons = R[1].data || [], quizzes = R[2].data || [];
+      var chats = R[3].data || [], enrolls = R[4].data || [], orders = R[5].data || [], profs = R[6].data || [];
+      /* ---- content quality per course ---- */
+      var quizByLesson = {}; quizzes.forEach(function (q) { if (q.lesson_id) quizByLesson[q.lesson_id] = q; });
+      var qLens = quizzes.map(function (q) { return Array.isArray(q.questions) ? q.questions.length : null; }).filter(function (n) { return n !== null; });
+      var avgQ = qLens.length ? (qLens.reduce(function (a, b) { return a + b; }, 0) / qLens.length).toFixed(1) : "—";
+      var rows = courses.map(function (c) {
+        var ls = lessons.filter(function (l) { return l.course_slug === c.slug; });
+        var withVideo = ls.filter(function (l) { return l.video_url; }).length;
+        var withPdf = ls.filter(function (l) { return l.pdf_url; }).length;
+        var withQuiz = ls.filter(function (l) { return quizByLesson[l.id]; }).length;
+        var enr = enrolls.filter(function (e) { return e.course_slug === c.slug; }).length;
+        return { title: c.title || c.slug, n: ls.length, video: withVideo, pdf: withPdf, quiz: withQuiz, enr: enr };
+      });
+      var F2 = [];
+      rows.forEach(function (r) {
+        if (r.n > 0 && r.n < 22) F2.push(["🎓", "“" + r.title + "” কোর্সে মাত্র " + r.n + "টি লেসন — নিয়ম হলো ২২+", "অসম্পূর্ণ কোর্স = কম মূল্য-বোধ ও রিফান্ডের ঝুঁকি।", "বাকি লেসন যোগ করুন (ভিডিও + কুইজসহ) — Super Admin → লেসন ট্যাব।", "এই সপ্তাহে"]);
+        if (r.n > 0 && r.video < r.n) F2.push(["🎬", "“" + r.title + "”-এ " + (r.n - r.video) + "টি লেসনে ভিডিও নেই", "ভিডিও ছাড়া লেসন শিক্ষার্থীকে ধরে রাখে না — completion কমে।", "প্রতিটি লেসনে যাচাই করা YouTube ভিডিও বসান — লেসন ট্যাব থেকে।", "এই সপ্তাহে"]);
+        if (r.n > 0 && r.quiz < r.n) F2.push(["📝", "“" + r.title + "”-এ " + (r.n - r.quiz) + "টি লেসনে কুইজ নেই", "কুইজ ছাড়া শেখা যাচাই হয় না; সার্টিফিকেটের মূল্য কমে।", "প্রতিটি লেসনে ৫ প্রশ্নের কুইজ যোগ করুন — কুইজ ট্যাব থেকে।", "এই সপ্তাহে"]);
+      });
+      /* ---- trust ---- */
+      var oldPending = orders.filter(function (o) { return o.status === "pending" && (Date.now() - new Date(o.created_at).getTime()) > 48 * 3600000; }).length;
+      if (oldPending > 0) F2.push(["⏰", oldPending + "টি অর্ডার ৪৮ ঘণ্টার বেশি অপেক্ষমাণ", "দেরি করা অনুমোদন আস্থা নষ্ট করে — ক্রেতা ভাবেন টাকা আটকে গেছে।", "অর্ডার ট্যাবে গিয়ে যাচাই করে অনুমোদন/বাতিল করুন — প্রতিদিন সকালে একবার।", "আজই"]);
+      var downs = chats.filter(function (c) { return c.vote === "down"; }).length;
+      var downPct = chats.length ? Math.round(downs / chats.length * 100) : 0;
+      if (chats.length >= 5 && downPct > 25) F2.push(["🤖", "Nowshin-এর উত্তরে অসন্তুষ্টি " + downPct + "% — আস্থার ঝুঁকি", "ভুল/অসম্পূর্ণ উত্তর ক্রেতাকে দূরে ঠেলে দেয়।", "Nowshin ট্যাবে 👎 পাওয়া প্রশ্নগুলো দেখুন; ঘাটতি থাকলে তথ্য/উত্তর ঠিক করুন।", "এই সপ্তাহে"]);
+      /* ---- authenticity detail ---- */
+      var pN = profs.length || 1;
+      var pct = function (f) { return Math.round(profs.filter(f).length / pN * 100); };
+      var occP = pct(function (p) { return p.occupation; }), instP = pct(function (p) { return p.institution; }), avP = pct(function (p) { return p.avatar_url; });
+      var dispN = profs.filter(function (p) { return p.email && window.SSA_SCORE && SSA_SCORE.isDisposable(p.email); }).length;
+      if (dispN > 0) F2.push(["🚫", dispN + "টি অস্থায়ী ইমেইলধারী পুরনো অ্যাকাউন্ট আছে", "অস্থায়ী ইমেইল = প্রায় নিশ্চিত নকল/পরিত্যক্ত অ্যাকাউন্ট।", "নতুন সাইনআপে এগুলো এখন বন্ধ; পুরনোদের আসল ইমেইল দিতে বলুন বা নিষ্ক্রিয় রাখুন।", "এই মাসে"]);
+      /* ---- real-time demand ---- */
+      var topics = [["💰 দাম / ফি", /দাম|কত টাকা|ফি|price|cost|ভর্তি ফি/i], ["🔤 Phonics", /phonics|ফনিক্স|বর্ণ/i], ["🗣️ Spoken English", /spoken|স্পোকেন|কথা বলা|speaking/i], ["📜 সার্টিফিকেট", /সার্টিফিকেট|certificate/i], ["↩️ রিফান্ড", /রিফান্ড|refund|টাকা ফেরত/i], ["🧒 বাচ্চাদের ক্লাস", /বাচ্চা|শিশু|kids|বয়স/i], ["📝 ভর্তি প্রক্রিয়া", /ভর্তি|admission|কিনব|কোর্স নিব/i]];
+      var demand = topics.map(function (t) {
+        var n = chats.filter(function (c) { return c.question && t[1].test(c.question); }).length;
+        return { label: t[0], n: n };
+      }).filter(function (d) { return d.n > 0; }).sort(function (a, b) { return b.n - a.n; });
+      var d30 = Date.now() - 30 * 86400000;
+      var recentOrders = orders.filter(function (o) { return new Date(o.created_at).getTime() >= d30 && o.status !== "cancelled"; });
+      holder.innerHTML =
+        '<h3 class="cca-h">🔬 গভীর পরীক্ষা — Content Quality · Authenticity · Trust · Real-time Demand</h3>' +
+        '<div class="table-scroll"><table class="admin-table"><thead><tr><th>কোর্স</th><th>লেসন</th><th>ভিডিওসহ</th><th>PDFসহ</th><th>কুইজসহ</th><th>ভর্তি</th></tr></thead><tbody>' +
+        (rows.length ? rows.map(function (r) {
+          return "<tr><td>" + ccaEsc(r.title) + "</td><td>" + r.n + "</td><td>" + r.video + "/" + r.n + "</td><td>" + r.pdf + "/" + r.n + "</td><td>" + r.quiz + "/" + r.n + "</td><td>" + r.enr + "</td></tr>";
+        }).join("") : '<tr><td colspan="6">কোর্স ডেটা পাওয়া যায়নি।</td></tr>') +
+        '</tbody></table></div>' +
+        '<p class="admin-note">গড় কুইজ প্রশ্ন সংখ্যা: <b class="en">' + avgQ + '</b> · প্রোফাইল পূর্ণতা — পেশা: ' + occP + '% · প্রতিষ্ঠান: ' + instP + '% · ছবি: ' + avP + '% · অস্থায়ী ইমেইল: ' + dispN + 'টি</p>' +
+        '<h4 class="cca-when">🔥 Real-time Demand — শিক্ষার্থীরা এখন যা চাইছে (Nowshin-এর সাম্প্রতিক ' + chats.length + 'টি কথোপকথন থেকে)</h4>' +
+        (demand.length ? '<div class="cca-metrics">' + demand.map(function (d) { return '<div class="cca-metric"><span>' + d.label + '</span><b>' + d.n + ' বার জিজ্ঞাসা</b></div>'; }).join("") + '</div>' : '<p class="empty-note">এখনো পর্যাপ্ত কথোপকথনের ডেটা নেই।</p>') +
+        '<p class="admin-note">গত ৩০ দিনে অর্ডার: <b>' + recentOrders.length + 'টি</b> · মোট ভর্তি (enrollment): <b>' + enrolls.length + 'টি</b> — কোন কোর্সে চাহিদা বেশি, উপরের ছকে "ভর্তি" কলামে দেখুন।</p>' +
+        (F2.length ? '<h4 class="cca-when">🔍 গভীর Findings</h4>' + F2.map(function (f) {
+          return '<div class="cca-card"><div class="cca-what">' + f[0] + " " + ccaEsc(f[1]) + '</div><div class="cca-row"><b>কেন:</b> ' + ccaEsc(f[2]) + '</div><div class="cca-row"><b>কীভাবে:</b> ' + ccaEsc(f[3]) + '</div><div class="cca-row"><b>কখন:</b> ' + ccaEsc(f[4]) + '</div></div>';
+        }).join("") : '<p class="admin-note">✅ গভীর পরীক্ষায় বড় কোনো ঘাটতি পাওয়া যায়নি — কনটেন্ট, আস্থা ও সত্যতা ঠিক আছে।</p>');
+    }, function () { holder.innerHTML = '<p class="empty-note">গভীর পরীক্ষার ডেটা লোড করা যায়নি।</p>'; });
+  }
+  window.SSA_loadCCADeep = loadCCADeep;
   document.addEventListener("click", function (e) {
     var b = e.target && e.target.closest ? e.target.closest("[data-pact]") : null;
     if (!b || !window.SSA_DB) return;
