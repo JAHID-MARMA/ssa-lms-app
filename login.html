@@ -55,6 +55,12 @@
     <section class="panel">
       <h2 style="text-align:center">লগইন করুন</h2>
       <p style="text-align:center;color:var(--muted);margin-bottom:16px">আপনার অ্যাকাউন্টে লগইন করে আপনার কোর্সগুলো দেখুন।</p>
+      <div id="alreadyIn" style="display:none;text-align:center;padding:6px 0 4px">
+        <p style="font-size:17px;font-weight:700;margin-bottom:6px">✅ আপনি ইতিমধ্যে লগইন আছেন</p>
+        <p style="color:var(--muted);margin-bottom:16px" id="alreadyInName"></p>
+        <a class="btn lg" href="dashboard.html" style="display:block;width:100%;margin-bottom:10px;text-align:center">ড্যাশবোর্ডে যান</a>
+        <button class="btn lg" type="button" id="alreadyOutBtn" style="width:100%;background:#EEF4F0;color:#14532D;box-shadow:none">লগ আউট করুন</button>
+      </div>
       <div class="form-error" id="loginError"></div>
       <form class="form-grid" id="loginForm">
         <div class="field">
@@ -152,7 +158,27 @@
   }
   if (window.SSA_AUTH) {
     SSA_AUTH.ready.then(function () {
-      if (SSA_AUTH.getUser()) window.location.href = "dashboard.html";
+      if (!SSA_AUTH.getUser()) return;
+      /* Already signed in: do NOT bounce silently to the dashboard — that
+         made the Login and Dashboard buttons feel like the same button
+         (Founder report, 2026-10-23). Show a clear panel with the two
+         real choices instead: go to the dashboard, or log out. */
+      var panel = document.getElementById("alreadyIn");
+      var nameEl = document.getElementById("alreadyInName");
+      if (nameEl) nameEl.textContent = SSA_AUTH.displayName() + " — আপনার কোর্সগুলো ড্যাশবোর্ডে অপেক্ষা করছে।";
+      if (panel) panel.style.display = "";
+      if (form) form.style.display = "none";
+      if (form && form.parentElement) {
+        var heads = form.parentElement.querySelectorAll("h2, p");
+        for (var i = 0; i < heads.length; i++) {
+          if (panel && panel.contains(heads[i])) continue;
+          heads[i].style.display = "none";
+        }
+      }
+      var outBtn = document.getElementById("alreadyOutBtn");
+      if (outBtn) outBtn.addEventListener("click", function () {
+        SSA_AUTH.signOut().then(function () { window.location.reload(); });
+      });
     });
   }
   form.addEventListener("submit", function (ev) {
