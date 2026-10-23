@@ -129,6 +129,13 @@
             actions = '<button class="btn sm" type="button" data-act="approve" data-id="' + o.id + '">Approve</button> ' +
               '<button class="btn sm neutral" type="button" data-act="reject" data-id="' + o.id + '">Reject</button>';
           }
+          /* Super Admin (Founder, 2026-10-23): fully delete ANY order —
+             test purchases included — so sales reports stay exact. The
+             enrollments the order created are removed with it. */
+          if (IS_SUPER) {
+            actions += (actions ? ' ' : '') +
+              '<button class="btn sm neutral" type="button" data-act="del" data-id="' + o.id + '">সম্পূর্ণ মুছুন</button>';
+          }
           return '<tr><td>' + fmtDate(o.created_at) + '</td>' +
             '<td>' + escapeHtml(o.name) + '</td>' +
             '<td class="en">' + escapeHtml(o.mobile) + '</td>' +
@@ -200,12 +207,59 @@
       });
   }
 
+  /* Fully delete an order (Super Admin): first the enrollments it created,
+     then the order row itself. Reports, revenue and the CCA all read these
+     two tables live, so the sale disappears from every report at once. */
+  function deleteOrderFully(id, btn) {
+    window.SSA_DB.from("enrollments").delete().eq("order_id", id)
+      .then(function (r1) {
+        if (r1.error) {
+          showMsg(ordersMsg, "অর্ডারটির কোর্স অ্যাক্সেস মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।", false);
+          if (btn) btn.disabled = false;
+          return;
+        }
+        window.SSA_DB.from("orders").delete().eq("id", id)
+          .then(function (r2) {
+            if (r2.error) {
+              showMsg(ordersMsg, "অর্ডারটি মোছা যায়নি। আবার চেষ্টা করুন।", false);
+              if (btn) btn.disabled = false;
+              return;
+            }
+            showMsg(ordersMsg, "অর্ডার #" + id + " সম্পূর্ণ মুছে ফেলা হয়েছে — রিপোর্ট থেকে এই সেলটি সরে গেছে।", true);
+            loadOrders();
+            loadAccess();
+          }, function () {
+            showMsg(ordersMsg, "অর্ডারটি মোছা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।", false);
+            if (btn) btn.disabled = false;
+          });
+      }, function () {
+        showMsg(ordersMsg, "অর্ডারটি মোছা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।", false);
+        if (btn) btn.disabled = false;
+      });
+  }
+
   ordersWrap.addEventListener("click", function (ev) {
     var t = ev.target;
     if (!t.getAttribute || !t.getAttribute("data-act")) return;
     var id = t.getAttribute("data-id");
+    var act = t.getAttribute("data-act");
+    if (act === "del") {
+      /* Two-step confirm on the button itself: first tap arms it. */
+      if (t.getAttribute("data-armed") === "1") {
+        t.disabled = true;
+        deleteOrderFully(id, t);
+      } else {
+        t.setAttribute("data-armed", "1");
+        t.textContent = "সত্যিই মুছবেন?";
+        setTimeout(function () {
+          t.removeAttribute("data-armed");
+          t.textContent = "সম্পূর্ণ মুছুন";
+        }, 4000);
+      }
+      return;
+    }
     t.disabled = true;
-    if (t.getAttribute("data-act") === "approve") approveOrder(id);
+    if (act === "approve") approveOrder(id);
     else rejectOrder(id);
   });
 
