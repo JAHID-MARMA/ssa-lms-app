@@ -394,7 +394,7 @@
     results: "sec-results", reports: "sec-reports", revenue: "sec-revenue",
     finance: "sec-finance", reviews: "sec-reviews", nowshin: "sec-nowshin",
     analyst: "sec-analyst",
-    partners: "sec-partners",
+    partners: "sec-partners", inbox: "sec-inbox",
     products: "sec-products", support: "sec-support", settings: "sec-settings"
   };
   var p4Inited = false;
@@ -424,6 +424,7 @@
     if (name === "settings" && window.SSA_loadNotices) window.SSA_loadNotices();
     if (name === "settings" && window.SSA_loadSecReports) window.SSA_loadSecReports();
     if (name === "partners" && window.SSA_loadPartners) window.SSA_loadPartners();
+    if (name === "inbox" && window.SSA_loadInbox) window.SSA_loadInbox();
   }
 
   /* ---- shared course catalog (admin view, incl. unpublished) ---- */
@@ -3280,6 +3281,126 @@
     }, function () {});
   }
   window.SSA_loadPartners = loadPartners;
+
+  /* ================= Super Admin INBOX (Founder order 2026-10-23) =================
+     Every outside application / message / report in ONE place, newest first.
+     Safety: all text is rendered escaped and never as a link; intake screening
+     (load11 SQL triggers) strips links, HTML and malware patterns at the door. */
+  var INBOX_SOURCES = [
+    { kind: "teacher", table: "teacher_applications", icon: "👩‍🏫", label: "শিক্ষক আবেদন", canDelete: true },
+    { kind: "affiliate", table: "affiliate_applications", icon: "🤝", label: "অ্যাফিলিয়েট আবেদন", canDelete: true },
+    { kind: "ticket", table: "support_tickets", icon: "💬", label: "সাপোর্ট বার্তা", canDelete: false },
+    { kind: "secrep", table: "security_reports", icon: "🛡️", label: "নিরাপত্তা রিপোর্ট", canDelete: true },
+    { kind: "review", table: "reviews", icon: "⭐", label: "রিভিউ", canDelete: true }
+  ];
+  var inboxItems = [], inboxFilter = "all";
+  function inboxEsc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function inboxMsg(t, ok) { var m = $("inboxMsg"); if (!m) return; m.textContent = t; m.style.display = ""; m.style.color = ok ? "#14703D" : "#B90E59"; }
+  function inboxTitle(r, kind) {
+    if (kind === "teacher" || kind === "affiliate") return r.full_name || "(নাম নেই)";
+    if (kind === "ticket") return r.subject || "(বিষয় নেই)";
+    if (kind === "secrep") return r.name || "(নাম নেই)";
+    if (kind === "review") return "কোর্স: " + (r.course_slug || "") + " — " + (r.rating || "") + "★";
+    return "(বার্তা)";
+  }
+  function inboxMeta(r, kind) {
+    var parts = [];
+    if (r.mobile) parts.push(r.mobile);
+    if (r.email) parts.push(r.email);
+    if (kind === "teacher" && (r.subject || r.experience)) parts.push([r.subject, r.experience].filter(Boolean).join(" • "));
+    if (kind === "affiliate" && (r.platform || r.audience)) parts.push([r.platform, r.audience].filter(Boolean).join(" • "));
+    if (kind === "ticket" && r.name) parts.push(r.name);
+    if (kind === "secrep" && r.page) parts.push("পেজ: " + r.page);
+    if (r.status) parts.push("অবস্থা: " + r.status);
+    try { parts.push(new Date(r.created_at).toLocaleString("en-GB")); } catch (e) {}
+    return parts.join(" · ");
+  }
+  function inboxBody(r, kind) {
+    if (kind === "secrep") return r.reason || "";
+    if (kind === "review") return r.review_text || "";
+    return r.message || "";
+  }
+  function renderInbox() {
+    var wrap = $("inboxWrap"); if (!wrap) return;
+    var rows = inboxItems.filter(function (it) { return inboxFilter === "all" || it.kind === inboxFilter; });
+    if (!rows.length) { wrap.innerHTML = '<p class="empty-note">এখানে এখনো কিছু নেই।</p>'; return; }
+    wrap.innerHTML = rows.map(function (it) {
+      var src = INBOX_SOURCES.filter(function (s) { return s.kind === it.kind; })[0] || {};
+      var body = inboxBody(it.row, it.kind);
+      return '<div class="inbox-item' + (it.row.is_read ? "" : " unread") + '">' +
+        '<div class="inbox-head"><span class="inbox-kind">' + (src.icon || "") + " " + inboxEsc(src.label || it.kind) + '</span>' +
+        (it.row.screened ? '<span class="inbox-screened">🧹 স্ক্রিন করা</span>' : "") +
+        '<span class="inbox-actions">' +
+        (it.row.is_read ? "" : '<button type="button" class="btn sm green" data-iact="read" data-kind="' + it.kind + '" data-id="' + it.row.id + '">✓ পড়া হয়েছে</button> ') +
+        (src.canDelete ? '<button type="button" class="btn sm neutral" data-iact="del" data-kind="' + it.kind + '" data-id="' + it.row.id + '">🗑 মুছুন</button>' : "") +
+        '</span></div>' +
+        '<div class="inbox-title">' + inboxEsc(inboxTitle(it.row, it.kind)) + '</div>' +
+        '<div class="inbox-meta">' + inboxEsc(inboxMeta(it.row, it.kind)) + '</div>' +
+        (body ? '<div class="inbox-body">' + inboxEsc(body) + '</div>' : "") +
+        '</div>';
+    }).join("");
+  }
+  function loadInboxBadge() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    var total = 0, pending = INBOX_SOURCES.length;
+    INBOX_SOURCES.forEach(function (s) {
+      window.SSA_DB.from(s.table).select("id", { count: "exact", head: true }).eq("is_read", false).then(function (r) {
+        if (!r.error && typeof r.count === "number") total += r.count;
+        if (--pending === 0) {
+          var b = $("inboxBadge");
+          if (b) { b.textContent = total; b.style.display = total > 0 ? "" : "none"; }
+        }
+      }, function () { if (--pending === 0) {} });
+    });
+  }
+  function loadInbox() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    var wrap = $("inboxWrap"); if (wrap) wrap.innerHTML = '<p class="empty-note">লোড হচ্ছে…</p>';
+    var collected = [], pending = INBOX_SOURCES.length;
+    INBOX_SOURCES.forEach(function (s) {
+      window.SSA_DB.from(s.table).select("*").order("created_at", { ascending: false }).limit(60).then(function (r) {
+        (r.data || []).forEach(function (row) { collected.push({ kind: s.kind, row: row }); });
+        if (--pending === 0) {
+          collected.sort(function (a, b) { return new Date(b.row.created_at) - new Date(a.row.created_at); });
+          inboxItems = collected;
+          renderInbox();
+          loadInboxBadge();
+        }
+      }, function () { if (--pending === 0) { inboxItems = collected; renderInbox(); } });
+    });
+  }
+  window.SSA_loadInbox = loadInbox;
+  document.addEventListener("click", function (e) {
+    var chip = e.target && e.target.closest ? e.target.closest("[data-ifilter]") : null;
+    if (chip) {
+      inboxFilter = chip.getAttribute("data-ifilter");
+      var chips = document.querySelectorAll("[data-ifilter]");
+      for (var i = 0; i < chips.length; i++) chips[i].classList.toggle("active", chips[i] === chip);
+      renderInbox();
+      return;
+    }
+    var b = e.target && e.target.closest ? e.target.closest("[data-iact]") : null;
+    if (!b || !window.SSA_DB) return;
+    var act = b.getAttribute("data-iact"), kind = b.getAttribute("data-kind"), id = b.getAttribute("data-id");
+    var src = INBOX_SOURCES.filter(function (s) { return s.kind === kind; })[0];
+    if (!src) return;
+    if (act === "read") {
+      window.SSA_DB.from(src.table).update({ is_read: true }).eq("id", id).then(function (r) {
+        if (r.error) { inboxMsg("পড়া হয়েছে করা যায়নি: " + r.error.message, false); return; }
+        inboxItems.forEach(function (it) { if (it.kind === kind && String(it.row.id) === String(id)) it.row.is_read = true; });
+        renderInbox(); loadInboxBadge(); inboxMsg("✓ পড়া হয়েছে হিসাবে রাখা হলো।", true);
+      });
+    }
+    if (act === "del") {
+      if (!window.confirm("এই বার্তাটি স্থায়ীভাবে মুছে ফেলবেন?")) return;
+      window.SSA_DB.from(src.table).delete().eq("id", id).then(function (r) {
+        if (r.error) { inboxMsg("মোছা যায়নি: " + r.error.message, false); return; }
+        inboxItems = inboxItems.filter(function (it) { return !(it.kind === kind && String(it.row.id) === String(id)); });
+        renderInbox(); loadInboxBadge(); inboxMsg("🗑 মোছা হয়েছে।", true);
+      });
+    }
+  });
+  setTimeout(loadInboxBadge, 1600);
   document.addEventListener("click", function (e) {
     var b = e.target && e.target.closest ? e.target.closest("[data-pact]") : null;
     if (!b || !window.SSA_DB) return;
