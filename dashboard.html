@@ -257,6 +257,16 @@
         res[1].data.forEach(function (p) { if (p.file_path) fileBySlug[p.slug] = p; });
       }
       var rows = r.data || [];
+      /* Admin/Staff (Founder, 2026-10-23): the owner sees EVERY course and
+         product here as open — never locked out of his own academy.
+         Students keep the enrollment-only view. */
+      if (profile && (profile.role === "admin" || profile.role === "staff")) {
+        var seenSlugs = {};
+        rows.forEach(function (x) { seenSlugs[x.course_slug] = 1; });
+        (SSA_DATA.courses.concat(SSA_DATA.products)).forEach(function (it) {
+          if (!seenSlugs[it.slug]) rows.push({ course_slug: it.slug });
+        });
+      }
       if (!rows.length) {
         coursesEl.innerHTML =
           '<p class="empty-note">আপনি এখনো কোনো কোর্সে ভর্তি হননি।<br>' +
