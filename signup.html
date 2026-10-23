@@ -16,6 +16,8 @@
 <link rel="icon" href="assets/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://actykevvljlwoxjybagw.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 </head>
 <body>
 
@@ -148,6 +150,7 @@
 <script src="notices.js"></script>
 <script src="guard.js"></script>
 <script src="nowshin.js"></script>
+<script src="score.js"></script>
 <script>
 /* Signup page: Supabase signUp + a row in profiles (id = the auth user id).
    If the project asks for email confirmation, there is no session yet —
@@ -202,6 +205,10 @@
       showErr("সঠিক ইমেইল ঠিকানা দিন।");
       return;
     }
+    if (window.SSA_SCORE && SSA_SCORE.isDisposable(email)) {
+      showErr("এই ধরনের অস্থায়ী (temporary / one-time) ইমেইল দিয়ে অ্যাকাউন্ট খোলা যাবে না। অনুগ্রহ করে আপনার আসল ইমেইল ঠিকানা ব্যবহার করুন।");
+      return;
+    }
     setBusy(true);
     SSA_DB.auth.signUp({ email: email, password: pass }).then(function (res) {
       if (res.error) {
@@ -224,12 +231,12 @@
       }
       try {
         localStorage.setItem("ssa_pending_profile", JSON.stringify({
-          id: user.id, name: name, mobile: mobile, username: username
+          id: user.id, name: name, mobile: mobile, username: username, email: email
         }));
       } catch (e) {}
       if (res.data.session) {
         SSA_DB.from("profiles").insert({
-          id: user.id, name: name, mobile: mobile, username: username
+          id: user.id, name: name, mobile: mobile, username: username, email: email
         }).then(function (ir) {
           if (ir.error) {
             setBusy(false);

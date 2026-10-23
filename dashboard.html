@@ -16,6 +16,8 @@
 <link rel="icon" href="assets/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://actykevvljlwoxjybagw.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 </head>
 <body>
 
@@ -57,6 +59,36 @@
       </div>
       <a class="btn" id="ssaAdminBtn" href="admin.html" style="display:none">Admin Panel</a>
       <button class="btn ghost" type="button" id="logoutBtn">লগআউট</button>
+    </div>
+  </section>
+
+  <section class="panel" style="margin-top:20px" id="profilePanel">
+    <h2>👤 আমার প্রোফাইল ও বিশ্বাসযোগ্যতা</h2>
+    <div class="prof-flex">
+      <div class="prof-left">
+        <img id="profAvatar" class="prof-avatar" alt="প্রোফাইল ছবি" style="display:none">
+        <div id="profAvatarPh" class="prof-avatar prof-avatar-ph">👤</div>
+        <label class="btn sm green prof-upload">📷 ছবি দিন / বদলান
+          <input type="file" id="profPhoto" accept="image/*" style="display:none">
+        </label>
+        <p class="prof-note" id="profPhotoNote">ছবি নিজে নিজেই মাঝখান থেকে কাটা (crop) হয়ে ছোট সাইজে (KB) সেভ হবে।</p>
+      </div>
+      <div class="prof-right">
+        <div class="score-head">
+          <span class="score-num" id="scoreNum">–</span>
+          <span class="score-band" id="scoreBand">মাপা হচ্ছে…</span>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="scoreFill" style="width:0%"></div></div>
+        <ul class="score-parts" id="scoreParts"></ul>
+        <div class="prof-fields">
+          <div class="field"><label for="profOcc">আপনার পেশা</label>
+            <input type="text" id="profOcc" placeholder="যেমন: ছাত্র / শিক্ষক / চাকরিজীবী"></div>
+          <div class="field"><label for="profInst">স্কুল / কলেজ / বিশ্ববিদ্যালয়</label>
+            <input type="text" id="profInst" placeholder="আপনার প্রতিষ্ঠানের নাম"></div>
+        </div>
+        <button class="btn green" type="button" id="profSave">💾 প্রোফাইল সেভ করুন</button>
+        <p class="admin-msg" id="profMsg" style="display:none"></p>
+      </div>
     </div>
   </section>
 
@@ -154,6 +186,7 @@
 <script src="notices.js"></script>
 <script src="guard.js"></script>
 <script src="nowshin.js"></script>
+<script src="score.js"></script>
 <script>
 /* Dashboard: the signed-in student's courses (enrollments) + orders.
    Reads are limited to the student's own rows by Supabase RLS. */
@@ -514,6 +547,94 @@
           '<div class="o-items">সর্বমোট: ৳' + o.total + '</div></div>';
       }).join("");
     });
+  });
+})();
+</script>
+<script>
+/* Profile & Authenticity (Founder order 2026-10-23): occupation, institution,
+   auto-cropped small-KB photo, and the authenticity score — computed here
+   (where every signal is visible) and stored on the profile, so the Super
+   Admin sees the same number as the student's Security Health. */
+(function () {
+  if (!window.SSA_AUTH || !window.SSA_SCORE) return;
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  var user = null, profile = null;
+  function msg(t, ok) { var m = $("profMsg"); if (!m) return; m.textContent = t; m.style.display = ""; m.style.color = ok ? "#14703D" : "#B90E59"; }
+  function renderScore(sig) {
+    var res = SSA_SCORE.compute(sig);
+    var band = SSA_SCORE.band(res.score);
+    $("scoreNum").textContent = res.score + " / 100";
+    var b = $("scoreBand"); b.textContent = band.label; b.style.background = band.bg; b.style.color = band.color;
+    $("scoreFill").style.width = res.score + "%";
+    $("scoreParts").innerHTML = res.parts.map(function (p) {
+      return "<li>" + (p.ok ? "✅" : "⬜") + " " + esc(p.label) + ' <span class="en">(' + p.pts + "/" + p.max + ")</span></li>";
+    }).join("");
+    return res.score;
+  }
+  function computeAndStore() {
+    if (!user || !window.SSA_DB) return;
+    SSA_DB.from("lesson_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id).then(function (r) {
+      var created = profile && profile.created_at ? new Date(profile.created_at) : (user.created_at ? new Date(user.created_at) : new Date());
+      var ageDays = Math.floor((Date.now() - created.getTime()) / 86400000);
+      var score = renderScore({
+        email: user.email, emailVerified: !!user.email_confirmed_at,
+        mobile: profile ? profile.mobile : "", occupation: profile ? profile.occupation : "",
+        institution: profile ? profile.institution : "", avatarUrl: profile ? profile.avatar_url : "",
+        hasProgress: !r.error && (r.count || 0) > 0, ageDays: ageDays
+      });
+      SSA_DB.from("profiles").update({ authenticity_score: score, authenticity_at: new Date().toISOString(), email: user.email }).eq("id", user.id).then(function () {}, function () {});
+    }, function () {});
+  }
+  SSA_AUTH.ready.then(function () {
+    user = SSA_AUTH.getUser(); profile = SSA_AUTH.getProfile();
+    if (!user) return;
+    if (profile) {
+      if (profile.occupation) $("profOcc").value = profile.occupation;
+      if (profile.institution) $("profInst").value = profile.institution;
+      if (profile.avatar_url) { var im = $("profAvatar"); im.src = profile.avatar_url; im.style.display = ""; $("profAvatarPh").style.display = "none"; }
+    }
+    computeAndStore();
+  });
+  $("profSave").addEventListener("click", function () {
+    if (!user || !window.SSA_DB) return;
+    var occ = $("profOcc").value.trim(), inst = $("profInst").value.trim();
+    SSA_DB.from("profiles").update({ occupation: occ || null, institution: inst || null }).eq("id", user.id).then(function (r) {
+      if (r.error) { msg("সেভ করা যায়নি — আবার চেষ্টা করুন।", false); return; }
+      if (profile) { profile.occupation = occ; profile.institution = inst; }
+      msg("✅ প্রোফাইল সেভ হয়েছে।", true);
+      computeAndStore();
+    });
+  });
+  $("profPhoto").addEventListener("change", function (ev) {
+    var file = ev.target.files && ev.target.files[0];
+    if (!file || !user || !window.SSA_DB) return;
+    var img = new Image();
+    img.onload = function () {
+      var side = Math.min(img.width, img.height);
+      var c = document.createElement("canvas"); c.width = 256; c.height = 256;
+      var ctx = c.getContext("2d");
+      ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, 256, 256);
+      URL.revokeObjectURL(img.src);
+      c.toBlob(function (blob) {
+        if (!blob) { msg("ছবিটি তৈরি করা যায়নি।", false); return; }
+        $("profPhotoNote").textContent = "ছবি তৈরি: মাত্র " + Math.max(1, Math.round(blob.size / 1024)) + " KB — আপলোড হচ্ছে…";
+        var path = "avatars/" + user.id + ".jpg";
+        SSA_DB.storage.from("public-assets").upload(path, blob, { upsert: true, contentType: "image/jpeg" }).then(function (up) {
+          if (up.error) { msg("ছবি আপলোড করা যায়নি — আবার চেষ্টা করুন।", false); return; }
+          var pub = SSA_DB.storage.from("public-assets").getPublicUrl(path);
+          var url = (pub && pub.data && pub.data.publicUrl) ? pub.data.publicUrl : "";
+          if (profile) profile.avatar_url = url;
+          var im = $("profAvatar"); im.src = url + "?t=" + Date.now(); im.style.display = ""; $("profAvatarPh").style.display = "none";
+          SSA_DB.from("profiles").update({ avatar_url: url }).eq("id", user.id).then(function () {
+            msg("✅ ছবি সেভ হয়েছে (" + Math.max(1, Math.round(blob.size / 1024)) + " KB)।", true);
+            computeAndStore();
+          });
+        });
+      }, "image/jpeg", 0.82);
+    };
+    img.onerror = function () { msg("এই ছবিটি পড়া যায়নি — অন্য ছবি দিন।", false); };
+    img.src = URL.createObjectURL(file);
   });
 })();
 </script>

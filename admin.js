@@ -223,14 +223,31 @@
           customersWrap.innerHTML = '<p class="empty-note">এখনো কোনো কাস্টমার নেই।</p>';
           return;
         }
+        (function () {
+          var sh = $("secHealth"); if (!sh) return;
+          var scored = customersCache.filter(function (p) { return typeof p.authenticity_score === "number"; });
+          var disp = customersCache.filter(function (p) { return p.email && window.SSA_SCORE && SSA_SCORE.isDisposable(p.email); }).length;
+          if (!scored.length) { sh.innerHTML = '<p class="admin-note">🛡️ Security Health: এখনো কোনো শিক্ষার্থীর স্কোর মাপা হয়নি — তারা Dashboard খুললেই স্কোর এখানে আসবে।' + (disp ? ' ⚠️ অস্থায়ী ইমেইল পাওয়া গেছে: ' + disp + 'টি।' : '') + '</p>'; return; }
+          var avg = Math.round(scored.reduce(function (a, p) { return a + p.authenticity_score; }, 0) / scored.length);
+          var band = window.SSA_SCORE ? SSA_SCORE.band(avg) : { label: "", color: "#333", bg: "#F3F4F6" };
+          var hi = scored.filter(function (p) { return p.authenticity_score >= 80; }).length;
+          var mid = scored.filter(function (p) { return p.authenticity_score >= 50 && p.authenticity_score < 80; }).length;
+          var low = scored.length - hi - mid;
+          sh.innerHTML = '<div class="health-card" style="background:' + band.bg + ';border-color:' + band.color + '">' +
+            '<b>🛡️ Security Health — গড় বিশ্বাসযোগ্যতা: <span class="en">' + avg + ' / 100</span></b> (' + band.label + ')<br>' +
+            '<span>মাপা হয়েছে: ' + scored.length + ' / ' + customersCache.length + ' জন · ✅ নির্ভরযোগ্য: ' + hi + ' · আংশিক: ' + mid + ' · দুর্বল: ' + low + (disp ? ' · ⚠️ অস্থায়ী ইমেইল: ' + disp + 'টি' : '') + '</span></div>';
+        })();
         var html = '<div class="table-scroll"><table class="admin-table"><thead><tr>' +
-          '<th>নাম</th><th>ইউজারনেম</th><th>মোবাইল</th><th>Role</th>' +
+          '<th>নাম</th><th>ইউজারনেম</th><th>মোবাইল</th><th>বিশ্বাসযোগ্যতা</th><th>Role</th>' +
           (IS_SUPER ? '<th>রোল বদলান</th>' : '') +
           '</tr></thead><tbody>';
         html += customersCache.map(function (p) {
-          var row = '<tr><td>' + escapeHtml(p.name) + '</td>' +
+          var sc = (typeof p.authenticity_score === "number") ? p.authenticity_score : null;
+          var scb = window.SSA_SCORE ? SSA_SCORE.band(sc) : { label: "মাপা হয়নি", color: "#6B7280", bg: "#F3F4F6" };
+          var row = '<tr><td>' + (p.avatar_url ? '<img src="' + escapeHtml(p.avatar_url) + '" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;vertical-align:-9px;margin-right:7px">' : '') + escapeHtml(p.name) + '</td>' +
             '<td class="en">' + escapeHtml(p.username) + '</td>' +
             '<td class="en">' + escapeHtml(p.mobile) + '</td>' +
+            '<td>' + (sc === null ? '<span style="color:#6B7280">মাপা হয়নি</span>' : '<span class="score-pill" style="background:' + scb.bg + ';color:' + scb.color + '">' + sc + ' / 100</span>') + '</td>' +
             '<td class="en">' + escapeHtml(p.role || "student") + '</td>';
           if (IS_SUPER) {
             var cur = p.role || "student";
@@ -393,7 +410,7 @@
     courses: "sec-courses", lessons: "sec-lessons", quizzes: "sec-quizzes",
     results: "sec-results", reports: "sec-reports", revenue: "sec-revenue",
     finance: "sec-finance", reviews: "sec-reviews", nowshin: "sec-nowshin",
-    analyst: "sec-analyst",
+    analyst: "sec-analyst", cca: "sec-cca",
     partners: "sec-partners", inbox: "sec-inbox",
     products: "sec-products", support: "sec-support", settings: "sec-settings"
   };
@@ -425,6 +442,7 @@
     if (name === "settings" && window.SSA_loadSecReports) window.SSA_loadSecReports();
     if (name === "partners" && window.SSA_loadPartners) window.SSA_loadPartners();
     if (name === "inbox" && window.SSA_loadInbox) window.SSA_loadInbox();
+    if (name === "cca" && window.SSA_loadCCA) window.SSA_loadCCA();
   }
 
   /* ---- shared course catalog (admin view, incl. unpublished) ---- */
@@ -3401,6 +3419,110 @@
     }
   });
   setTimeout(loadInboxBadge, 1600);
+
+  /* ================= CCA — Chief Company Adviser (Founder order 2026-10-23) =================
+     Measures the LIVE LMS (users, orders, revenue, authenticity, reviews,
+     support, security) and advises: what to do, why, how, and when — with a
+     prioritised to-do plan and an 8-week up-scaling graph. Rule-based on real
+     numbers only; nothing is guessed. */
+  function ccaEsc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function weekKey(d) { var x = new Date(d); var day = (x.getDay() + 6) % 7; x.setDate(x.getDate() - day); x.setHours(0, 0, 0, 0); return x.getTime(); }
+  function loadCCA() {
+    if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
+    var wrap = $("ccaWrap"); if (!wrap) return;
+    wrap.innerHTML = '<p class="empty-note">লাইভ ডেটা মাপা হচ্ছে…</p>';
+    var Q = [
+      window.SSA_DB.from("profiles").select("created_at,authenticity_score,email,occupation,institution,avatar_url,mobile,role").limit(2000),
+      window.SSA_DB.from("orders").select("created_at,amount,status").limit(2000),
+      window.SSA_DB.from("reviews").select("rating").limit(1000),
+      window.SSA_DB.from("support_tickets").select("id,status").limit(1000),
+      window.SSA_DB.from("security_reports").select("id").limit(1000),
+      window.SSA_DB.from("lesson_progress").select("user_id").limit(4000),
+      window.SSA_DB.from("courses").select("id", { count: "exact", head: true }),
+      window.SSA_DB.from("lessons").select("id", { count: "exact", head: true })
+    ];
+    Promise.all(Q.map(function (p) { return p.then(function (r) { return r; }, function () { return { data: null, error: true }; }); })).then(function (R) {
+      var profiles = (R[0].data || []).filter(function (p) { return p.role !== "admin"; });
+      var orders = R[1].data || [];
+      var paid = orders.filter(function (o) { return ["approved", "completed", "paid"].indexOf(o.status) !== -1; });
+      var revenue = paid.reduce(function (a, o) { return a + (Number(o.amount) || 0); }, 0);
+      var reviews = R[2].data || [];
+      var avgRating = reviews.length ? (reviews.reduce(function (a, r) { return a + (r.rating || 0); }, 0) / reviews.length) : 0;
+      var openTickets = (R[3].data || []).filter(function (t) { return t.status === "open"; }).length;
+      var secReports = (R[4].data || []).length;
+      var learners = {}; (R[5].data || []).forEach(function (r) { learners[r.user_id] = 1; });
+      var activeLearners = Object.keys(learners).length;
+      var coursesN = R[6].count || 0, lessonsN = R[7].count || 0;
+      var scored = profiles.filter(function (p) { return typeof p.authenticity_score === "number"; });
+      var avgScore = scored.length ? Math.round(scored.reduce(function (a, p) { return a + p.authenticity_score; }, 0) / scored.length) : null;
+      var conv = profiles.length ? Math.round(paid.length / profiles.length * 100) : 0;
+      var now = Date.now(), d7 = now - 7 * 86400000, d14 = now - 14 * 86400000;
+      var rev7 = paid.filter(function (o) { return new Date(o.created_at).getTime() >= d7; }).reduce(function (a, o) { return a + (Number(o.amount) || 0); }, 0);
+      var revPrev7 = paid.filter(function (o) { var t = new Date(o.created_at).getTime(); return t >= d14 && t < d7; }).reduce(function (a, o) { return a + (Number(o.amount) || 0); }, 0);
+      var M = [
+        ["👥 মোট শিক্ষার্থী", profiles.length], ["🛒 মোট অর্ডার", orders.length],
+        ["✅ অনুমোদিত অর্ডার", paid.length], ["💰 মোট আয়", "৳" + revenue],
+        ["📈 রূপান্তর (ক্রেতা)", conv + "%"], ["🛡️ গড় বিশ্বাসযোগ্যতা", avgScore === null ? "মাপা হয়নি" : avgScore + " / 100"],
+        ["⭐ গড় রেটিং", reviews.length ? avgRating.toFixed(1) + " (" + reviews.length + "টি রিভিউ)" : "এখনো নেই"],
+        ["📚 সক্রিয় শিক্ষার্থী (লেসন করেছে)", activeLearners],
+        ["🎓 কোর্স / লেসন", coursesN + " / " + lessonsN],
+        ["💬 খোলা সাপোর্ট টিকিট", openTickets], ["🛡️ নিরাপত্তা রিপোর্ট", secReports],
+        ["📅 শেষ ৭ দিনের আয়", "৳" + rev7 + " (আগের ৭ দিন: ৳" + revPrev7 + ")"]
+      ];
+      var F = [];
+      function add(prio, icon, what, why, how, when) { F.push({ prio: prio, icon: icon, what: what, why: why, how: how, when: when }); }
+      if (secReports > 0) add(1, "🛡️", "নিরাপত্তা রিপোর্টগুলো পর্যালোচনা করুন (" + secReports + "টি)", "সন্দেহজনক চেষ্টা অদেখা থাকলে বারবার আসবে; আসল শিক্ষার্থী আটকে থাকতে পারে।", "ইনবক্স ট্যাব → 🛡️ নিরাপত্তা রিপোর্ট দেখুন; আসল শিক্ষার্থী হলে তাকে লগইন করতে বলুন, নকল হলে উপেক্ষা করুন।", "আজই");
+      if (openTickets > 0) add(1, "💬", "খোলা সাপোর্ট টিকিটের উত্তর দিন (" + openTickets + "টি)", "দেরি করা উত্তর = হারানো ক্রেতা ও খারাপ রিভিউ।", "সাপোর্ট ট্যাবে গিয়ে প্রতিটির উত্তর দিন ও Closed করুন।", "আজই");
+      if (avgScore !== null && avgScore < 60) add(1, "🛡️", "শিক্ষার্থীদের প্রোফাইল সম্পূর্ণ করতে উৎসাহ দিন (গড় স্কোর " + avgScore + ")", "অসম্পূর্ণ প্রোফাইল = কম বিশ্বাসযোগ্যতা, নকল অ্যাকাউন্টের ঝুঁকি ও কম ধরে রাখা।", "Nowshin ও নোটিশে বার্তা দিন: পেশা, প্রতিষ্ঠান ও ছবি যোগ করলে স্কোর বাড়ে — Dashboard-এ দেখানো হয়।", "আজই");
+      if (scored.length < profiles.length) add(2, "📊", "সব শিক্ষার্থীর স্কোর মাপা নিশ্চিত করুন (" + scored.length + "/" + profiles.length + " মাপা)", "স্কোর ছাড়া Security Health অসম্পূর্ণ থাকে।", "শিক্ষার্থীরা Dashboard খুললেই স্কোর নিজে নিজে মাপা ও সেভ হয় — তাদের Dashboard দেখতে উৎসাহ দিন।", "এই সপ্তাহে");
+      if (profiles.length >= 5 && conv < 10) add(1, "📈", "বিক্রয় রূপান্তর বাড়ান — বর্তমানে মাত্র " + conv + "%", "অনেক শিক্ষার্থী আসছে কিন্তু কিনছে কম — আয়ের সরাসরি ক্ষতি।", "প্রথম লেসন ফ্রি-এর পরে Nowshin ফলো-আপ, কোর্স পেজে রিভিউ ও সাফল্যের গল্প, সীমিত সময়ের অফার নোটিশ।", "এই সপ্তাহে");
+      if (revPrev7 > 0 && rev7 < revPrev7) add(1, "📉", "আয় কমেছে — গত সপ্তাহ ৳" + revPrev7 + " → এই সপ্তাহ ৳" + rev7, "গতি হারালে বৃদ্ধি থেমে যায়; কারণ খুঁজে ঠিক করা জরুরি।", "Facebook গ্রুপে মূল্যবান পোস্ট + কোর্স অফার, পুরনো শিক্ষার্থীদের Nowshin দিয়ে আবার ডাকা।", "এই সপ্তাহে");
+      if (!reviews.length || avgRating < 4.5) add(2, "⭐", "আরও রিভিউ সংগ্রহ করুন (এখন " + reviews.length + "টি, গড় " + (reviews.length ? avgRating.toFixed(1) : "—") + ")", "রিভিউ নতুন ক্রেতার আস্থা — বিশ্বমানের LMS-এর প্রথম শর্ত।", "কোর্স শেষ করা শিক্ষার্থীকে Dashboard থেকে রিভিউ দিতে বলুন; ভালো রিভিউ হোমপেজে দেখান।", "এই সপ্তাহে");
+      if (profiles.length && activeLearners / profiles.length < 0.4) add(2, "📚", "শেখার সক্রিয়তা বাড়ান — মাত্র " + activeLearners + " জন লেসন করেছে", "যে শিক্ষার্থী শেখে না, সে আবার কেনে না ও অন্যকে বলে না।", "নোটিশ + Nowshin অনুস্মারক: 'আজকের লেসন শেষ করুন'; কুইজ প্রতিযোগিতার ঘোষণা দিন।", "এই সপ্তাহে");
+      add(3, "🏫", "স্থানীয় বৃদ্ধি: জামালপুরের স্কুলগুলোর সঙ্গে অংশীদারিত্ব বাড়ান", "স্থানীয় আস্থাই প্রথম ১ লাখ টাকা আয়ের দ্রুততম পথ — আপনি ইতিমধ্যে ৩টি প্রতিষ্ঠানে আছেন।", "প্রতিটি স্কুলে ফ্রি ডেমো ক্লাস/স্পেলিং প্রতিযোগিতা; সফল শিক্ষার্থীর গল্প পোস্টারে; স্কুল কর্তৃপক্ষকে ফলাফলের রিপোর্ট দিন।", "এই মাসে");
+      add(3, "📣", "Facebook গ্রুপে সাপ্তাহিক কনটেন্ট ছন্দ ধরে রাখুন", "নিয়মিত মূল্যবান কনটেন্ট = ফ্রি ভর্তি; অনিয়ম = ভুলে যাওয়া।", "সপ্তাহে ৩টি পোস্ট: ১টি টিপস ভিডিও, ১টি সাফল্যের গল্প, ১টি লাইভ/কুইজ ঘোষণা — একই দিনে ও সময়ে।", "এই মাসে");
+      F.sort(function (a, b) { return a.prio - b.prio; });
+      /* 8-week up-scaling graph: signups vs paid orders per week */
+      var weeks = [], labels = [];
+      for (var w = 7; w >= 0; w--) { var start = weekKey(new Date(now - w * 7 * 86400000)); weeks.push(start); labels.push(new Date(start).toLocaleDateString("en-GB", { day: "numeric", month: "short" })); }
+      function bucket(rows, pred) { return weeks.map(function (wk) { return rows.filter(function (r) { return pred(r) && weekKey(r.created_at) === wk; }).length; }); }
+      var su = bucket(profiles, function () { return true; });
+      var od = bucket(paid, function () { return true; });
+      var maxV = Math.max(1, Math.max.apply(null, su.concat(od)));
+      var BW = 26, GAP = 14, X0 = 34, H = 120;
+      var svg = '<svg viewBox="0 0 ' + (X0 + weeks.length * (BW * 2 + GAP) + 8) + ' ' + (H + 30) + '" style="width:100%;max-width:640px">';
+      for (var gi = 0; gi < weeks.length; gi++) {
+        var gx = X0 + gi * (BW * 2 + GAP);
+        var h1 = Math.round(su[gi] / maxV * (H - 14)), h2 = Math.round(od[gi] / maxV * (H - 14));
+        svg += '<rect x="' + gx + '" y="' + (H - h1) + '" width="' + BW + '" height="' + h1 + '" rx="4" fill="#1FA463"><title>নতুন শিক্ষার্থী: ' + su[gi] + '</title></rect>';
+        svg += '<rect x="' + (gx + BW + 3) + '" y="' + (H - h2) + '" width="' + BW + '" height="' + h2 + '" rx="4" fill="#B90E59"><title>অনুমোদিত অর্ডার: ' + od[gi] + '</title></rect>';
+        svg += '<text x="' + (gx + BW) + '" y="' + (H + 16) + '" font-size="9.5" text-anchor="middle" fill="#6B7280">' + labels[gi] + '</text>';
+        svg += '<text x="' + (gx + BW / 2) + '" y="' + (H - h1 - 4) + '" font-size="10" text-anchor="middle" fill="#14703D" font-weight="700">' + su[gi] + '</text>';
+        svg += '<text x="' + (gx + BW + 3 + BW / 2) + '" y="' + (H - h2 - 4) + '" font-size="10" text-anchor="middle" fill="#B90E59" font-weight="700">' + od[gi] + '</text>';
+      }
+      svg += '<line x1="' + (X0 - 6) + '" y1="' + H + '" x2="' + (X0 + weeks.length * (BW * 2 + GAP)) + '" y2="' + H + '" stroke="#E5E7EB" stroke-width="2"/></svg>';
+      var whenGroups = ["আজই", "এই সপ্তাহে", "এই মাসে"];
+      var todo = whenGroups.map(function (wg) {
+        var items = F.filter(function (f) { return f.when === wg; });
+        if (!items.length) return "";
+        return '<h4 class="cca-when">🕐 ' + wg + '</h4><ul class="cca-todo">' + items.map(function (f) { return "<li>" + f.icon + " " + ccaEsc(f.what) + "</li>"; }).join("") + "</ul>";
+      }).join("");
+      wrap.innerHTML =
+        '<div class="cca-metrics">' + M.map(function (m) { return '<div class="cca-metric"><span>' + m[0] + '</span><b>' + ccaEsc(m[1]) + '</b></div>'; }).join("") + '</div>' +
+        '<h3 class="cca-h">📈 Up Scaling — শেষ ৮ সপ্তাহ</h3>' +
+        '<p class="cca-legend"><span class="dot" style="background:#1FA463"></span> নতুন শিক্ষার্থী &nbsp; <span class="dot" style="background:#B90E59"></span> অনুমোদিত অর্ডার</p>' + svg +
+        '<h3 class="cca-h">🔍 Findings ও পরামর্শ — কী, কেন, কীভাবে, কখন</h3>' +
+        F.map(function (f) {
+          return '<div class="cca-card"><div class="cca-what">' + f.icon + " " + ccaEsc(f.what) + '</div>' +
+            '<div class="cca-row"><b>কেন:</b> ' + ccaEsc(f.why) + '</div>' +
+            '<div class="cca-row"><b>কীভাবে:</b> ' + ccaEsc(f.how) + '</div>' +
+            '<div class="cca-row"><b>কখন:</b> ' + ccaEsc(f.when) + '</div></div>';
+        }).join("") +
+        '<h3 class="cca-h">✅ To-Do Plan</h3>' + todo +
+        '<p class="admin-note">CCA-এর সব সংখ্যা এই মুহূর্তের লাইভ ডেটা থেকে মাপা। পরামর্শ বাস্তবায়নের পর পরেরবার খুললেই পরিবর্তন দেখা যাবে।</p>';
+    }, function () { wrap.innerHTML = '<p class="empty-note">ডেটা লোড করা যায়নি — সংযোগ দেখে আবার চেষ্টা করুন।</p>'; });
+  }
+  window.SSA_loadCCA = loadCCA;
   document.addEventListener("click", function (e) {
     var b = e.target && e.target.closest ? e.target.closest("[data-pact]") : null;
     if (!b || !window.SSA_DB) return;

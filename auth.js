@@ -53,7 +53,7 @@
      kept in localStorage as "ssa_pending_profile" — save the row now. */
   function ensureProfile(user) {
     return window.SSA_DB.from("profiles")
-      .select("id,name,mobile,username,role")
+      .select("id,name,mobile,username,role,email,occupation,institution,avatar_url,authenticity_score,created_at")
       .eq("id", user.id)
       .maybeSingle()
       .then(function (r) {
@@ -64,10 +64,10 @@
         if (raw) { try { p = JSON.parse(raw); } catch (e) { p = null; } }
         if (!p || p.id !== user.id) return null;
         return window.SSA_DB.from("profiles")
-          .insert({ id: user.id, name: p.name, mobile: p.mobile, username: p.username })
+          .insert({ id: user.id, name: p.name, mobile: p.mobile, username: p.username, email: p.email || user.email || null })
           .then(function (ir) {
             if (!ir.error) {
-              state.profile = { id: user.id, name: p.name, mobile: p.mobile, username: p.username };
+              state.profile = { id: user.id, name: p.name, mobile: p.mobile, username: p.username, email: p.email || user.email || null };
               try { localStorage.removeItem("ssa_pending_profile"); } catch (e) {}
             }
             return null;
