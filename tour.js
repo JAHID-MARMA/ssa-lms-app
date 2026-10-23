@@ -1,18 +1,28 @@
-/* Self Scale Academy — first-visitor guided tour (Founder order 2026-10-22).
-   Shows ONCE per device: a welcome popup offering a short tour of how to use
-   the site, with a Skip option at every step. Never shows again afterwards. */
+/* Self Scale Academy — first-visitor guided tour (Founder order 2026-10-22;
+   corrected 2026-10-23: ONLY a genuinely new, logged-out visitor is invited —
+   a returning or logged-in user NEVER sees it. Every step's text and highlight
+   match the real element on the page. Shows once per device. */
 (function () {
   var LS = "ssa_tour_done";
   try { if (localStorage.getItem(LS)) return; } catch (e) { return; }
   function done() { try { localStorage.setItem(LS, "1"); } catch (e) {} }
-  function esc(t) { return String(t == null ? "" : t); }
+  function hasSessionToken() {
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i) || "";
+        if (k.indexOf("sb-") === 0 && k.indexOf("-auth-token") > 0) return true;
+      }
+    } catch (e) {}
+    return false;
+  }
+  if (hasSessionToken()) { done(); return; }
 
   var STEPS = [
     { sel: ".main-nav a[href='courses.html']", title: "📚 সব কোর্স এখানে", text: "Spoken English, Phonics — সব কোর্স ও পণ্য এই মেনুতে পাবেন।" },
-    { sel: ".slide-cap .btn", title: "🛒 ভর্তি ও অর্ডার", text: "প্রতিটি কোর্সের কার্ডে ও এখানে ভর্তি/অর্ডার বাটন আছে — বিকাশে পেমেন্ট করে ফর্ম জমা দিলেই অর্ডার হয়ে যাবে।" },
+    { sel: ".slide.active .slide-cap .btn", title: "🛒 ভর্তি ও অর্ডার", text: "এই বাটন থেকে সরাসরি ভর্তি/অর্ডার শুরু হয় — বিকাশে পেমেন্ট করে ফর্ম জমা দিলেই অর্ডার হয়ে যাবে।" },
     { sel: "#ssaLoginLink", title: "🔐 Login / Dashboard", text: "কেনার পর Login করে Dashboard-এ আপনার সব কোর্স, অগ্রগতি ও সার্টিফিকেট পাবেন।" },
-    { sel: ".notice-ticker", title: "📢 আপডেট ও নোটিশ", text: "সব খবর, শুভেচ্ছা ও নোটিশ এই স্ক্রলিং বারে আর Footer-এর নোটিশ বোর্ডে পাবেন।" },
-    { sel: null, title: "🤖 সাহায্য লাগলে — Ask Nowshin", text: "ডানদিকের নিচের Ask Nowshin বাটনে যেকোনো প্রশ্ন করুন — আমাদের Customer Manager সঙ্গে সঙ্গে উত্তর দেবে। ট্যুর শেষ — শুভ শিক্ষা! 🎉" }
+    { sel: ".notice-fab", title: "📋 নোটিশ বোর্ড", text: "এই 📋 বাটনে সব নোটিশ, খবর ও আপডেট পাবেন — এটি Ask Nowshin বাটনের ঠিক উপরে থাকে।" },
+    { sel: ".nowshin-pill", title: "🤖 সাহায্য লাগলে — Ask Nowshin", text: "নিচের এই Ask Nowshin বাটনে যেকোনো প্রশ্ন করুন — আমাদের Customer Manager সঙ্গে সঙ্গে উত্তর দেবে। ট্যুর শেষ — শুভ শিক্ষা! 🎉" }
   ];
 
   var shade = null, card = null, hi = null, idx = 0;
@@ -88,7 +98,24 @@
       done(); pop.parentNode.removeChild(pop);
     });
   }
-  function init() { setTimeout(invite, 900); }
+  function init() {
+    /* Old user protection: if this browser holds a login session, the visitor
+       is a returning user — never invite them, and remember the choice. */
+    var invited = false;
+    function maybeInvite() { if (!invited) { invited = true; setTimeout(invite, 400); } }
+    if (window.SSA_AUTH && window.SSA_AUTH.ready && typeof window.SSA_AUTH.ready.then === "function") {
+      var guard = setTimeout(maybeInvite, 1800); /* auth too slow — treat as new visitor */
+      window.SSA_AUTH.ready.then(function () {
+        clearTimeout(guard);
+        var user = null;
+        try { user = window.SSA_AUTH.getUser(); } catch (e) {}
+        if (user) { done(); return; }
+        maybeInvite();
+      });
+    } else {
+      setTimeout(maybeInvite, 500);
+    }
+  }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();
