@@ -13,6 +13,22 @@
   var readyDone = false;
   function finish() { if (!readyDone) { readyDone = true; resolveReady(state); } }
 
+  /* Header door fix (Founder, 2026-10-23): until the session check ends,
+     hide every auth control, so a signed-in visitor never sees (or taps) a
+     "Login" button that would only bounce to the dashboard, and a signed-out
+     visitor never sees a Dashboard door that bounces back to login.
+     setHeader() reveals exactly the right door for the visitor's state. */
+  var AUTH_IDS = ["ssaLoginLink", "ssaDashLink", "ssaUserChip", "ssaAdminLink", "ssaAdminBtn"];
+  function authEls() {
+    var out = [];
+    for (var i = 0; i < AUTH_IDS.length; i++) {
+      var el = document.getElementById(AUTH_IDS[i]);
+      if (el) out.push(el);
+    }
+    return out;
+  }
+  authEls().forEach(function (el) { el.style.visibility = "hidden"; });
+
   function displayName() {
     if (state.profile && state.profile.name) return state.profile.name;
     if (state.profile && state.profile.username) return state.profile.username;
@@ -46,6 +62,7 @@
       if (dash) dash.style.display = "none";
       if (chip) { chip.style.display = "none"; chip.textContent = ""; }
     }
+    authEls().forEach(function (el) { el.style.visibility = ""; });
   }
 
   /* Load the student's profile row. If signup finished before the row could
@@ -141,12 +158,12 @@
     }
   };
 
-  if (!window.SSA_DB) { finish(); return; }
+  if (!window.SSA_DB) { setHeader(); finish(); return; }
 
   window.SSA_DB.auth.getSession().then(function (res) {
     var session = (res && res.data) ? res.data.session : null;
     applyUser(session ? session.user : null);
-  }, function () { finish(); });
+  }, function () { setHeader(); finish(); });
 
   window.SSA_DB.auth.onAuthStateChange(function (_event, session) {
     var user = session ? session.user : null;
