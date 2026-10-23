@@ -106,9 +106,30 @@
       }, function () {});
   }
 
+  function markAllLessonsOpen(noteText) {
+    var list = document.getElementById("lessonList");
+    if (!list) return;
+    for (var i = 1; i < list.children.length; i++) {
+      var li = list.children[i];
+      li.className = "open";
+      var tag = li.querySelector(".tag");
+      if (tag) { tag.className = "tag tag-open"; tag.textContent = "✓ খোলা আছে"; }
+    }
+    var note = document.getElementById("lessonNote");
+    if (note && noteText) note.textContent = noteText;
+  }
+
   function unlockCourse(user) {
     var hero = document.getElementById("courseHero");
     if (!hero || !user) return;
+    /* Admin/Staff (Founder, 2026-10-23): entering as admin, every course is
+       open — the lesson list must show that, not locks. The database already
+       serves lesson content to the admin; this makes the list match. */
+    var prof = state.profile;
+    if (prof && (prof.role === "admin" || prof.role === "staff")) {
+      markAllLessonsOpen("আপনি Admin — এই কোর্সের সব লেসন আপনার জন্য খোলা আছে।");
+      return;
+    }
     var slug = hero.getAttribute("data-course");
     window.SSA_DB.from("enrollments")
       .select("course_slug")
@@ -117,16 +138,7 @@
       .maybeSingle()
       .then(function (r) {
         if (!r || !r.data) return;
-        var list = document.getElementById("lessonList");
-        if (!list) return;
-        for (var i = 1; i < list.children.length; i++) {
-          var li = list.children[i];
-          li.className = "open";
-          var tag = li.querySelector(".tag");
-          if (tag) { tag.className = "tag tag-open"; tag.textContent = "✓ খোলা আছে"; }
-        }
-        var note = document.getElementById("lessonNote");
-        if (note) note.textContent = "আপনি এই কোর্সে ভর্তি আছেন — সব লেসন আপনার জন্য খোলা আছে। শুভ শিক্ষা!";
+        markAllLessonsOpen("আপনি এই কোর্সে ভর্তি আছেন — সব লেসন আপনার জন্য খোলা আছে। শুভ শিক্ষা!");
       }, function () {});
   }
 
