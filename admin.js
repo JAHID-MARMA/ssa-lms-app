@@ -3426,6 +3426,41 @@
      prioritised to-do plan and an 8-week up-scaling graph. Rule-based on real
      numbers only; nothing is guessed. */
   function ccaEsc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  /* Dropdown item (Founder order 2026-10-23): only the TITLE shows; a tap
+     smoothly spreads the details open — one open at a time per group. */
+  function ccaItem(icon, title, bodyHtml) {
+    return '<div class="cca-item"><button type="button" class="cca-head" aria-expanded="false">' +
+      '<span class="cca-ht">' + icon + " " + ccaEsc(title) + '</span><span class="faq-chev cca-chev" aria-hidden="true"></span></button>' +
+      '<div class="cca-body">' + bodyHtml + '</div></div>';
+  }
+  function ccaWhyHowWhen(f) {
+    return '<div class="cca-row"><b>কেন:</b> ' + ccaEsc(f.why || f[2]) + '</div>' +
+      '<div class="cca-row"><b>কীভাবে:</b> ' + ccaEsc(f.how || f[3]) + '</div>' +
+      '<div class="cca-row"><b>কখন:</b> ' + ccaEsc(f.when || f[4]) + '</div>';
+  }
+  if (!window.__ccaAccBound) {
+    window.__ccaAccBound = true;
+    document.addEventListener("click", function (e) {
+      var head = e.target && e.target.closest ? e.target.closest(".cca-head") : null;
+      if (head) {
+        var item = head.parentNode, acc = item.parentNode, willOpen = !item.classList.contains("open");
+        if (acc) {
+          var sibs = acc.querySelectorAll(".cca-item.open");
+          for (var i = 0; i < sibs.length; i++) { sibs[i].classList.remove("open"); sibs[i].querySelector(".cca-body").style.maxHeight = "0px"; sibs[i].querySelector(".cca-head").setAttribute("aria-expanded", "false"); }
+        }
+        if (willOpen) { item.classList.add("open"); var b = item.querySelector(".cca-body"); b.style.maxHeight = b.scrollHeight + "px"; head.setAttribute("aria-expanded", "true"); }
+        return;
+      }
+      var tile = e.target && e.target.closest ? e.target.closest("[data-hpanel]") : null;
+      if (tile) {
+        var pid = tile.getAttribute("data-hpanel"), panel = document.getElementById(pid);
+        if (!panel) return;
+        var wrap = panel.parentNode, open = panel.classList.contains("open");
+        if (wrap) { var ps = wrap.querySelectorAll(".hpanel.open"); for (var j = 0; j < ps.length; j++) { ps[j].classList.remove("open"); ps[j].style.maxHeight = "0px"; } }
+        if (!open) { panel.classList.add("open"); panel.style.maxHeight = panel.scrollHeight + "px"; }
+      }
+    });
+  }
   function weekKey(d) { var x = new Date(d); var day = (x.getDay() + 6) % 7; x.setDate(x.getDate() - day); x.setHours(0, 0, 0, 0); return x.getTime(); }
   function loadCCA() {
     if (!window.SSA_DB || typeof window.SSA_DB.from !== "function") return;
@@ -3505,21 +3540,18 @@
       var todo = whenGroups.map(function (wg) {
         var items = F.filter(function (f) { return f.when === wg; });
         if (!items.length) return "";
-        return '<h4 class="cca-when">🕐 ' + wg + '</h4><ul class="cca-todo">' + items.map(function (f) { return "<li>" + f.icon + " " + ccaEsc(f.what) + "</li>"; }).join("") + "</ul>";
+        return ccaItem("🕐", wg + " — " + items.length + "টি কাজ", '<ul class="cca-todo">' + items.map(function (f) { return "<li>" + f.icon + " " + ccaEsc(f.what) + "</li>"; }).join("") + "</ul>");
       }).join("");
       wrap.innerHTML =
         '<div class="cca-metrics">' + M.map(function (m) { return '<div class="cca-metric"><span>' + m[0] + '</span><b>' + ccaEsc(m[1]) + '</b></div>'; }).join("") + '</div>' +
+        '<h3 class="cca-h">🏥 Site Health — আইকনে চাপ দিলে খুলবে</h3><div id="ccaHealth"><p class="empty-note">স্বাস্থ্য মাপা হচ্ছে…</p></div>' +
         '<h3 class="cca-h">📈 Up Scaling — শেষ ৮ সপ্তাহ</h3>' +
         '<p class="cca-legend"><span class="dot" style="background:#1FA463"></span> নতুন শিক্ষার্থী &nbsp; <span class="dot" style="background:#B90E59"></span> অনুমোদিত অর্ডার</p>' + svg +
-        '<h3 class="cca-h">🔍 Findings ও পরামর্শ — কী, কেন, কীভাবে, কখন</h3>' +
-        F.map(function (f) {
-          return '<div class="cca-card"><div class="cca-what">' + f.icon + " " + ccaEsc(f.what) + '</div>' +
-            '<div class="cca-row"><b>কেন:</b> ' + ccaEsc(f.why) + '</div>' +
-            '<div class="cca-row"><b>কীভাবে:</b> ' + ccaEsc(f.how) + '</div>' +
-            '<div class="cca-row"><b>কখন:</b> ' + ccaEsc(f.when) + '</div></div>';
-        }).join("") +
-        '<h3 class="cca-h">✅ To-Do Plan</h3>' + todo +
+        '<h3 class="cca-h">🔍 Findings ও পরামর্শ — শিরোনামে চাপ দিলে খুলবে</h3>' +
+        '<div class="cca-acc">' + F.map(function (f) { return ccaItem(f.icon, f.what, ccaWhyHowWhen(f)); }).join("") + '</div>' +
+        '<h3 class="cca-h">✅ To-Do Plan</h3><div class="cca-acc">' + todo + '</div>' +
         '<p class="admin-note">CCA-এর সব সংখ্যা এই মুহূর্তের লাইভ ডেটা থেকে মাপা। পরামর্শ বাস্তবায়নের পর পরেরবার খুললেই পরিবর্তন দেখা যাবে।</p>';
+      if (window.SSA_loadCCAHealth) window.SSA_loadCCAHealth();
       if (window.SSA_loadCCADeep) window.SSA_loadCCADeep();
     }, function () { wrap.innerHTML = '<p class="empty-note">ডেটা লোড করা যায়নি — সংযোগ দেখে আবার চেষ্টা করুন।</p>'; });
   }
@@ -3583,23 +3615,113 @@
       }).filter(function (d) { return d.n > 0; }).sort(function (a, b) { return b.n - a.n; });
       var d30 = Date.now() - 30 * 86400000;
       var recentOrders = orders.filter(function (o) { return new Date(o.created_at).getTime() >= d30 && o.status !== "cancelled"; });
-      holder.innerHTML =
-        '<h3 class="cca-h">🔬 গভীর পরীক্ষা — Content Quality · Authenticity · Trust · Real-time Demand</h3>' +
-        '<div class="table-scroll"><table class="admin-table"><thead><tr><th>কোর্স</th><th>লেসন</th><th>ভিডিওসহ</th><th>PDFসহ</th><th>কুইজসহ</th><th>ভর্তি</th></tr></thead><tbody>' +
+      var tableHtml = '<div class="table-scroll"><table class="admin-table"><thead><tr><th>কোর্স</th><th>লেসন</th><th>ভিডিওসহ</th><th>PDFসহ</th><th>কুইজসহ</th><th>ভর্তি</th></tr></thead><tbody>' +
         (rows.length ? rows.map(function (r) {
           return "<tr><td>" + ccaEsc(r.title) + "</td><td>" + r.n + "</td><td>" + r.video + "/" + r.n + "</td><td>" + r.pdf + "/" + r.n + "</td><td>" + r.quiz + "/" + r.n + "</td><td>" + r.enr + "</td></tr>";
         }).join("") : '<tr><td colspan="6">কোর্স ডেটা পাওয়া যায়নি।</td></tr>') +
         '</tbody></table></div>' +
-        '<p class="admin-note">গড় কুইজ প্রশ্ন সংখ্যা: <b class="en">' + avgQ + '</b> · প্রোফাইল পূর্ণতা — পেশা: ' + occP + '% · প্রতিষ্ঠান: ' + instP + '% · ছবি: ' + avP + '% · অস্থায়ী ইমেইল: ' + dispN + 'টি</p>' +
-        '<h4 class="cca-when">🔥 Real-time Demand — শিক্ষার্থীরা এখন যা চাইছে (Nowshin-এর সাম্প্রতিক ' + chats.length + 'টি কথোপকথন থেকে)</h4>' +
-        (demand.length ? '<div class="cca-metrics">' + demand.map(function (d) { return '<div class="cca-metric"><span>' + d.label + '</span><b>' + d.n + ' বার জিজ্ঞাসা</b></div>'; }).join("") + '</div>' : '<p class="empty-note">এখনো পর্যাপ্ত কথোপকথনের ডেটা নেই।</p>') +
-        '<p class="admin-note">গত ৩০ দিনে অর্ডার: <b>' + recentOrders.length + 'টি</b> · মোট ভর্তি (enrollment): <b>' + enrolls.length + 'টি</b> — কোন কোর্সে চাহিদা বেশি, উপরের ছকে "ভর্তি" কলামে দেখুন।</p>' +
-        (F2.length ? '<h4 class="cca-when">🔍 গভীর Findings</h4>' + F2.map(function (f) {
-          return '<div class="cca-card"><div class="cca-what">' + f[0] + " " + ccaEsc(f[1]) + '</div><div class="cca-row"><b>কেন:</b> ' + ccaEsc(f[2]) + '</div><div class="cca-row"><b>কীভাবে:</b> ' + ccaEsc(f[3]) + '</div><div class="cca-row"><b>কখন:</b> ' + ccaEsc(f[4]) + '</div></div>';
-        }).join("") : '<p class="admin-note">✅ গভীর পরীক্ষায় বড় কোনো ঘাটতি পাওয়া যায়নি — কনটেন্ট, আস্থা ও সত্যতা ঠিক আছে।</p>');
+        '<p class="admin-note">গড় কুইজ প্রশ্ন সংখ্যা: <b class="en">' + avgQ + '</b> · প্রোফাইল পূর্ণতা — পেশা: ' + occP + '% · প্রতিষ্ঠান: ' + instP + '% · ছবি: ' + avP + '% · অস্থায়ী ইমেইল: ' + dispN + 'টি</p>';
+      var demandHtml = (demand.length ? '<div class="cca-metrics">' + demand.map(function (d) { return '<div class="cca-metric"><span>' + d.label + '</span><b>' + d.n + ' বার জিজ্ঞাসা</b></div>'; }).join("") + '</div>' : '<p class="empty-note">এখনো পর্যাপ্ত কথোপকথনের ডেটা নেই।</p>') +
+        '<p class="admin-note">গত ৩০ দিনে অর্ডার: <b>' + recentOrders.length + 'টি</b> · মোট ভর্তি (enrollment): <b>' + enrolls.length + 'টি</b> — কোন কোর্সে চাহিদা বেশি, Content Quality ছকের "ভর্তি" কলামে দেখুন।</p>';
+      holder.innerHTML =
+        '<h3 class="cca-h">🔬 গভীর পরীক্ষা — শিরোনামে চাপ দিলে খুলবে</h3>' +
+        '<div class="cca-acc">' +
+        ccaItem("📚", "Content Quality — কোর্সভিত্তিক ছক", tableHtml) +
+        ccaItem("🔥", "Real-time Demand — শিক্ষার্থীরা এখন যা চাইছে (সাম্প্রতিক " + chats.length + "টি কথোপকথন)", demandHtml) +
+        (F2.length ? F2.map(function (f) { return ccaItem(f[0], f[1], ccaWhyHowWhen(f)); }).join("") : ccaItem("✅", "গভীর পরীক্ষায় বড় কোনো ঘাটতি নেই", '<p class="admin-note">কনটেন্ট, আস্থা ও সত্যতা ঠিক আছে — এই অবস্থা ধরে রাখুন।</p>')) +
+        '</div>';
     }, function () { holder.innerHTML = '<p class="empty-note">গভীর পরীক্ষার ডেটা লোড করা যায়নি।</p>'; });
   }
   window.SSA_loadCCADeep = loadCCADeep;
+
+  /* ---- CCA Site Health (Founder order 2026-10-23): app-icon tiles that
+     open smooth panels — Speed, Security, Storage, Performance, Pressure.
+     Everything measured live from this browser + public APIs + the DB. */
+  function fmtKB(b) { if (b == null || isNaN(b)) return "—"; if (b >= 1048576) return (b / 1048576).toFixed(2) + " MB"; return Math.max(1, Math.round(b / 1024)) + " KB"; }
+  function timedFetch(url, noStore) {
+    var t0 = performance.now();
+    return fetch(url, noStore ? { cache: "no-store" } : {}).then(function (r) { return r.blob(); }).then(function (b) {
+      return { ms: Math.round(performance.now() - t0), kb: b.size };
+    }).catch(function () { return { ms: null, kb: null }; });
+  }
+  function loadCCAHealth() {
+    var holder = $("ccaHealth"); if (!holder || !window.SSA_DB) return;
+    var P = {
+      home: timedFetch("index.html", true),
+      css: timedFetch("style.css"),
+      img: timedFetch("assets/slide-1.jpg"),
+      gh: fetch("https://api.github.com/repos/JAHID-MARMA/ssa-lms-app").then(function (r) { return r.json(); }).catch(function () { return null; }),
+      db: window.SSA_DB.rpc("ssa_db_size").then(function (r) { return r.error ? null : r.data; }, function () { return null; }),
+      profs: window.SSA_DB.from("profiles").select("created_at,email,occupation,institution,avatar_url,authenticity_score").limit(2000).then(function (r) { return r.data || []; }, function () { return []; }),
+      reps: window.SSA_DB.from("security_reports").select("is_read").limit(1000).then(function (r) { return r.data || []; }, function () { return []; }),
+      ords: window.SSA_DB.from("orders").select("created_at").limit(2000).then(function (r) { return r.data || []; }, function () { return []; })
+    };
+    Promise.all([P.home, P.css, P.img, P.gh, P.db, P.profs, P.reps, P.ords]).then(function (R) {
+      var home = R[0], css = R[1], img = R[2], gh = R[3], db = R[4], profs = R[5], reps = R[6], ords = R[7];
+      /* pressure: 3 timed API pings */
+      var pings = [];
+      var pingOnce = function () {
+        var t0 = performance.now();
+        return window.SSA_DB.from("profiles").select("id", { count: "exact", head: true }).then(function () { return performance.now() - t0; }, function () { return null; });
+      };
+      return pingOnce().then(function (a) { pings.push(a); return pingOnce(); }).then(function (b) { pings.push(b); return pingOnce(); }).then(function (c) {
+        pings.push(c);
+        var valid = pings.filter(function (x) { return x !== null; });
+        var avgPing = valid.length ? Math.round(valid.reduce(function (x, y) { return x + y; }, 0) / valid.length) : null;
+        var d7 = Date.now() - 7 * 86400000;
+        var signups7 = profs.filter(function (p) { return p.created_at && new Date(p.created_at).getTime() >= d7; }).length;
+        var orders7 = ords.filter(function (o) { return new Date(o.created_at).getTime() >= d7; }).length;
+        /* security score */
+        var scored = profs.filter(function (p) { return typeof p.authenticity_score === "number"; });
+        var avgScore = scored.length ? Math.round(scored.reduce(function (a, p) { return a + p.authenticity_score; }, 0) / scored.length) : null;
+        var pN = profs.length || 1;
+        var pc = function (f) { return Math.round(profs.filter(f).length / pN * 100); };
+        var completeness = Math.round((pc(function (p) { return p.occupation; }) + pc(function (p) { return p.institution; }) + pc(function (p) { return p.avatar_url; })) / 3);
+        var emailCov = pc(function (p) { return p.email; });
+        var dispN = profs.filter(function (p) { return p.email && window.SSA_SCORE && SSA_SCORE.isDisposable(p.email); }).length;
+        var unreadReps = reps.filter(function (r) { return !r.is_read; }).length;
+        var secScore = Math.round((avgScore === null ? 0 : avgScore * 0.35) + (dispN === 0 ? 15 : Math.max(0, 15 - dispN * 3)) + (unreadReps === 0 ? 15 : 7) + completeness * 0.2 + emailCov * 0.15);
+        var secBand = window.SSA_SCORE ? SSA_SCORE.band(secScore) : { label: "", color: "#333" };
+        /* speed + performance */
+        var nav = (performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || null;
+        var speedLabel = home.ms === null ? "মাপা যায়নি" : (home.ms < 900 ? "দ্রুত 🟢" : (home.ms < 2000 ? "মাঝারি 🟡" : "ধীর 🔴"));
+        var pressLabel = avgPing === null ? "মাপা যায়নি" : (avgPing < 350 ? "চাপ কম 🟢" : (avgPing < 800 ? "চাপ মাঝারি 🟡" : "চাপ বেশি 🔴"));
+        var siteWeight = (home.kb || 0) + (css.kb || 0) + (img.kb || 0);
+        var dbPct = db && db.db_bytes ? Math.round(db.db_bytes / (500 * 1048576) * 1000) / 10 : null;
+        function rows(list) { return list.map(function (r) { return '<div class="cca-row"><b>' + r[0] + ':</b> ' + r[1] + '</div>'; }).join(""); }
+        function suggest(why, what, how, when) {
+          return '<div class="hpanel-sug"><div class="cca-row"><b>কেন:</b> ' + why + '</div><div class="cca-row"><b>কী:</b> ' + what + '</div><div class="cca-row"><b>কীভাবে:</b> ' + how + '</div><div class="cca-row"><b>কখন:</b> ' + when + '</div></div>';
+        }
+        var tiles = [
+          { id: "hp-speed", icon: "🚀", cls: "g-green", label: "Site Speed", status: speedLabel },
+          { id: "hp-sec", icon: "🛡️", cls: "g-blue", label: "Security Health", status: secScore + " / 100" },
+          { id: "hp-storage", icon: "🗄️", cls: "g-purple", label: "Storage", status: db ? ("DB " + fmtKB(db.db_bytes)) : "DB —" },
+          { id: "hp-perf", icon: "📊", cls: "g-pink", label: "Performance", status: nav ? ("লোড " + Math.round(nav.loadEventEnd || nav.duration || 0) + "ms") : "—" },
+          { id: "hp-press", icon: "⚡", cls: "g-amber", label: "Site Pressure", status: pressLabel }
+        ];
+        var panels = {
+          "hp-speed": rows([["হোমপেজ (তাজা মাপ)", home.ms === null ? "মাপা যায়নি" : home.ms + " ms · আকার " + fmtKB(home.kb)], ["স্টাইল ফাইল (style.css)", fmtKB(css.kb)], ["বড় ছবি (slide-1)", fmtKB(img.kb)], ["অবস্থা", speedLabel]]) +
+            suggest("ধীর সাইট = শিক্ষার্থী চলে যাওয়া ও কম বিক্রি।", "গতি এই মানের নিচে নামলেই ব্যবস্থা নিন: হোমপেজ ২ সেকেন্ডের বেশি।", "ছবি হালকা রাখুন, ক্যাশ (Service Worker) চালু রাখুন — CEO প্রতিটি প্রকাশে মাপে।", home.ms !== null && home.ms >= 2000 ? "আজই" : "নিয়মিত পর্যবেক্ষণ"),
+          "hp-sec": rows([["Security Score", secScore + " / 100 — " + secBand.label], ["গড় বিশ্বাসযোগ্যতা", avgScore === null ? "এখনো মাপা হয়নি" : avgScore + " / 100 (" + scored.length + " জন মাপা)"], ["অস্থায়ী ইমেইল অ্যাকাউন্ট", dispN + "টি"], ["না-পড়া নিরাপত্তা রিপোর্ট", unreadReps + "টি"], ["প্রোফাইল পূর্ণতা (গড়)", completeness + "%"], ["ইমেইল কভারেজ", emailCov + "%"]]) +
+            suggest("উচ্চ স্কোর = আসল শিক্ষার্থী, কম জালিয়াতি, বেশি আস্থা।", "স্কোর ৮০-এর নিচে থাকলে প্রোফাইল পূর্ণতায় জোর দিন।", "ইনবক্সে রিপোর্ট পড়ুন, শিক্ষার্থীদের পেশা/প্রতিষ্ঠান/ছবি যোগ করতে উৎসাহ দিন।", unreadReps > 0 ? "আজই" : "এই সপ্তাহে"),
+          "hp-storage": rows([["Supabase ডেটাবেস", db ? fmtKB(db.db_bytes) + " (ফ্রি সীমা 500 MB-এর " + dbPct + "%)" : "মাপা যায়নি"], ["GitHub রিপো (কোড+ইতিহাস)", gh && gh.size ? fmtKB(gh.size * 1024) : "মাপা যায়নি"], ["সাইটের মূল ফাইলের ওজন (নমুনা)", fmtKB(siteWeight) + " (হোমপেজ+স্টাইল+১ ছবি)"], ["Vercel", "সাইটের একই ফাইল হোস্ট করে — বিস্তারিত ব্যবহার Vercel ড্যাশবোর্ডে"]]) +
+            suggest("স্টোরেজ ভরে গেলে সাইট/ডেটাবেস থেমে যেতে পারে — আগাম জানা জরুরি।", "DB ৮০% ছাড়ালে পুরনো/অপ্রয়োজনীয় ডেটা পরিষ্কারের পরিকল্পনা করুন।", "CCA এই প্যানেলে প্রতিবার লাইভ মাপে; বড় হলে CEO-কে বলুন।", dbPct !== null && dbPct >= 80 ? "এই সপ্তাহে" : "মাসে একবার দেখুন"),
+          "hp-perf": rows([["এই পেজের সার্ভার উত্তর (TTFB)", nav ? Math.round(nav.responseStart) + " ms" : "—"], ["পেজ তৈরি সম্পূর্ণ (DOM)", nav ? Math.round(nav.domContentLoadedEventEnd) + " ms" : "—"], ["সম্পূর্ণ লোড", nav ? Math.round(nav.loadEventEnd || nav.duration || 0) + " ms" : "—"], ["লোড হওয়া রিসোর্স", performance.getEntriesByType ? performance.getEntriesByType("resource").length + "টি" : "—"]]) +
+            suggest("মসৃণ পারফরম্যান্স = পেশাদার অনুভূতি ও বেশি ধরে রাখা।", "লোড ৩ সেকেন্ড ছাড়ালে ভারী ফাইল খুঁজুন।", "ছবি/স্ক্রিপ্ট হালকা রাখা ও ক্যাশ — Speed প্যানেলের সঙ্গে মিলিয়ে দেখুন।", "নিয়মিত"),
+          "hp-press": rows([["সার্ভারের উত্তর (গড়, ৩ বার মাপা)", avgPing === null ? "মাপা যায়নি" : avgPing + " ms"], ["শেষ ৭ দিনে নতুন শিক্ষার্থী", signups7 + " জন"], ["শেষ ৭ দিনে অর্ডার", orders7 + "টি"], ["চাপের অবস্থা", pressLabel]]) +
+            suggest("চাপ বাড়লে পেজ ধীর হয় ও buffering বাড়ে — আগে থেকে জানলে প্রস্তুতি নেওয়া যায়।", "উত্তর ৮০০ms ছাড়ালে বা ভর্তি হঠাৎ বাড়লে নজর দিন।", "ভাইরাল/অফারের আগে CEO-কে বলুন — ক্যাশ ও ছবি যাচাই করে প্রস্তুত রাখবে।", avgPing !== null && avgPing >= 800 ? "আজই" : "অফারের আগে অবশ্যই")
+        };
+        holder.innerHTML =
+          '<div class="htiles">' + tiles.map(function (t) {
+            return '<button type="button" class="htile" data-hpanel="' + t.id + '"><span class="app-icon ' + t.cls + '">' + t.icon + '</span><span class="htile-label">' + t.label + '</span><span class="htile-status">' + ccaEsc(t.status) + '</span></button>';
+          }).join("") + '</div>' +
+          '<div class="hpanels">' + tiles.map(function (t) {
+            return '<div class="hpanel" id="' + t.id + '">' + panels[t.id] + '</div>';
+          }).join("") + '</div>';
+      });
+    }).catch(function () { holder.innerHTML = '<p class="empty-note">স্বাস্থ্য মাপা যায়নি — আবার চেষ্টা করুন।</p>'; });
+  }
+  window.SSA_loadCCAHealth = loadCCAHealth;
   document.addEventListener("click", function (e) {
     var b = e.target && e.target.closest ? e.target.closest("[data-pact]") : null;
     if (!b || !window.SSA_DB) return;

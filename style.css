@@ -852,3 +852,32 @@ html.io-on .reveal.in{opacity:1;transform:none}
 .cca-row{font-size:14.2px;line-height:1.6;color:#374151}
 .cca-when{margin:14px 0 6px;color:#232946}
 .cca-todo{margin:0;padding-left:20px;line-height:1.9;font-size:14.5px}
+
+/* CCA dropdowns + Site Health app-icon tiles */
+.cca-acc{display:flex;flex-direction:column;gap:9px}
+.cca-item{background:linear-gradient(180deg,#fff,#FFF9FB);border:1.5px solid #F0D9E4;border-radius:14px;overflow:hidden;transition:border-color .25s ease,box-shadow .25s ease}
+.cca-item:hover{border-color:#E79FC0}
+.cca-item.open{border-color:#B90E59;box-shadow:0 8px 22px rgba(185,14,89,.12)}
+.cca-head{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;cursor:pointer;text-align:left;padding:12px 14px;font-family:'Hind Siliguri',sans-serif}
+.cca-ht{flex:1;font-size:15.3px;font-weight:700;color:#232946;line-height:1.45}
+.cca-chev{width:26px;height:26px}
+.cca-item.open .cca-chev{transform:rotate(180deg)}
+.cca-body{max-height:0;overflow:hidden;transition:max-height .38s ease;padding:0 15px}
+.cca-body .cca-row{font-size:14.2px;line-height:1.65;color:#374151;padding-bottom:7px}
+.cca-body .cca-row:first-child{padding-top:2px}
+.cca-body .cca-row:last-child{padding-bottom:13px}
+.htiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;margin:6px 0 12px}
+.htile{background:#fff;border:1.5px solid #F0D9E4;border-radius:18px;padding:13px 8px 11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;font-family:'Hind Siliguri',sans-serif}
+.htile:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(35,41,70,.10);border-color:#E79FC0}
+.app-icon{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 14px rgba(35,41,70,.18),inset 0 1px 0 rgba(255,255,255,.45)}
+.app-icon.g-green{background:linear-gradient(135deg,#2ECC71,#1FA463)}
+.app-icon.g-blue{background:linear-gradient(135deg,#4FA3FF,#2563EB)}
+.app-icon.g-purple{background:linear-gradient(135deg,#B07CFF,#7C3AED)}
+.app-icon.g-pink{background:linear-gradient(135deg,#FF7EB6,#B90E59)}
+.app-icon.g-amber{background:linear-gradient(135deg,#FFC93C,#F59E0B)}
+.htile-label{font-size:13.5px;font-weight:700;color:#232946}
+.htile-status{font-size:12px;color:#6B7280}
+.hpanel{max-height:0;overflow:hidden;transition:max-height .38s ease;background:#FFF9FB;border-radius:14px}
+.hpanel.open{border:1.5px solid #F0D9E4;padding:12px 15px;margin-bottom:12px}
+.hpanel .cca-row{font-size:14.2px;line-height:1.65;color:#374151;padding-bottom:6px}
+.hpanel-sug{margin-top:8px;border-top:1px dashed #F0D9E4;padding-top:9px}
