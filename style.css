@@ -353,7 +353,7 @@ a{color:var(--pink);text-decoration:none}
 .n-msg.me{background:var(--pink);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
 .n-msg.typing{color:var(--muted);font-style:italic}
 .n-input{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line);background:#fff}
-.n-input input{flex:1;padding:10px 13px;border:1.5px solid #E3D5DE;border-radius:999px;font-size:14.5px;font-family:'Hind Siliguri',sans-serif}
+.n-input input{flex:1;min-width:0;padding:10px 13px;border:1.5px solid #E3D5DE;border-radius:999px;font-size:14.5px;font-family:'Hind Siliguri',sans-serif}
 .n-input input:focus{outline:none;border-color:var(--pink)}
 .n-input button{background:var(--pink);color:#fff;border:0;border-radius:999px;padding:10px 17px;font-weight:600;cursor:pointer;font-family:'Hind Siliguri',sans-serif}
 .n-input button:hover{background:var(--pink-dark)}
