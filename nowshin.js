@@ -256,11 +256,12 @@
     input.focus();
   }
   pill.addEventListener("click", function () {
-    if (box.classList.contains("open")) { box.classList.remove("open"); pill.classList.remove("keep"); } else openBox();
+    if (box.classList.contains("open")) { box.classList.remove("open"); pill.classList.remove("keep"); voiceUsed = false; } else openBox();
   });
   box.querySelector(".n-close").addEventListener("click", function () {
     box.classList.remove("open");
     pill.classList.remove("keep");
+    voiceUsed = false;
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     if (typeof stopListening === "function" && listening) stopListening();
   });
@@ -542,6 +543,10 @@
     ev.preventDefault();
     var text = input.value.replace(/^\s+|\s+$/g, "");
     if (!text || busy) return;
+    /* Voice in → voice reply; typed in → text reply only. A typed
+       message must never trigger sound, even if the speaker is on. */
+    var wasVoice = voiceUsed;
+    voiceUsed = false;
     if (window.SSA_secFail) window.SSA_secFail("chat");
     input.value = "";
     addMsg(text, "me");
@@ -562,7 +567,7 @@
       var answered = !!(data && data.reply);
       var reply = answered ? String(data.reply) : FALLBACK;
       addMsg(reply, "bot");
-      speak(reply);
+      if (wasVoice) speak(reply);
       addVoteRow(text, reply);
       history.push({ role: "bot", text: reply });
       logExchange(text, reply, answered ? "" : "NEEDS-CEO");
@@ -570,7 +575,7 @@
     }).catch(function () {
       typing.parentNode && typing.parentNode.removeChild(typing);
       addMsg(FALLBACK, "bot");
-      speak(FALLBACK);
+      if (wasVoice) speak(FALLBACK);
       addVoteRow(text, FALLBACK);
       logExchange(text, FALLBACK, "NEEDS-CEO");
       busy = false;
