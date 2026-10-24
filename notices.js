@@ -47,9 +47,10 @@
     render(DEFAULTS);
     watchFooter();
   }
-  function open() { if (panel) panel.classList.add("open"); if (fab) fab.classList.add("keep"); }
+  function open() { if (window.SSA_closeNowshin) window.SSA_closeNowshin(); if (panel) panel.classList.add("open"); if (fab) fab.classList.add("keep"); }
   function close() { if (panel) panel.classList.remove("open"); if (fab) fab.classList.remove("keep"); }
-  function toggle() { if (!panel) return; suppressed = false; panel.classList.toggle("open"); }
+  window.SSA_closeNotices = close;
+  function toggle() { if (!panel) return; suppressed = false; var opening = !panel.classList.contains("open"); if (opening && window.SSA_closeNowshin) window.SSA_closeNowshin(); panel.classList.toggle("open"); }
   function render(rows) {
     if (!panel) return;
     var list = panel.querySelector(".notice-panel-list");
@@ -75,7 +76,7 @@
           if (fab) fab.classList.add("show");
           if (autoShown || suppressed) return;
           dwellTimer = setTimeout(function () {
-            if (!suppressed) { autoShown = true; open(); }
+            if (!suppressed && !document.querySelector(".nowshin-box.open")) { autoShown = true; open(); }
           }, 1200);
         } else {
           if (fab) fab.classList.remove("show");
