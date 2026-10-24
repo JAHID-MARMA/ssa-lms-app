@@ -748,7 +748,8 @@ html.io-on .reveal.in{opacity:1;transform:none}
 }
 
 /* ——— Notice icon + glassy green notice board (Founder redesign 2026-10-22) ——— */
-.notice-fab{position:fixed;left:16px;bottom:16px;z-index:900;width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:linear-gradient(135deg,rgba(24,140,80,.92),rgba(13,110,51,.92));color:#fff;font-size:24px;cursor:pointer;box-shadow:0 14px 30px rgba(13,110,51,.4),inset 0 1px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.notice-fab{position:static;z-index:900;width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:linear-gradient(135deg,rgba(24,140,80,.92),rgba(13,110,51,.92));color:#fff;font-size:24px;cursor:pointer;box-shadow:0 14px 30px rgba(13,110,51,.4),inset 0 1px 0 rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.site-footer .notice-fab{margin:18px auto 8px}
 .notice-fab:hover{transform:translateY(-2px)}
 .notice-fab-dot{position:absolute;top:9px;right:10px;width:11px;height:11px;border-radius:50%;background:#FF4D8D;border:2px solid #fff}
 .notice-panel{position:fixed;left:14px;bottom:86px;z-index:901;width:350px;max-width:calc(100vw - 28px);background:linear-gradient(150deg,rgba(20,122,66,.88),rgba(10,84,40,.9));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.45);border-radius:18px;box-shadow:0 26px 55px rgba(7,60,30,.45),inset 0 1px 0 rgba(255,255,255,.5);color:#fff;padding:16px 18px 12px;transform:translateX(-115%);opacity:0;transition:transform .55s cubic-bezier(.22,.9,.3,1),opacity .45s}
