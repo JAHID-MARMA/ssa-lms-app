@@ -28,9 +28,12 @@
   box.innerHTML =
     '<div class="n-head"><span class="n-avatar"><img src="assets/nowshin-avatar.webp" alt="Nowshin Jannat"><span class="online-dot"></span></span>' +
     '<span><b>Nowshin Jannat</b><small>Customer Manager — অনলাইনে আছেন</small></span>' +
+    '<button class="n-speak" type="button" aria-label="Voice replies on or off">🔇</button>' +
     '<button class="n-close" type="button" aria-label="Close">×</button></div>' +
     '<div class="n-msgs"></div>' +
     '<form class="n-input"><input type="text" placeholder="আপনার প্রশ্ন লিখুন…" autocomplete="off">' +
+    '<button class="n-lang" type="button" aria-label="Voice language">বাং</button>' +
+    '<button class="n-mic" type="button" aria-label="Speak your question">🎤</button>' +
     '<button type="submit">পাঠান</button></form>';
 
   document.body.appendChild(pill);
@@ -244,6 +247,7 @@
     if (!greeted) {
       greeted = true;
       addMsg(GREETING, "bot");
+      speak(GREETING);
       history.push({ role: "bot", text: GREETING });
       /* First visit on this device: ask for name + mobile (lead). */
       if (!getLead()) { showLeadForm(); return; }
@@ -253,7 +257,11 @@
   pill.addEventListener("click", function () {
     if (box.classList.contains("open")) box.classList.remove("open"); else openBox();
   });
-  box.querySelector(".n-close").addEventListener("click", function () { box.classList.remove("open"); });
+  box.querySelector(".n-close").addEventListener("click", function () {
+    box.classList.remove("open");
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    if (typeof stopListening === "function" && listening) stopListening();
+  });
 
   /* Footer / strip "Ask Nowshin" triggers */
   document.addEventListener("click", function (ev) {
@@ -263,6 +271,102 @@
       t = t.parentNode;
     }
   });
+
+  /* ── Voice (Founder order 2026-10-24): talk to Nowshin directly from
+     her icon — the browser's own speech (Chrome Web Speech API), so it
+     costs nothing at any student count. Mic = speech recognition
+     (bn-BD / en-US toggle); speaker = Nowshin's replies read aloud.
+     Everything is capability-guarded: on a browser without these APIs
+     the buttons simply never appear and the chat stays text-only. */
+  var micBtn = box.querySelector(".n-mic");
+  var langBtn = box.querySelector(".n-lang");
+  var speakBtn = box.querySelector(".n-speak");
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  var voiceLang = "bn-BD";
+  var speakOn = false;
+  try {
+    voiceLang = localStorage.getItem("ssa_nowshin_vlang") || "bn-BD";
+    speakOn = localStorage.getItem("ssa_nowshin_speak") === "1";
+  } catch (e) {}
+  function paintVoiceBtns() {
+    langBtn.textContent = voiceLang === "bn-BD" ? "বাং" : "EN";
+    speakBtn.textContent = speakOn ? "🔊" : "🔇";
+    speakBtn.classList.toggle("on", !!speakOn);
+  }
+  if (!SR) { micBtn.style.display = "none"; langBtn.style.display = "none"; }
+  if (!("speechSynthesis" in window)) { speakBtn.style.display = "none"; }
+  paintVoiceBtns();
+
+  langBtn.addEventListener("click", function () {
+    voiceLang = voiceLang === "bn-BD" ? "en-US" : "bn-BD";
+    try { localStorage.setItem("ssa_nowshin_vlang", voiceLang); } catch (e) {}
+    paintVoiceBtns();
+    input.focus();
+  });
+  speakBtn.addEventListener("click", function () {
+    speakOn = !speakOn;
+    try { localStorage.setItem("ssa_nowshin_speak", speakOn ? "1" : "0"); } catch (e) {}
+    if (!speakOn && "speechSynthesis" in window) speechSynthesis.cancel();
+    paintVoiceBtns();
+    if (speakOn) speak(voiceLang === "bn-BD" ? "ভয়েস চালু হয়েছে। বলুন, আমি শুনছি।" : "Voice is on. Ask me anything.");
+  });
+
+  var recog = null;
+  var listening = false;
+  function stopListening() {
+    listening = false;
+    micBtn.classList.remove("listening");
+    input.placeholder = "আপনার প্রশ্ন লিখুন…";
+    if (recog) { try { recog.stop(); } catch (e) {} }
+  }
+  micBtn.addEventListener("click", function () {
+    if (!SR) return;
+    if (listening) { stopListening(); return; }
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    recog = new SR();
+    recog.lang = voiceLang;
+    recog.interimResults = true;
+    recog.continuous = false;
+    listening = true;
+    micBtn.classList.add("listening");
+    input.placeholder = voiceLang === "bn-BD" ? "শুনছি… বলুন" : "Listening… speak now";
+    recog.onresult = function (ev) {
+      var finalText = "", interim = "";
+      for (var i = 0; i < ev.results.length; i++) {
+        if (ev.results[i].isFinal) finalText += ev.results[i][0].transcript;
+        else interim += ev.results[i][0].transcript;
+      }
+      input.value = finalText || interim;
+      if (finalText) {
+        stopListening();
+        if (form.requestSubmit) form.requestSubmit();
+        else form.dispatchEvent(new Event("submit", { cancelable: true }));
+      }
+    };
+    recog.onend = function () { if (listening) stopListening(); };
+    recog.onerror = function () { if (listening) stopListening(); };
+    try { recog.start(); } catch (e) { stopListening(); }
+  });
+
+  function speak(text) {
+    if (!speakOn || !("speechSynthesis" in window) || !text) return;
+    try {
+      speechSynthesis.cancel();
+      var clean = String(text).replace(/[*_#`>]/g, "").slice(0, 600);
+      var u = new SpeechSynthesisUtterance(clean);
+      var isBn = /[\u0980-\u09FF]/.test(clean);
+      u.lang = isBn ? "bn-BD" : "en-US";
+      var voices = speechSynthesis.getVoices() || [];
+      for (var i = 0; i < voices.length; i++) {
+        if ((voices[i].lang || "").toLowerCase().indexOf(isBn ? "bn" : "en") === 0) { u.voice = voices[i]; break; }
+      }
+      u.rate = 1.0;
+      speechSynthesis.speak(u);
+    } catch (e) { /* voice is an extra — never break the chat */ }
+  }
+  if ("speechSynthesis" in window && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = function () {};
+  }
 
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
@@ -288,6 +392,7 @@
       var answered = !!(data && data.reply);
       var reply = answered ? String(data.reply) : FALLBACK;
       addMsg(reply, "bot");
+      speak(reply);
       addVoteRow(text, reply);
       history.push({ role: "bot", text: reply });
       logExchange(text, reply, answered ? "" : "NEEDS-CEO");
@@ -295,6 +400,7 @@
     }).catch(function () {
       typing.parentNode && typing.parentNode.removeChild(typing);
       addMsg(FALLBACK, "bot");
+      speak(FALLBACK);
       addVoteRow(text, FALLBACK);
       logExchange(text, FALLBACK, "NEEDS-CEO");
       busy = false;
