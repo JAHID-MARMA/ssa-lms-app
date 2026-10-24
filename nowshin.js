@@ -373,6 +373,8 @@
     /* A breath pause must never send the message: words only fill the
        box, and he presses Send himself when he is really finished. */
     var voiceBase = "";
+    var voiceSegs = [];
+    var lastFinalNorm = "";
     /* If nothing is heard within 4s of tapping, say so plainly instead
        of leaving him wondering whether it understood anything. */
     var heardTimer = setTimeout(function () {
@@ -388,11 +390,24 @@
       var interim = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
         if (ev.results[i].isFinal) {
-          voiceUsed = true;
-          voiceBase = (voiceBase ? voiceBase + " " : "") + punctuate(ev.results[i][0].transcript.trim(), voiceLang === "bn-BD");
+          var raw = ev.results[i][0].transcript.trim();
+          var norm = raw.replace(/[।?!.…,;:]+$/g, "").trim();
+          /* Chrome re-delivers the same words after a mic restart:
+             an exact repeat is skipped, and a growing repeat replaces
+             the previous segment instead of piling up. */
+          if (norm && norm !== lastFinalNorm) {
+            if (lastFinalNorm && norm.indexOf(lastFinalNorm) === 0) voiceSegs.pop();
+            voiceSegs.push(punctuate(raw, voiceLang === "bn-BD"));
+            lastFinalNorm = norm;
+            voiceUsed = true;
+            voiceBase = voiceSegs.join(" ");
+          }
         }
         else interim += ev.results[i][0].transcript;
       }
+      /* An interim echo of words already finalised is not shown. */
+      var interimNorm = interim.replace(/[।?!.…,;:]+$/g, "").trim();
+      if (lastFinalNorm && interimNorm && (interimNorm === lastFinalNorm || lastFinalNorm.indexOf(interimNorm) === 0)) interim = "";
       input.value = (voiceBase + (interim ? " " + interim : "")).trim();
     };
     recog.onend = function () {
