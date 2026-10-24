@@ -329,9 +329,11 @@ a{color:var(--pink);text-decoration:none}
   position:fixed;right:18px;bottom:18px;z-index:120;background:var(--pink);color:#fff;
   border:0;border-radius:999px;padding:12px 20px 12px 16px;font-size:16px;font-weight:600;cursor:pointer;
   display:flex;align-items:center;gap:9px;box-shadow:0 10px 26px rgba(226,19,110,.38);
-  font-family:'Poppins','Hind Siliguri',sans-serif;transition:transform .18s,background .18s;
+  font-family:'Poppins','Hind Siliguri',sans-serif;opacity:0;pointer-events:none;transform:translateY(12px);
+  transition:transform .45s,opacity .45s,background .18s;
 }
-.nowshin-pill:hover{background:var(--pink-dark);transform:translateY(-2px)}
+.nowshin-pill.show,.nowshin-pill.keep{opacity:1;pointer-events:auto;transform:translateY(0)}
+.nowshin-pill.show:hover,.nowshin-pill.keep:hover{background:var(--pink-dark);transform:translateY(-2px)}
 .pill-face{position:relative;display:inline-flex;flex:none}
 .pill-face img{width:26px;height:26px;border-radius:50%;object-fit:cover;display:block}
 .pill-face .online-dot{position:absolute;right:-2px;bottom:-2px;width:10px;height:10px;border:2px solid #fff}
