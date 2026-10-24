@@ -301,6 +301,7 @@
     voiceLang = voiceLang === "bn-BD" ? "en-US" : "bn-BD";
     try { localStorage.setItem("ssa_nowshin_vlang", voiceLang); } catch (e) {}
     paintVoiceBtns();
+    if (!listening) input.placeholder = voiceLang === "bn-BD" ? "আপনার প্রশ্ন লিখুন…" : "Write your question here…";
     input.focus();
   });
   speakBtn.addEventListener("click", function () {
@@ -316,7 +317,7 @@
   function stopListening() {
     listening = false;
     micBtn.classList.remove("listening");
-    input.placeholder = "আপনার প্রশ্ন লিখুন…";
+    input.placeholder = voiceLang === "bn-BD" ? "আপনার প্রশ্ন লিখুন…" : "Write your question here…";
     if (recog) { try { recog.stop(); } catch (e) {} }
   }
   micBtn.addEventListener("click", function () {
