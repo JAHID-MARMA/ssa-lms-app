@@ -1,8 +1,10 @@
 /* Self Scale Academy — Notices v2 (Founder redesign 2026-10-22).
-   A small notice icon sits at the lower-left side. Clicking it opens the
-   notice board. When a visitor reaches the footer and STAYS to read, the
-   board also glides in from the left by itself — premium, glassy, green —
-   and stays while they are there. If they do not stay, it never comes.
+   The notice button lives IN THE FOOTER, not floating on the screen: it
+   scrolls with the page, so it is there at the foot and gone while the
+   visitor works elsewhere. Clicking it opens the notice board. When a
+   visitor reaches the footer and STAYS to read, the board also glides
+   in from the left by itself — premium, glassy, green — and stays while
+   they are there. If they do not stay, it never comes.
    Notices come from Supabase `site_notices` (Super Admin → Settings). */
 (function () {
   var DEFAULTS = [
@@ -30,7 +32,10 @@
       '<button type="button" class="notice-panel-close" aria-label="বন্ধ করুন">✕</button></div>' +
       '<ul class="notice-panel-list"></ul>' +
       '<p class="notice-panel-foot">সব আপডেট ও শুভেচ্ছা এখানেই পাবেন 💚</p>';
-    document.body.appendChild(fab); document.body.appendChild(panel);
+    /* Button goes into the footer (page flow) — never floating fixed. */
+    var foot = document.querySelector(".site-footer");
+    if (foot) foot.appendChild(fab); else document.body.appendChild(fab);
+    document.body.appendChild(panel);
     fab.addEventListener("click", function () { toggle(); });
     panel.querySelector(".notice-panel-close").addEventListener("click", function () {
       suppressed = true; close();
