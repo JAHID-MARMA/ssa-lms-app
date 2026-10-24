@@ -761,7 +761,7 @@ html.io-on .reveal.in{opacity:1;transform:none}
 .notice-panel-close{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;line-height:1}
 .notice-panel-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .notice-panel-list li{display:flex;gap:9px;align-items:flex-start;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:9px 11px;line-height:1.55;font-size:14px}
-.np-date{flex:none;background:#fff;color:#0d6e33;font-weight:700;font-size:11.5px;padding:2px 8px;border-radius:99px;margin-top:1px}
+.np-date{flex:none;background:#fff;color:#0d6e33;font-weight:700;font-size:11.5px;padding:2px 8px;border-radius:99px;margin-top:1px;white-space:nowrap}
 .np-text b{font-weight:700}
 .notice-panel-foot{margin:10px 0 2px;font-size:12.5px;opacity:.85;text-align:center}
 .sec-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(24px);z-index:9995;background:#263238;color:#fff;font-size:14.5px;font-weight:600;padding:12px 20px;border-radius:99px;box-shadow:0 16px 36px rgba(0,0,0,.35);opacity:0;transition:opacity .35s,transform .35s;max-width:calc(100vw - 32px);text-align:center;line-height:1.5}
