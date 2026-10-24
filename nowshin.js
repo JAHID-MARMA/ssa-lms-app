@@ -372,10 +372,17 @@
     };
     recog.onerror = function (ev) {
       if (!listening) return;
-      var blocked = ev && (ev.error === "not-allowed" || ev.error === "service-not-allowed");
+      var err = ev && ev.error;
       stopListening();
-      if (blocked) {
+      /* Never fail silently: the box itself must say why it stopped. */
+      if (err === "not-allowed" || err === "service-not-allowed") {
         input.placeholder = voiceLang === "bn-BD" ? "Mic বন্ধ আছে — address bar-এর mic icon থেকে Allow করুন" : "Mic is blocked — Allow it from the mic icon in the address bar";
+      } else if (err === "audio-capture") {
+        input.placeholder = voiceLang === "bn-BD" ? "Mic পাওয়া যাচ্ছে না — laptop-এর mic চেক করুন" : "No microphone found — check your laptop mic";
+      } else if (err === "network") {
+        input.placeholder = voiceLang === "bn-BD" ? "Network সমস্যা — আবার mic চাপুন" : "Network problem — tap mic again";
+      } else {
+        input.placeholder = voiceLang === "bn-BD" ? "শোনা যাচ্ছে না — আবার বলুন (ভাষা বাং/EN মিলিয়ে নিন)" : "Cannot hear you — speak again (check বাং/EN)";
       }
     };
     try { recog.start(); } catch (e) {
