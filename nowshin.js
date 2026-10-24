@@ -357,9 +357,16 @@
       var isBn = /[\u0980-\u09FF]/.test(clean);
       u.lang = isBn ? "bn-BD" : "en-US";
       var voices = speechSynthesis.getVoices() || [];
+      var want = isBn ? "bn" : "en", first = null, female = null, google = null;
       for (var i = 0; i < voices.length; i++) {
-        if ((voices[i].lang || "").toLowerCase().indexOf(isBn ? "bn" : "en") === 0) { u.voice = voices[i]; break; }
+        var vl = (voices[i].lang || "").toLowerCase();
+        if (vl.indexOf(want) !== 0) continue;
+        if (!first) first = voices[i];
+        var vn = (voices[i].name || "").toLowerCase();
+        if (!female && /female|zira|aria|samantha|natasha|heera|google বাংলা|google हिन्दी/.test(vn)) female = voices[i];
+        if (!google && vn.indexOf("google") === 0) google = voices[i];
       }
+      u.voice = female || google || first;
       u.rate = 1.0;
       speechSynthesis.speak(u);
     } catch (e) { /* voice is an extra — never break the chat */ }
