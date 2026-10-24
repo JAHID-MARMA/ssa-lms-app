@@ -333,7 +333,15 @@
     /* A breath pause must never send the message: words only fill the
        box, and he presses Send himself when he is really finished. */
     var voiceBase = "";
+    /* If nothing is heard within 4s of tapping, say so plainly instead
+       of leaving him wondering whether it understood anything. */
+    var heardTimer = setTimeout(function () {
+      if (listening && !input.value) {
+        input.placeholder = voiceLang === "bn-BD" ? "শোনা যাচ্ছে না — আবার বলুন (ভাষা বাং/EN মিলিয়ে নিন)" : "Cannot hear you — speak again (check বাং/EN)";
+      }
+    }, 4000);
     recog.onresult = function (ev) {
+      clearTimeout(heardTimer);
       var interim = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
         if (ev.results[i].isFinal) voiceBase = (voiceBase ? voiceBase + " " : "") + ev.results[i][0].transcript.trim();
@@ -364,31 +372,61 @@
       var parts = [], re = /[^।.!?]+[।.!?]?/g, m;
       while ((m = re.exec(clean)) !== null) { var s = m[0].trim(); if (s) parts.push(s); }
       if (!parts.length) parts = [clean];
-      var chunks = [];
+      var rawChunks = [];
       for (var p = 0; p < parts.length; p++) {
         var sentence = parts[p];
         while (sentence.length > 200) {
           var cut = sentence.lastIndexOf(" ", 200);
           if (cut < 60) cut = 200;
-          chunks.push(sentence.slice(0, cut).trim());
+          rawChunks.push(sentence.slice(0, cut).trim());
           sentence = sentence.slice(cut).trim();
         }
-        if (sentence) chunks.push(sentence);
+        if (sentence) rawChunks.push(sentence);
+      }
+      /* Split each piece further by script: a Bangla run is spoken by the
+         Bangla voice, an English run by the English voice — so no Bangla
+         part ever pops up in the middle of an English reply, or reverse. */
+      var chunks = [];
+      for (var q = 0; q < rawChunks.length; q++) {
+        var piece = rawChunks[q], runs = [], cur = "", curBn = null;
+        for (var c = 0; c < piece.length; c++) {
+          var ch = piece.charAt(c);
+          var isB = /[\u0980-\u09FF]/.test(ch);
+          if (curBn === null) { curBn = isB; cur = ch; }
+          else if (isB === curBn) { cur += ch; }
+          else { runs.push(cur); cur = ch; curBn = isB; }
+        }
+        if (cur) runs.push(cur);
+        for (var r = 0; r < runs.length; r++) {
+          var run = runs[r].trim();
+          if (!run) continue;
+          if (run.length < 4 && chunks.length) chunks[chunks.length - 1] += " " + run;
+          else chunks.push(run);
+        }
       }
       /* Each chunk gets its own language's female-preferred voice, so the
          voice never flips to male in the middle of a reply. */
+      /* STRICT RULE: only a female voice, ever. A male voice is never
+         used — not even as a fallback. Chrome's Google voices are female. */
+      var FEMALE_RE = /female|woman|zira|aria|samantha|natasha|heera|ananya|priya|tania|taniya|sunita|mona|sonia|farida|nusrat|google বাংলা|^google /;
+      function isFemaleVoice(v) {
+        return v && FEMALE_RE.test((v.name || "").toLowerCase());
+      }
       function pickVoice(isBn) {
         var voices = speechSynthesis.getVoices() || [];
-        var want = isBn ? "bn" : "en", first = null, female = null, google = null;
+        var want = isBn ? "bn" : "en";
         for (var i = 0; i < voices.length; i++) {
           var vl = (voices[i].lang || "").toLowerCase();
-          if (vl.indexOf(want) !== 0) continue;
-          if (!first) first = voices[i];
-          var vn = (voices[i].name || "").toLowerCase();
-          if (!female && /female|zira|aria|samantha|natasha|heera|google বাংলা/.test(vn)) female = voices[i];
-          if (!google && vn.indexOf("google") === 0) google = voices[i];
+          if (vl.indexOf(want) === 0 && isFemaleVoice(voices[i])) return voices[i];
         }
-        return female || google || first;
+        return null;
+      }
+      function anyFemaleVoice() {
+        var voices = speechSynthesis.getVoices() || [];
+        for (var i = 0; i < voices.length; i++) {
+          if (isFemaleVoice(voices[i])) return voices[i];
+        }
+        return null;
       }
       var qi = 0, fastErr = 0, fellBack = false;
       function sayNext() {
@@ -397,8 +435,12 @@
         var isBn = /[\u0980-\u09FF]/.test(txt);
         var u = new SpeechSynthesisUtterance(txt);
         u.lang = isBn ? "bn-BD" : "en-US";
-        var v = pickVoice(isBn);
-        if (v) u.voice = v;
+        /* Female voice of this chunk's language, else any female voice —
+           never a male voice. If none exists, skip speech, text stays. */
+        var v = pickVoice(isBn) || anyFemaleVoice();
+        if (!v) { sayNext(); return; }
+        u.voice = v;
+        u.pitch = 1.0;
         u.rate = 1.0;
         var t0 = Date.now();
         u.onend = function () { fastErr = 0; sayNext(); };
@@ -416,9 +458,17 @@
         speechSynthesis.speak(u);
       }
       /* Stop any old speech, then start a beat later: speaking in the same
-         tick as cancel() is what makes Chrome drop the new voice. */
+         tick as cancel() is what makes Chrome drop the new voice. The
+         voice list loads late on some machines, so wait up to 1.5s for a
+         female voice to appear; if none ever appears, stay silent. */
       speechSynthesis.cancel();
-      setTimeout(sayNext, 80);
+      var voiceTries = 0;
+      function startChain() {
+        var firstBn = chunks.length && /[\u0980-\u09FF]/.test(chunks[0]);
+        if (pickVoice(firstBn) || anyFemaleVoice()) { sayNext(); return; }
+        if (voiceTries++ < 15) { setTimeout(startChain, 100); return; }
+      }
+      setTimeout(startChain, 80);
     } catch (e) { /* voice is an extra — never break the chat */ }
   }
   if ("speechSynthesis" in window) {
