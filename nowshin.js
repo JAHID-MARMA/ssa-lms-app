@@ -331,10 +331,30 @@
 
   var recog = null;
   var listening = false;
+  var voiceUsed = false;
+  /* Voice text must carry sentence punctuation, or it is hard to read:
+     Bangla ends with dari (।), English with a full stop; a question
+     word makes it a question mark. Mid-sentence commas are left out —
+     a wrong comma hurts understanding more than a missing one. */
+  function punctuate(text, bn) {
+    var t = String(text).trim();
+    if (!t || /[।?!.…:]$/.test(t)) return t;
+    if (bn) {
+      var q = ["কি", "কী", "কেন", "কখন", "কোথায়", "কবে", "কত", "কিভাবে", "কীভাবে", "কেমন", "কার", "কোন"];
+      var words = t.split(/\s+/);
+      for (var i = 0; i < words.length; i++) {
+        if (q.indexOf(words[i].replace(/[।?!,.:;]+$/, "")) >= 0) return t + "?";
+      }
+      return t + "।";
+    }
+    if (/^(what|why|when|where|who|whom|whose|which|how|is|are|was|were|do|does|did|can|could|will|would|should|may|might)\b/i.test(t)) return t + "?";
+    return t + ".";
+  }
   function stopListening() {
     listening = false;
     micBtn.classList.remove("listening");
     input.placeholder = voiceLang === "bn-BD" ? "আপনার প্রশ্ন লিখুন…" : "Write your question here…";
+    if (voiceUsed && input.value) input.value = punctuate(input.value, voiceLang === "bn-BD");
     if (recog) { try { recog.stop(); } catch (e) {} }
   }
   micBtn.addEventListener("click", function () {
@@ -346,6 +366,7 @@
     recog.interimResults = true;
     recog.continuous = true;
     listening = true;
+    voiceUsed = false;
     micBtn.classList.add("listening");
     input.placeholder = voiceLang === "bn-BD" ? "শুনছি… শেষ হলে mic-এ আবার চাপুন" : "Listening… tap mic again when done";
     /* A breath pause must never send the message: words only fill the
@@ -362,7 +383,10 @@
       clearTimeout(heardTimer);
       var interim = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
-        if (ev.results[i].isFinal) voiceBase = (voiceBase ? voiceBase + " " : "") + ev.results[i][0].transcript.trim();
+        if (ev.results[i].isFinal) {
+          voiceUsed = true;
+          voiceBase = (voiceBase ? voiceBase + " " : "") + punctuate(ev.results[i][0].transcript.trim(), voiceLang === "bn-BD");
+        }
         else interim += ev.results[i][0].transcript;
       }
       input.value = (voiceBase + (interim ? " " + interim : "")).trim();
