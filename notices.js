@@ -16,7 +16,10 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-  function fmtDate(iso) { try { return iso ? new Date(iso).toLocaleDateString("en-GB") : ""; } catch (e) { return ""; } }
+  /* Bangladesh time, always: a visitor on a foreign-timezone device
+     must still see the same Bangladesh date as a Dhaka visitor. */
+  function fmtDate(iso) { try { return iso ? new Date(iso).toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka" }) : ""; } catch (e) { return ""; } }
+  function todayBD() { try { return new Date().toLocaleDateString("en-GB", { timeZone: "Asia/Dhaka" }); } catch (e) { return ""; } }
 
   var fab = null, panel = null, autoShown = false, suppressed = false, dwellTimer = null;
 
@@ -30,6 +33,7 @@
     panel.innerHTML =
       '<div class="notice-panel-head"><span>📋 নোটিশ বোর্ড</span>' +
       '<button type="button" class="notice-panel-close" aria-label="বন্ধ করুন">✕</button></div>' +
+      '<p class="notice-panel-today">আজ • ' + todayBD() + '</p>' +
       '<ul class="notice-panel-list"></ul>' +
       '<p class="notice-panel-foot">সব আপডেট ও শুভেচ্ছা এখানেই পাবেন 💚</p>';
     /* Fixed at the left bottom corner, parallel to Ask Nowshin (right) —
