@@ -351,7 +351,6 @@
   function speak(text) {
     if (!speakOn || !("speechSynthesis" in window) || !text) return;
     try {
-      speechSynthesis.cancel();
       /* Strip markdown, symbols, emojis and links so the voice never reads
          "star", "comma" or other sign names — punctuation becomes pauses. */
       var clean = String(text)
@@ -391,7 +390,7 @@
         }
         return female || google || first;
       }
-      var qi = 0;
+      var qi = 0, fastErr = 0, fellBack = false;
       function sayNext() {
         if (qi >= chunks.length) return;
         var txt = chunks[qi++];
@@ -401,15 +400,33 @@
         var v = pickVoice(isBn);
         if (v) u.voice = v;
         u.rate = 1.0;
-        u.onend = sayNext;
-        u.onerror = sayNext;
+        var t0 = Date.now();
+        u.onend = function () { fastErr = 0; sayNext(); };
+        u.onerror = function () {
+          /* Chrome sometimes kills a fresh chain instantly after cancel():
+             if two chunks die in under 150ms, fall back to one plain
+             utterance of the whole reply so something is always heard. */
+          if (!fellBack && Date.now() - t0 < 150 && ++fastErr >= 2) {
+            fellBack = true;
+            try { speechSynthesis.speak(new SpeechSynthesisUtterance(clean)); } catch (e2) {}
+            return;
+          }
+          sayNext();
+        };
         speechSynthesis.speak(u);
       }
-      sayNext();
+      /* Stop any old speech, then start a beat later: speaking in the same
+         tick as cancel() is what makes Chrome drop the new voice. */
+      speechSynthesis.cancel();
+      setTimeout(sayNext, 80);
     } catch (e) { /* voice is an extra — never break the chat */ }
   }
-  if ("speechSynthesis" in window && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = function () {};
+  if ("speechSynthesis" in window) {
+    /* Warm the voice list up front so the first reply is never voiceless. */
+    speechSynthesis.getVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = function () { speechSynthesis.getVoices(); };
+    }
   }
 
   form.addEventListener("submit", function (ev) {
