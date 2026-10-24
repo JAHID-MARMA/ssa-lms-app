@@ -244,6 +244,7 @@
   }
   function openBox() {
     box.classList.add("open");
+    pill.classList.add("keep");
     if (!greeted) {
       greeted = true;
       addMsg(GREETING, "bot");
@@ -255,13 +256,29 @@
     input.focus();
   }
   pill.addEventListener("click", function () {
-    if (box.classList.contains("open")) box.classList.remove("open"); else openBox();
+    if (box.classList.contains("open")) { box.classList.remove("open"); pill.classList.remove("keep"); } else openBox();
   });
   box.querySelector(".n-close").addEventListener("click", function () {
     box.classList.remove("open");
+    pill.classList.remove("keep");
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     if (typeof stopListening === "function" && listening) stopListening();
   });
+
+  /* Ask Nowshin pill: hidden while scrolling mid-page, fixed at the
+     bottom-right only near the footer — same rule as the notice button,
+     so it never sits in front of the customer. Stays while chat is open. */
+  (function watchPillFooter() {
+    var footer = document.querySelector(".site-footer");
+    if (!footer || !("IntersectionObserver" in window)) { pill.classList.add("show"); return; }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) pill.classList.add("show");
+        else if (!box.classList.contains("open")) pill.classList.remove("show");
+      });
+    }, { threshold: 0.35 });
+    obs.observe(footer);
+  })();
 
   /* Footer / strip "Ask Nowshin" triggers */
   document.addEventListener("click", function (ev) {
@@ -419,7 +436,7 @@
          voice never flips to male in the middle of a reply. */
       /* STRICT RULE: only a female voice, ever. A male voice is never
          used — not even as a fallback. Chrome's Google voices are female. */
-      var FEMALE_RE = /female|woman|zira|aria|samantha|natasha|heera|ananya|priya|tania|taniya|sunita|mona|sonia|farida|nusrat|google বাংলা|^google /;
+      var FEMALE_RE = /female|woman|zira|aria|samantha|natasha|heera|ananya|priya|tania|taniya|sunita|mona|sonia|farida|nusrat|nabanita|google বাংলা|^google /;
       function isFemaleVoice(v) {
         return v && FEMALE_RE.test((v.name || "").toLowerCase());
       }
