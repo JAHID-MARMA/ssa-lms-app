@@ -32,9 +32,9 @@
       '<button type="button" class="notice-panel-close" aria-label="বন্ধ করুন">✕</button></div>' +
       '<ul class="notice-panel-list"></ul>' +
       '<p class="notice-panel-foot">সব আপডেট ও শুভেচ্ছা এখানেই পাবেন 💚</p>';
-    /* Button goes into the footer (page flow) — never floating fixed. */
-    var foot = document.querySelector(".site-footer");
-    if (foot) foot.appendChild(fab); else document.body.appendChild(fab);
+    /* Fixed at the left bottom corner, parallel to Ask Nowshin (right) —
+       hidden while scrolling mid-page; it glides in only near the footer. */
+    document.body.appendChild(fab);
     document.body.appendChild(panel);
     fab.addEventListener("click", function () { toggle(); });
     panel.querySelector(".notice-panel-close").addEventListener("click", function () {
@@ -43,8 +43,8 @@
     render(DEFAULTS);
     watchFooter();
   }
-  function open() { if (panel) panel.classList.add("open"); }
-  function close() { if (panel) panel.classList.remove("open"); }
+  function open() { if (panel) panel.classList.add("open"); if (fab) fab.classList.add("keep"); }
+  function close() { if (panel) panel.classList.remove("open"); if (fab) fab.classList.remove("keep"); }
   function toggle() { if (!panel) return; suppressed = false; panel.classList.toggle("open"); }
   function render(rows) {
     if (!panel) return;
@@ -60,18 +60,21 @@
   }
   window.SSA_renderNotices = render;
 
-  /* Glide in only when the visitor reaches the footer AND stays to read. */
+  /* Button glides in from the left only near the footer; panel auto-opens
+     only if the visitor stays at the footer to read. */
   function watchFooter() {
     var footer = document.querySelector(".site-footer");
-    if (!footer || !("IntersectionObserver" in window)) return;
+    if (!footer || !("IntersectionObserver" in window)) { if (fab) fab.classList.add("show"); return; }
     var obs = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) {
+          if (fab) fab.classList.add("show");
           if (autoShown || suppressed) return;
           dwellTimer = setTimeout(function () {
             if (!suppressed) { autoShown = true; open(); }
           }, 1200);
         } else {
+          if (fab) fab.classList.remove("show");
           if (dwellTimer) { clearTimeout(dwellTimer); dwellTimer = null; }
           if (autoShown) { close(); autoShown = false; }
         }
