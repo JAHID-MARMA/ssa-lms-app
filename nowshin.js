@@ -352,8 +352,18 @@
     recog.onend = function () {
       if (listening) { try { recog.start(); } catch (e) { stopListening(); } }
     };
-    recog.onerror = function () { if (listening) stopListening(); };
-    try { recog.start(); } catch (e) { stopListening(); }
+    recog.onerror = function (ev) {
+      if (!listening) return;
+      var blocked = ev && (ev.error === "not-allowed" || ev.error === "service-not-allowed");
+      stopListening();
+      if (blocked) {
+        input.placeholder = voiceLang === "bn-BD" ? "Mic বন্ধ আছে — address bar-এর mic icon থেকে Allow করুন" : "Mic is blocked — Allow it from the mic icon in the address bar";
+      }
+    };
+    try { recog.start(); } catch (e) {
+      stopListening();
+      input.placeholder = voiceLang === "bn-BD" ? "Mic চালু হয়নি — address bar থেকে Allow করুন" : "Mic did not start — Allow it from the address bar";
+    }
   });
 
   function speak(text) {
