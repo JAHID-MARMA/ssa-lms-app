@@ -357,6 +357,14 @@ a{color:var(--pink);text-decoration:none}
 .n-input input:focus{outline:none;border-color:var(--pink)}
 .n-input button{background:var(--pink);color:#fff;border:0;border-radius:999px;padding:10px 17px;font-weight:600;cursor:pointer;font-family:'Hind Siliguri',sans-serif}
 .n-input button:hover{background:var(--pink-dark)}
+.n-head .n-speak{background:rgba(255,255,255,.16);border:0;color:#fff;font-size:16px;cursor:pointer;padding:5px 9px;border-radius:999px;line-height:1}
+.n-head .n-speak.on{background:#fff;color:var(--pink)}
+.n-input .n-mic{background:#FDF0F5;color:var(--pink);border:1.5px solid #E3D5DE;padding:10px 13px;font-size:16px;line-height:1}
+.n-input .n-mic:hover{background:#FCE4F0}
+.n-input .n-mic.listening{background:var(--pink);color:#fff;border-color:var(--pink);animation:nPulse 1.1s ease-in-out infinite}
+.n-input .n-lang{background:#FDF0F5;color:var(--pink);border:1.5px solid #E3D5DE;padding:10px 11px;font-size:13.5px;line-height:1}
+.n-input .n-lang:hover{background:#FCE4F0}
+@keyframes nPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.13)}}
 
 /* ---------- responsive ---------- */
 @media (max-width:900px){
