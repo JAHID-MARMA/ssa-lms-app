@@ -45,6 +45,7 @@
   var history = [];
   var greeted = false;
   var busy = false;
+  var lastQA = null;
 
   /* Fire-and-forget POST to the Google Bridge. Fully guarded: it must
      never delay, block or break the chat. The bridge routes by "type"
@@ -89,8 +90,11 @@
   }
 
   /* 👍/👎 feedback (Phase 12, Founder order 2026-10-22: "What people
-     ask to Nowshin — are they happy with the answer or not?"). Every
-     Nowshin answer gets a small vote row under it; one tap per answer.
+     ask to Nowshin — are they happy with the answer or not?").
+     Founder correction 2026-10-24: NO vote row under every answer —
+     that looks unprofessional. ONE vote bar only, always at the
+     bottom of the chat box, icons only, no written label. It rates
+     the latest finished exchange, after the talking is done.
      The vote goes to BOTH sinks, each fully guarded so a failure is
      never visible: (1) the Google Bridge → the Sheet's "Nowshin
      Feedback" tab, and (2) Supabase nowshin_feedback, where the
@@ -118,12 +122,11 @@
     } catch (e) { /* feedback is best-effort only */ }
   }
 
-  function addVoteRow(question, answer) {
-    var row = document.createElement("div");
-    row.className = "n-vote";
-    var label = document.createElement("span");
-    label.className = "n-vote-label";
-    label.textContent = "উত্তরটি কেমন লাগলো?";
+  /* The ONE vote bar: icons only, no written label, pinned above the
+     input so it is always at the bottom of the box, never per message. */
+  (function buildVoteBar() {
+    var bar = document.createElement("div");
+    bar.className = "n-vote-once";
     var up = document.createElement("button");
     up.type = "button";
     up.className = "n-vote-btn";
@@ -134,26 +137,21 @@
     down.className = "n-vote-btn";
     down.textContent = "👎";
     down.setAttribute("aria-label", "উত্তরটি ভালো লাগেনি");
-    row.appendChild(label);
-    row.appendChild(up);
-    row.appendChild(down);
-    msgs.appendChild(row);
-    msgs.scrollTop = msgs.scrollHeight;
+    bar.appendChild(up);
+    bar.appendChild(down);
+    box.insertBefore(bar, form);
     var voted = false;
-    function vote(v) {
+    function vote(v, btn) {
       if (voted) return;
       voted = true;
-      postFeedback(question, answer, v);
-      row.innerHTML = "";
-      var done = document.createElement("span");
-      done.className = "n-vote-done";
-      done.textContent = "ধন্যবাদ! আপনার মতামত আমাদের আরও ভালো হতে সাহায্য করবে।";
-      row.appendChild(done);
-      msgs.scrollTop = msgs.scrollHeight;
+      if (lastQA) postFeedback(lastQA.q, lastQA.a, v);
+      btn.classList.add("voted");
+      up.disabled = true;
+      down.disabled = true;
     }
-    up.addEventListener("click", function () { vote("up"); });
-    down.addEventListener("click", function () { vote("down"); });
-  }
+    up.addEventListener("click", function () { vote("up", up); });
+    down.addEventListener("click", function () { vote("down", down); });
+  })();
 
   /* Lead capture, shown inside the chat on the very first open when
      the visitor has not given (or skipped) their details yet. The
@@ -589,7 +587,7 @@
       var reply = answered ? String(data.reply) : FALLBACK;
       addMsg(reply, "bot");
       if (wasVoice) speak(reply);
-      addVoteRow(text, reply);
+      lastQA = { q: text, a: reply };
       history.push({ role: "bot", text: reply });
       logExchange(text, reply, answered ? "" : "NEEDS-CEO");
       busy = false;
@@ -597,7 +595,7 @@
       typing.parentNode && typing.parentNode.removeChild(typing);
       addMsg(FALLBACK, "bot");
       if (wasVoice) speak(FALLBACK);
-      addVoteRow(text, FALLBACK);
+      lastQA = { q: text, a: FALLBACK };
       logExchange(text, FALLBACK, "NEEDS-CEO");
       busy = false;
     });
