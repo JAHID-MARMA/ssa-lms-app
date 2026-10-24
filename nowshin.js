@@ -326,24 +326,24 @@
     recog = new SR();
     recog.lang = voiceLang;
     recog.interimResults = true;
-    recog.continuous = false;
+    recog.continuous = true;
     listening = true;
     micBtn.classList.add("listening");
-    input.placeholder = voiceLang === "bn-BD" ? "শুনছি… বলুন" : "Listening… speak now";
+    input.placeholder = voiceLang === "bn-BD" ? "শুনছি… শেষ হলে mic-এ আবার চাপুন" : "Listening… tap mic again when done";
+    /* A breath pause must never send the message: words only fill the
+       box, and he presses Send himself when he is really finished. */
+    var voiceBase = "";
     recog.onresult = function (ev) {
-      var finalText = "", interim = "";
-      for (var i = 0; i < ev.results.length; i++) {
-        if (ev.results[i].isFinal) finalText += ev.results[i][0].transcript;
+      var interim = "";
+      for (var i = ev.resultIndex; i < ev.results.length; i++) {
+        if (ev.results[i].isFinal) voiceBase = (voiceBase ? voiceBase + " " : "") + ev.results[i][0].transcript.trim();
         else interim += ev.results[i][0].transcript;
       }
-      input.value = finalText || interim;
-      if (finalText) {
-        stopListening();
-        if (form.requestSubmit) form.requestSubmit();
-        else form.dispatchEvent(new Event("submit", { cancelable: true }));
-      }
+      input.value = (voiceBase + (interim ? " " + interim : "")).trim();
     };
-    recog.onend = function () { if (listening) stopListening(); };
+    recog.onend = function () {
+      if (listening) { try { recog.start(); } catch (e) { stopListening(); } }
+    };
     recog.onerror = function () { if (listening) stopListening(); };
     try { recog.start(); } catch (e) { stopListening(); }
   });
