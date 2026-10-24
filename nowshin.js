@@ -352,23 +352,60 @@
     if (!speakOn || !("speechSynthesis" in window) || !text) return;
     try {
       speechSynthesis.cancel();
-      var clean = String(text).replace(/[*_#`>]/g, "").slice(0, 600);
-      var u = new SpeechSynthesisUtterance(clean);
-      var isBn = /[\u0980-\u09FF]/.test(clean);
-      u.lang = isBn ? "bn-BD" : "en-US";
-      var voices = speechSynthesis.getVoices() || [];
-      var want = isBn ? "bn" : "en", first = null, female = null, google = null;
-      for (var i = 0; i < voices.length; i++) {
-        var vl = (voices[i].lang || "").toLowerCase();
-        if (vl.indexOf(want) !== 0) continue;
-        if (!first) first = voices[i];
-        var vn = (voices[i].name || "").toLowerCase();
-        if (!female && /female|zira|aria|samantha|natasha|heera|google বাংলা|google हिन्दी/.test(vn)) female = voices[i];
-        if (!google && vn.indexOf("google") === 0) google = voices[i];
+      /* Strip markdown, symbols, emojis and links so the voice never reads
+         "star", "comma" or other sign names — punctuation becomes pauses. */
+      var clean = String(text)
+        .replace(/https?:\/\/\S+/g, " ")
+        .replace(/[*_#`>~|\\]/g, "")
+        .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "")
+        .replace(/\s+/g, " ").trim();
+      if (!clean) return;
+      /* Split into sentences, then into short chunks: one long utterance is
+         cut off by the browser, so speak piece by piece until the end. */
+      var parts = [], re = /[^।.!?]+[।.!?]?/g, m;
+      while ((m = re.exec(clean)) !== null) { var s = m[0].trim(); if (s) parts.push(s); }
+      if (!parts.length) parts = [clean];
+      var chunks = [];
+      for (var p = 0; p < parts.length; p++) {
+        var sentence = parts[p];
+        while (sentence.length > 200) {
+          var cut = sentence.lastIndexOf(" ", 200);
+          if (cut < 60) cut = 200;
+          chunks.push(sentence.slice(0, cut).trim());
+          sentence = sentence.slice(cut).trim();
+        }
+        if (sentence) chunks.push(sentence);
       }
-      u.voice = female || google || first;
-      u.rate = 1.0;
-      speechSynthesis.speak(u);
+      /* Each chunk gets its own language's female-preferred voice, so the
+         voice never flips to male in the middle of a reply. */
+      function pickVoice(isBn) {
+        var voices = speechSynthesis.getVoices() || [];
+        var want = isBn ? "bn" : "en", first = null, female = null, google = null;
+        for (var i = 0; i < voices.length; i++) {
+          var vl = (voices[i].lang || "").toLowerCase();
+          if (vl.indexOf(want) !== 0) continue;
+          if (!first) first = voices[i];
+          var vn = (voices[i].name || "").toLowerCase();
+          if (!female && /female|zira|aria|samantha|natasha|heera|google বাংলা/.test(vn)) female = voices[i];
+          if (!google && vn.indexOf("google") === 0) google = voices[i];
+        }
+        return female || google || first;
+      }
+      var qi = 0;
+      function sayNext() {
+        if (qi >= chunks.length) return;
+        var txt = chunks[qi++];
+        var isBn = /[\u0980-\u09FF]/.test(txt);
+        var u = new SpeechSynthesisUtterance(txt);
+        u.lang = isBn ? "bn-BD" : "en-US";
+        var v = pickVoice(isBn);
+        if (v) u.voice = v;
+        u.rate = 1.0;
+        u.onend = sayNext;
+        u.onerror = sayNext;
+        speechSynthesis.speak(u);
+      }
+      sayNext();
     } catch (e) { /* voice is an extra — never break the chat */ }
   }
   if ("speechSynthesis" in window && speechSynthesis.onvoiceschanged !== undefined) {
