@@ -381,6 +381,9 @@
       }
     }, 4000);
     recog.onresult = function (ev) {
+      /* A result arriving after the mic stopped (or after Send) must
+         never refill the box with text that was already sent. */
+      if (!listening) return;
       clearTimeout(heardTimer);
       var interim = "";
       for (var i = ev.resultIndex; i < ev.results.length; i++) {
@@ -547,6 +550,9 @@
        message must never trigger sound, even if the speaker is on. */
     var wasVoice = voiceUsed;
     voiceUsed = false;
+    /* Sending ends the mic too: otherwise recognition keeps running
+       and writes the sent text back into the box. */
+    if (listening) stopListening();
     if (window.SSA_secFail) window.SSA_secFail("chat");
     input.value = "";
     addMsg(text, "me");
