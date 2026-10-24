@@ -241,6 +241,7 @@
     return d;
   }
   function openBox() {
+    if (window.SSA_closeNotices) window.SSA_closeNotices();
     box.classList.add("open");
     pill.classList.add("keep");
     if (!greeted) {
@@ -256,6 +257,9 @@
   pill.addEventListener("click", function () {
     if (box.classList.contains("open")) { box.classList.remove("open"); pill.classList.remove("keep"); voiceUsed = false; } else openBox();
   });
+  /* Mutual exclusion with the notice panel: the two floating layers
+     must never cover each other on a narrow phone screen. */
+  window.SSA_closeNowshin = function () { box.classList.remove("open"); pill.classList.remove("keep"); };
   box.querySelector(".n-close").addEventListener("click", function () {
     box.classList.remove("open");
     pill.classList.remove("keep");
