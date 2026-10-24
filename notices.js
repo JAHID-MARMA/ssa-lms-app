@@ -56,7 +56,7 @@
     var use = rows && rows.length ? rows : DEFAULTS;
     list.innerHTML = use.slice(0, 5).map(function (r) {
       var d = fmtDate(r.created_at);
-      return '<li>' + (d ? '<span class="np-date">' + d + '</span>' : '') +
+      return '<li>' + (d ? '<span class="np-date">প্রকাশ: ' + d + '</span>' : '') +
         '<span class="np-text"><b>' + esc(r.title) + '</b>' + (r.detail ? '<br>' + esc(r.detail) : '') + '</span></li>';
     }).join("");
     var dot = fab.querySelector(".notice-fab-dot");
